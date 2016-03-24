@@ -194,13 +194,13 @@ namespace ${project_namespace}.View
                     StateID.${entity.name?cap_first}ListPageEnter);
                     </#if>
                     <#if mono>
-            //${entity.name?lower_case}Show.AddTransition(
-            //    Transition.${entity.name?cap_first}RadioListPage, 
-            //        StateID.${entity.name?cap_first}RadioListPageEnter);
-            //${entity.name?cap_first}RadioListState ${entity.name?lower_case}RadioList = new ${entity.name?cap_first}RadioListState();       
-            //${entity.name?lower_case}RadioList.AddTransition(
-            //    Transition.${entity.name?cap_first}RadioListPageBack,
-            //        StateID.${entity.name?cap_first}ShowPageEnter);
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${entity.name?cap_first}RadioListPage, 
+                    StateID.${entity.name?cap_first}RadioListPageEnter);
+            ${entity.name?cap_first}RadioListState ${entity.name?lower_case}RadioList = new ${entity.name?cap_first}RadioListState();       
+            ${entity.name?lower_case}RadioList.AddTransition(
+                Transition.${entity.name?cap_first}RadioListPageBack,
+                    StateID.${entity.name?cap_first}ShowPageEnter);
                     </#if>
             #endregion
                 </#if>

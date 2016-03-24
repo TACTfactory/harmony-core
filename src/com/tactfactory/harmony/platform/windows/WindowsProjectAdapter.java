@@ -292,6 +292,21 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
 		result.add(new ProjectUpdater(FileType.Compile, "View/"
 				+ "ICheckableManager.cs"));
+		
+		// Radioables
+		result.add(new SourceFile(templatePath
+				+ "View/RadioableBase.cs", filePath
+				+ "View/RadioableBase.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "View/"
+				+ "RadioableBase.cs"));
+				
+		result.add(new SourceFile(templatePath
+				+ "View/IRadioableManager.cs", filePath
+				+ "View/IRadioableManager.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "View/"
+				+ "IRadioableManager.cs"));
 
         return result;
     }
@@ -635,6 +650,31 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
                         entity.getName())));
         
+        // Radioable entities
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioable.cs",
+                String.format("%s%sRadioable.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioable.cs",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioableManager.cs",
+                String.format("%s%sRadioableManager.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioableManager.cs",
+                        entity.getName())));
+        
         return result;
     }
 
@@ -858,6 +898,73 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
+                        entity.getName())));
+        
+        // Add Radioable list for C#
+        // Base Radioable Views
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioListPage.xaml.cs",
+                String.format("%s%sRadioListPage.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml.cs",
+                        entity.getName()),
+                String.format("%sRadioListPage.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioListPage.xaml",
+                String.format("%s%sRadioListPage.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioListUserControl.xaml.cs",
+                String.format("%s%sRadioListUserControl.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml.cs",
+                        entity.getName()),
+                String.format("%sRadioListUserControl.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioListUserControl.xaml",
+                String.format("%s%sRadioListUserControl.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml",
+                        entity.getName())));
+        
+        // State Radioable Views
+        result.add(new SourceFile(
+                templatePath + "TemplateRadioListState.cs",
+                String.format("%s%sRadioListState.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sRadioListState.cs",
                         entity.getName())));
         
         return result;

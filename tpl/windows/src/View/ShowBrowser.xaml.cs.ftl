@@ -20,6 +20,11 @@ namespace ${project_namespace}.View.Navigation.UsersControls
         public Button Btn_Edit { get; set; }
         
         /// <summary>
+        /// UserControl existing button.
+        /// </summary>
+        public Button Btn_Existing { get; set; }
+        
+        /// <summary>
         /// UserControl delete button.
         /// </summary>
         public Button Btn_Delete { get; set; }
@@ -33,6 +38,7 @@ namespace ${project_namespace}.View.Navigation.UsersControls
             this.Btn_Back = this.btn_back;
             this.Btn_Edit = this.btn_edit;
             this.Btn_Delete = this.btn_delete;
+            this.Btn_Existing = this.btn_existing;
         }
     }
 }

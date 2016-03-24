@@ -41,7 +41,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager
         /// Update current ${curr.name?cap_first} entity to set it checkable.
         /// </summary>
         /// <param name="${curr.name?lower_case}">Base item list.</param>
-        public void ParseInSelectables(List<Entity.${curr.name?cap_first}> ${curr.name?lower_case})
+        public void ParseInCheckables(List<Entity.${curr.name?cap_first}> ${curr.name?lower_case})
         {
             foreach (var item in ${curr.name?lower_case})
             {

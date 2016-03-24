@@ -10,8 +10,8 @@ using ${project_namespace}.View.${field.relation.targetEntity?cap_first};
 </#list>
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
-using ${project_namespace}.View.${curr.name?cap_first}.Checkable;
-using ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager;
+using ${project_namespace}.View.${curr.name?cap_first}.Radioable;
+using ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager;
 using ${project_namespace}.Utils.StateMachine;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,63 +21,41 @@ using Windows.UI.Xaml.Input;
 namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     /// <summary>
-    /// ${curr.name?cap_first}CheckListUserControl contain 
-    /// real check list display mechanism for ${curr.name?cap_first} entity.
+    /// ${curr.name?cap_first}RadioListUserControl contain 
+    /// real radio list display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
-    public sealed partial class ${curr.name?cap_first}CheckListUserControl : UserControl
+    public sealed partial class ${curr.name?cap_first}RadioListUserControl : UserControl
     {
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
             
-        private ${curr.name?cap_first}CheckableManager ${curr.name?lower_case}CheckableManager = 
-            new ${curr.name?cap_first}CheckableManager();
+        private ${curr.name?cap_first}RadioableManager ${curr.name?lower_case}RadioableManager = 
+            new ${curr.name?cap_first}RadioableManager();
 
-        private ObservableCollection<${curr.name?cap_first}Checkable> obs;
+        private ObservableCollection<${curr.name?cap_first}Radioable> obs;
 
         /// <summary>
         /// Default constructor.
-        /// Initialize base list with ${curr.name?cap_first}Checkable items.
+        /// Initialize base list with ${curr.name?cap_first}Radioable items.
         /// </summary>
-        public ${curr.name?cap_first}CheckListUserControl()
+        public ${curr.name?cap_first}RadioListUserControl()
         {
             this.InitializeComponent();
-            obs = new ObservableCollection<${curr.name?cap_first}Checkable>();
+            obs = new ObservableCollection<${curr.name?cap_first}Radioable>();
             this.itemsList.ItemsSource = obs;
         }
 
         /// <summary>
-        /// Load items and set them checked if have to.
+        /// Load items and set them radioed if have to.
         /// </summary>
         public void LoadItem()
         {
             List<Entity.${curr.name?cap_first}> items = ${curr.name?lower_case}Adapter.GetAll();
 
-            ${curr.name?lower_case}CheckableManager.ParseInCheckables(items);
-            
-            <#assign item_count = 0/>
-            <#list fields?values as field>
-                <#if (!field.internal && !field.hidden && field.relation??)>
-                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
-                        <#if (item_count == 0)>
-            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                ${curr.name?lower_case}CheckableManager.SetChecked(
-                    ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
-            }
-                            <#assign item_count = 1/>
-                        <#else>
-            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                ${curr.name?lower_case}CheckableManager.SetChecked(
-                    ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
-            }
-                        </#if>
-                    </#if>
-                </#if>
-            </#list>
+            ${curr.name?lower_case}RadioableManager.ParseInRadioables(items);
 
             obs.Clear();
-            foreach (var item in ${curr.name?lower_case}CheckableManager.${curr.name?cap_first}Checkables)
+            foreach (var item in ${curr.name?lower_case}RadioableManager.${curr.name?cap_first}Radioables)
             {
                 obs.Add(item);
             }
@@ -96,18 +74,18 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             <#assign item_count = 0/>
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden && field.relation??)>
-                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
+                    <#if field.relation?? && (field.relation.type == "ManyToOne" || field.relation.type == "OneToOne")>
                         <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
-                ${curr.name?lower_case}CheckableManager.Save(
+                ${curr.name?lower_case}RadioableManager.Save(
                     ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }
                             <#assign item_count = 1/>
                         <#else>
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
-                ${curr.name?lower_case}CheckableManager.Save(
+                ${curr.name?lower_case}RadioableManager.Save(
                     ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }
                         </#if>
@@ -116,20 +94,16 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             </#list>
             
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}CheckListPageBack, 
+                Transition.${curr.name?cap_first}RadioListPageBack, 
                     new ${curr.name?cap_first}ListPage());
         }
         
         private void itemsList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ${curr.name?cap_first}Checkable item = e.ClickedItem as ${curr.name?cap_first}Checkable;
-            if (item.Check)
+            ${curr.name?cap_first}Radioable item = e.ClickedItem as ${curr.name?cap_first}Radioable;
+            if (!item.Radio)
             {
-                item.Check = false;
-            }
-            else
-            {
-                item.Check = true;
+                item.Radio = true;
             }
         }
     }

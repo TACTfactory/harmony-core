@@ -21,6 +21,7 @@ using ${project_namespace}.Data;
 using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.${curr.name?cap_first};
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace ${project_namespace}.View.Navigation.States
 {
@@ -65,6 +66,7 @@ namespace ${project_namespace}.View.Navigation.States
         public override void DoBeforeLeaving(Page page)
         {
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped -= this.Btn_Edit_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Existing.Tapped -= this.Btn_Existing_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped -= this.Btn_Delete_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped -= this.Btn_Back_Tapped;
             
@@ -128,6 +130,7 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped += this.Btn_Back_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped += this.Btn_Delete_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped += this.Btn_Edit_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Existing.Tapped += this.Btn_Existing_Tapped;
             this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl.${curr.name?cap_first}Item = ViewStateMachine.Instance.${curr.name?cap_first};
         <#if wishedfields?has_content>
         
@@ -180,7 +183,7 @@ namespace ${project_namespace}.View.Navigation.States
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>
-        private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void Btn_Back_Tapped(object sender, TappedRoutedEventArgs e)
         {
         <#assign item_count = 0/>
         <#if wishedfields?has_content>
@@ -259,7 +262,7 @@ namespace ${project_namespace}.View.Navigation.States
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>
-        private void Btn_Delete_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void Btn_Delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if(this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl
                         .${curr.name?cap_first}Item != null)
@@ -334,11 +337,16 @@ namespace ${project_namespace}.View.Navigation.States
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>
-        private void Btn_Edit_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void Btn_Edit_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
                 Transition.${curr.name?cap_first}EditPage, 
                     new ${curr.name?cap_first}EditPage());
+        }
+        
+        private void Btn_Existing_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,6 +14,7 @@
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
         <Button x:Name="btn_back" Content="Back" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button x:Name="btn_edit" Content="Edit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Button x:Name="btn_existing" Content="Use Existing" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button x:Name="btn_delete" Content="Delete" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </StackPanel>
 </UserControl>

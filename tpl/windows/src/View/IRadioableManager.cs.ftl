@@ -2,16 +2,16 @@
 
 using System.Collections.Generic;
 
-namespace ${project_namespace}.View.Checkable.Manager
+namespace ${project_namespace}.View.Radioable.Manager
 {
     /// <summary>
-    /// Base item to set checkable.
+    /// Base item to set radioable.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
-    interface ICheckableManagerBase<T>
+    interface IRadioableManagerBase<T>
     {
-        void ParseInCheckables(List<T> items);
-        List<T> GetBaseList();
+        void ParseInRadioables(List<T> items);
+        T GetBaseItem();
     }
 
     /// <summary>
@@ -19,9 +19,8 @@ namespace ${project_namespace}.View.Checkable.Manager
     /// or find parent item linked base item.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
-    interface ICheckableManagerParent<T>
+    interface IRadioableManagerParent<T>
     {
-        void SetChecked(T item);
         void Save(T item);
     }
 }
