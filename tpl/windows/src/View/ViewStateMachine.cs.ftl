@@ -5,6 +5,7 @@ using ${project_namespace}.Entity;
 using ${project_namespace}.Entity.Base;
 using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.Navigation.States;
+using System.Collections.Generic;
 using System;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
@@ -64,6 +65,13 @@ namespace ${project_namespace}.View
             this.${entity.name?cap_first} = null;
             </#if>
         </#list>
+            bsm.Transitions = new List<Transition>();
+        }
+        
+        //TODO comment
+        public Boolean DidTransitionContains(Transition trans)
+        {
+            return bsm.DidTransitionContains(trans);
         }
 
         private void SetItem(Object item)

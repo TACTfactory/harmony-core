@@ -11,6 +11,7 @@
 </#list>
 <@header?interpret />
 
+using System;
 <#list fields?values as field>
     <#if field.relation??>
 using ${project_namespace}.View.${field.relation.targetEntity?cap_first};
@@ -187,8 +188,8 @@ namespace ${project_namespace}.View.Navigation.States
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
                     <#if (item_count == 0)>     
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}EditPageBack)
+                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                && NotInBaseTransition(ViewStateMachine.Instance.NextTransition))
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack, 
@@ -197,8 +198,8 @@ namespace ${project_namespace}.View.Navigation.States
                         <#assign item_count = 1/>
                     <#else>
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}EditPageBack)
+                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                && NotInBaseTransition(ViewStateMachine.Instance.NextTransition))
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack, 
@@ -208,8 +209,7 @@ namespace ${project_namespace}.View.Navigation.States
                 <#else>
                     <#if (item_count == 0)>     
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}EditPageBack)
+                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage))
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
@@ -218,8 +218,7 @@ namespace ${project_namespace}.View.Navigation.States
                         <#assign item_count = 1/>
                     <#else>
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage
-                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}EditPageBack)
+                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage))
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
@@ -241,6 +240,19 @@ namespace ${project_namespace}.View.Navigation.States
                     new ${curr.name?cap_first}ListPage());
         }
         </#if>
+
+        private Boolean NotInBaseTransition(Transition trans)
+        {
+            if (trans != Transition.${curr.name?cap_first}ShowPage 
+                && trans != Transition.${curr.name?cap_first}EditPageBack)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Delete current item and navigate back.

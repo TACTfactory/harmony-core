@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Windows.UI.Xaml.Controls;
+using System;
 
 namespace ${project_namespace}.Utils.StateMachine
 {
@@ -17,6 +18,9 @@ namespace ${project_namespace}.Utils.StateMachine
         ///// Pages container for navigation undo.
         ///// </summary>
         //public List<Page> Pages = new List<Page>();
+        
+        //TODO comment
+        public List<Transition> Transitions { get; set; }
         
         /// <summary>
         /// Current Page container for navigation to.
@@ -44,6 +48,20 @@ namespace ${project_namespace}.Utils.StateMachine
         public BaseViewStateMachine()
         {
             states = new List<BaseViewStateMachineState>();
+            Transitions = new List<Transition>();
+        }
+        
+        //TODO comment
+        public Boolean DidTransitionContains(Transition trans)
+        {
+            foreach (var item in Transitions)
+            {
+                if (item == trans)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -148,7 +166,8 @@ namespace ${project_namespace}.Utils.StateMachine
                     //{
                     //    this.Pages.Add(this.CurrentPage);
                     //}
-
+                    Transitions.Add(trans);
+                    
                     // Reset the state to its desired condition before it can reason or act
                     this.currentState.DoBeforeEntering(page);
 
