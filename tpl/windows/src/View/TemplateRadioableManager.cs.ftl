@@ -13,7 +13,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
     /// Have to implement one IRadioableManagerBase 
     /// and multiple IRadioableManagerParent.
     /// </summary>
-    class ${curr.name?cap_first}RadioableManager : IRadioableManagerBase<Entity.${curr.name?cap_first}><#list curr_fields as field><#if field.relation?? && !field.internal><#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">, IRadioableManagerParent<Entity.${field.relation.targetEntity?cap_first}></#if></#if></#list>
+    class ${curr.name?cap_first}RadioableManager : IRadioableManagerBase<Entity.${curr.name?cap_first}><#list curr_fields as field><#if field.relation?? && !field.internal><#if field.relation.type == "OneToOne" || field.relation.type == "OneToMany">, IRadioableManagerParent<Entity.${field.relation.targetEntity?cap_first}></#if></#if></#list>
     {
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
@@ -69,11 +69,11 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         {
                 <#if field.relation.type == "ManyToOne" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            ${field.relation.targetEntity?lower_case}.${field.relation.inversedBy?cap_first} = this.GetBaseItem().${id?cap_first};
+            ${field.relation.targetEntity?lower_case}.${field.relation.mappedBy?cap_first} = this.GetBaseItem().${id?cap_first};
             adapter.Update(${field.relation.targetEntity?lower_case});
                 <#elseif field.relation.type == "OneToOne" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            ${field.relation.targetEntity?lower_case}.${field.relation.targetEntity?cap_first} = this.GetBaseItem().${id?cap_first};
+            ${field.relation.targetEntity?lower_case}.${curr.name?cap_first} = this.GetBaseItem().${id?cap_first};
             adapter.Update(${field.relation.targetEntity?lower_case});
                 </#if>
         }

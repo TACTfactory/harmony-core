@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
@@ -19,6 +20,7 @@ import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.platform.IAdapterProject;
 import com.tactfactory.harmony.platform.windows.updater.ProjectUpdater;
 import com.tactfactory.harmony.platform.windows.updater.XmlResourcesWindows;
@@ -651,30 +653,42 @@ public class WindowsProjectAdapter implements IAdapterProject {
                         entity.getName())));
         
         // Radioable entities
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioable.cs",
-                String.format("%s%sRadioable.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioable.cs",
-                        entity.getName())));
+        Boolean haveMonoRelation = false;
+        Map<String,FieldMetadata> fields = entity.getFields();
+        for (FieldMetadata item : fields.values()) {
+        	if (!item.isInternal() && item.getRelation() != null) {
+    			if (item.getRelation().getType().equals("OneToOne")
+    					|| item.getRelation().getType().equals("ManyToOne")) {
+    				haveMonoRelation = true;
+    			}
+			}
+		}
         
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioableManager.cs",
-                String.format("%s%sRadioableManager.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioableManager.cs",
-                        entity.getName())));
-        
+        if (haveMonoRelation) {
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioable.cs",
+	                String.format("%s%sRadioable.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioable.cs",
+	                        entity.getName())));
+	        
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioableManager.cs",
+	                String.format("%s%sRadioableManager.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioableManager.cs",
+	                        entity.getName())));
+        }
         return result;
     }
 
@@ -902,71 +916,83 @@ public class WindowsProjectAdapter implements IAdapterProject {
         
         // Add Radioable list for C#
         // Base Radioable Views
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioListPage.xaml.cs",
-                String.format("%s%sRadioListPage.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml.cs",
-                        entity.getName()),
-                String.format("%sRadioListPage.xaml",
-                        entity.getName())));
-
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioListPage.xaml",
-                String.format("%s%sRadioListPage.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml",
-                        entity.getName())));
+        Boolean haveMonoRelation = false;
+        Map<String,FieldMetadata> fields = entity.getFields();
+        for (FieldMetadata item : fields.values()) {
+        	if (!item.isInternal() && item.getRelation() != null) {
+    			if (item.getRelation().getType().equals("OneToOne")
+    					|| item.getRelation().getType().equals("ManyToOne")) {
+    				haveMonoRelation = true;
+    			}
+			}
+		}
         
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioListUserControl.xaml.cs",
-                String.format("%s%sRadioListUserControl.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml.cs",
-                        entity.getName()),
-                String.format("%sRadioListUserControl.xaml",
-                        entity.getName())));
-
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioListUserControl.xaml",
-                String.format("%s%sRadioListUserControl.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml",
-                        entity.getName())));
-        
-        // State Radioable Views
-        result.add(new SourceFile(
-                templatePath + "TemplateRadioListState.cs",
-                String.format("%s%sRadioListState.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sRadioListState.cs",
-                        entity.getName())));
-        
+        if (haveMonoRelation) {
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioListPage.xaml.cs",
+	                String.format("%s%sRadioListPage.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sRadioListPage.xaml",
+	                        entity.getName())));
+	
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioListPage.xaml",
+	                String.format("%s%sRadioListPage.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml",
+	                        entity.getName())));
+	        
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioListUserControl.xaml.cs",
+	                String.format("%s%sRadioListUserControl.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sRadioListUserControl.xaml",
+	                        entity.getName())));
+	
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioListUserControl.xaml",
+	                String.format("%s%sRadioListUserControl.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml",
+	                        entity.getName())));
+	        
+	        // State Radioable Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateRadioListState.cs",
+	                String.format("%s%sRadioListState.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sRadioListState.cs",
+	                        entity.getName())));
+        }
         return result;
     }
 
