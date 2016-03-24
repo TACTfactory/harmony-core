@@ -658,7 +658,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         for (FieldMetadata item : fields.values()) {
         	if (!item.isInternal() && item.getRelation() != null) {
     			if (item.getRelation().getType().equals("OneToOne")
-    					|| item.getRelation().getType().equals("ManyToOne")) {
+    					|| item.getRelation().getType().equals("OneToMany")) {
     				haveMonoRelation = true;
     			}
 			}
@@ -921,7 +921,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         for (FieldMetadata item : fields.values()) {
         	if (!item.isInternal() && item.getRelation() != null) {
     			if (item.getRelation().getType().equals("OneToOne")
-    					|| item.getRelation().getType().equals("ManyToOne")) {
+    					|| item.getRelation().getType().equals("OneToMany")) {
     				haveMonoRelation = true;
     			}
 			}

@@ -49,7 +49,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         }
 
         <#list curr_fields as field>
-            <#if field.relation?? && !field.internal && field.relation.type != "ManyToMany" && field.relation.type != "OneToMany" >
+            <#if field.relation?? && !field.internal && field.relation.type != "ManyToMany" && field.relation.type != "ManyToOne" >
                 <#list entities?values as entity>
                     <#if entity.name == field.relation.targetEntity>
                         <#assign relatedEntity = entity />
@@ -67,7 +67,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?cap_first} to save change.</param>
         public void Save(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})
         {
-                <#if field.relation.type == "ManyToOne" >
+                <#if field.relation.type == "OneToMany" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
             ${field.relation.targetEntity?lower_case}.${field.relation.mappedBy?cap_first} = this.GetBaseItem().${id?cap_first};
             adapter.Update(${field.relation.targetEntity?lower_case});
