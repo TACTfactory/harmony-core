@@ -74,7 +74,7 @@ namespace ${project_namespace}.View.Navigation.States
         {
             ViewStateMachine.Instance.SetTransition(
                 Transition.${curr.name?cap_first}RadioListPageBack, 
-                    new ${curr.name?cap_first}ListPage());
+                    new ${curr.name?cap_first}ShowPage());
         }
     }
 }

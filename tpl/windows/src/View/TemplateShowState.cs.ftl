@@ -66,7 +66,17 @@ namespace ${project_namespace}.View.Navigation.States
         public override void DoBeforeLeaving(Page page)
         {
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped -= this.Btn_Edit_Tapped;
+            <#if wishedfields?has_content>
+            <#assign item_count = 0/>
+            <#list wishedfields as field>
+                <#if field.relation.type == "OneToOne" || field.relation.type == "OneToMany">
+                    <#if (item_count == 0)>     
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Existing.Tapped -= this.Btn_Existing_Tapped;
+                        <#assign item_count = 1/>
+                    </#if>
+                </#if>
+            </#list>
+            </#if>
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped -= this.Btn_Delete_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped -= this.Btn_Back_Tapped;
             
@@ -130,7 +140,17 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped += this.Btn_Back_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped += this.Btn_Delete_Tapped;
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped += this.Btn_Edit_Tapped;
+            <#if wishedfields?has_content>
+            <#assign item_count = 0/>
+            <#list wishedfields as field>
+                <#if field.relation.type == "OneToOne" || field.relation.type == "OneToMany">
+                    <#if (item_count == 0)>     
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Existing.Tapped += this.Btn_Existing_Tapped;
+                        <#assign item_count = 1/>
+                    </#if>
+                </#if>
+            </#list>
+            </#if>
             this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl.${curr.name?cap_first}Item = ViewStateMachine.Instance.${curr.name?cap_first};
         <#if wishedfields?has_content>
         
@@ -182,7 +202,7 @@ namespace ${project_namespace}.View.Navigation.States
             if ( ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
                         <#assign item_count = 1/>
                     <#else>
-                || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
+                && ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
                     </#if>
                 </#if>
             </#list><#if item_count == 1>)
@@ -365,9 +385,21 @@ namespace ${project_namespace}.View.Navigation.States
                     new ${curr.name?cap_first}EditPage());
         }
         
+            <#if wishedfields?has_content>
+            <#assign item_count = 0/>
+            <#list wishedfields as field>
+                <#if field.relation.type == "OneToOne" || field.relation.type == "OneToMany">
+                    <#if (item_count == 0)>     
         private void Btn_Existing_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}RadioListPage, 
+                    new ${curr.name?cap_first}RadioListPage());
         }
+                        <#assign item_count = 1/>
+                    </#if>
+                </#if>
+            </#list>
+            </#if>
     }
 }

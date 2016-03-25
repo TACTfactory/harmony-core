@@ -21,6 +21,7 @@ namespace ${project_namespace}.View.Radioable.Manager
     /// <typeparam name="T">Item type.</typeparam>
     interface IRadioableManagerParent<T>
     {
+        void SetRadioed(T item);
         void Save(T item);
     }
 }

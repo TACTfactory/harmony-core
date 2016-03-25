@@ -168,7 +168,6 @@ namespace ${project_namespace}.View
             ${entity.name?lower_case}Edit.AddTransition(
                 Transition.${entity.name?cap_first}EditPageBack, 
                     StateID.${entity.name?cap_first}ShowPageEnter);
-                    
                     <#assign fields = ViewUtils.getAllFields(entity) />
                     <#assign multi = false>
                     <#assign mono = false>
@@ -182,6 +181,8 @@ namespace ${project_namespace}.View
                         </#if>
                     </#list>
                     <#if multi>
+                    
+            // CheckState.
             ${entity.name?lower_case}List.AddTransition(
                 Transition.${entity.name?cap_first}CheckListPage, 
                     StateID.${entity.name?cap_first}CheckListPageEnter);
@@ -191,6 +192,8 @@ namespace ${project_namespace}.View
                     StateID.${entity.name?cap_first}ListPageEnter);
                     </#if>
                     <#if mono>
+                    
+            // RadioState.
             ${entity.name?lower_case}Show.AddTransition(
                 Transition.${entity.name?cap_first}RadioListPage, 
                     StateID.${entity.name?cap_first}RadioListPageEnter);
@@ -311,7 +314,7 @@ namespace ${project_namespace}.View
             bsm.AddState(${entity.name?lower_case}CheckList);
                     </#if>
                     <#if mono>
-            //bsm.AddState(${entity.name?lower_case}RadioList);
+            bsm.AddState(${entity.name?lower_case}RadioList);
                     </#if>
                 </#if>
 

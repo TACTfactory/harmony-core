@@ -51,8 +51,26 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         public void LoadItem()
         {
             List<Entity.${curr.name?cap_first}> items = ${curr.name?lower_case}Adapter.GetAll();
-
             ${curr.name?lower_case}RadioableManager.ParseInRadioables(items);
+            <#assign item_count = 0/>
+            <#list fields?values as field>
+                <#if (!field.internal && !field.hidden && field.relation??)>
+                    <#if field.relation?? && (field.relation.type == "OneToMany" || field.relation.type == "OneToOne")>
+                        <#if (item_count == 0)>
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ${curr.name?lower_case}RadioableManager.SetRadioed(ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
+            }
+                            <#assign item_count = 1/>
+                        <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ${curr.name?lower_case}RadioableManager.SetRadioed(ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
+            }
+                        </#if>
+                    </#if>
+                </#if>
+            </#list>
 
             obs.Clear();
             foreach (var item in ${curr.name?lower_case}RadioableManager.${curr.name?cap_first}Radioables)
@@ -78,6 +96,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                         <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
+                ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}RadioableManager.GetBaseItem();
                 ${curr.name?lower_case}RadioableManager.Save(
                     ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }
@@ -85,6 +104,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                         <#else>
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
+                ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}RadioableManager.GetBaseItem();
                 ${curr.name?lower_case}RadioableManager.Save(
                     ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }
@@ -95,7 +115,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             
             ViewStateMachine.Instance.SetTransition(
                 Transition.${curr.name?cap_first}RadioListPageBack, 
-                    new ${curr.name?cap_first}ListPage());
+                    new ${curr.name?cap_first}ShowPage());
         }
         
         private void itemsList_ItemClick(object sender, ItemClickEventArgs e)

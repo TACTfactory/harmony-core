@@ -35,7 +35,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         {
             this.${curr.name?lower_case}Radioables = new List<${curr.name?cap_first}Radioable>();
         }
-
+        
         /// <summary>
         /// Update current ${curr.name?cap_first} entity to set it Radioable.
         /// </summary>
@@ -47,7 +47,30 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
                 this.${curr.name?lower_case}Radioables.Add(new ${curr.name?cap_first}Radioable(item));
             }
         }
-
+            <#assign fields = ViewUtils.getAllFields(curr) />
+            <#list fields?values as field>
+                <#if field.id>
+                    <#assign id = field.name />
+                </#if>
+            </#list>
+            <#list fields?values as field>
+                <#if (!field.internal && !field.hidden && field.relation??)>
+                    <#if field.relation?? && (field.relation.type == "OneToMany" || field.relation.type == "OneToOne")>
+        /// <summary>
+        /// Setup current ${curr.name?cap_first} entity radioable list radioed for current item
+        /// linked to ${field.relation.targetEntity?cap_first} entity.
+        /// </summary>
+        /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?lower_case} use to retrieve checked item.</param>
+        public void SetRadioed(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})
+        {
+            if (this.${curr.name?lower_case}Radioables.Find(i => i.${curr.name?cap_first}.${id?cap_first} == ${field.relation.targetEntity?lower_case}.${curr.name?cap_first}) != null)
+            {
+                this.${curr.name?lower_case}Radioables.Find(i => i.${curr.name?cap_first}.${id?cap_first} == ${field.relation.targetEntity?lower_case}.${curr.name?cap_first}).Radio = true;
+            }
+        }
+                    </#if>
+                </#if>
+            </#list>
         <#list curr_fields as field>
             <#if field.relation?? && !field.internal && field.relation.type != "ManyToMany" && field.relation.type != "ManyToOne" >
                 <#list entities?values as entity>
@@ -61,6 +84,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
                         <#assign id = field.name />
                     </#if>
                 </#list>
+
         /// <summary>
         /// Save current ${curr.name?cap_first} items relations for ${field.relation.targetEntity?cap_first} entity. 
         /// </summary>
@@ -69,12 +93,20 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         {
                 <#if field.relation.type == "OneToMany" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            ${field.relation.targetEntity?lower_case}.${field.relation.mappedBy?cap_first} = this.GetBaseItem().${id?cap_first};
-            adapter.Update(${field.relation.targetEntity?lower_case});
+            Entity.${curr.name?cap_first} ${curr.name?lower_case} = this.GetBaseItem();
+            if (${curr.name?lower_case} != null)
+            {
+                ${field.relation.targetEntity?lower_case}.${field.relation.mappedBy?cap_first} = ${curr.name?lower_case}.${id?cap_first};
+                adapter.Update(${field.relation.targetEntity?lower_case});
+            }
                 <#elseif field.relation.type == "OneToOne" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            ${field.relation.targetEntity?lower_case}.${curr.name?cap_first} = this.GetBaseItem().${id?cap_first};
-            adapter.Update(${field.relation.targetEntity?lower_case});
+            Entity.${curr.name?cap_first} ${curr.name?lower_case} = this.GetBaseItem();
+            if (${curr.name?lower_case} != null)
+            {
+                ${field.relation.targetEntity?lower_case}.${curr.name?cap_first} = ${curr.name?lower_case}.${id?cap_first};
+                adapter.Update(${field.relation.targetEntity?lower_case});
+            }
                 </#if>
         }
             </#if>
@@ -85,7 +117,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         /// </summary>
         public Entity.${curr.name?cap_first} GetBaseItem()
         {
-            return this.${curr.name?lower_case}Radioables.Find(i => i.Radio == true).${curr.name?cap_first};
+            ${curr.name?cap_first}Radioable ${curr.name?lower_case}Radioable = this.${curr.name?lower_case}Radioables.Find(i => i.Radio == true);
+            if (${curr.name?lower_case}Radioable != null)
+            {
+                return ${curr.name?lower_case}Radioable.${curr.name?cap_first};
+            }
+            return null;
         }
     }
 }
