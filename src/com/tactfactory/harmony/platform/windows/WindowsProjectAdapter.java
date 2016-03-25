@@ -627,43 +627,48 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
                         entity.getName())));
         
-        // Checkable entities
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckable.cs",
-                String.format("%s%sCheckable.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckable.cs",
-                        entity.getName())));
-        
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckableManager.cs",
-                String.format("%s%sCheckableManager.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
-                        entity.getName())));
-        
-        // Radioable entities
         Boolean haveMonoRelation = false;
+        Boolean haveMultiRelation = false;
         Map<String,FieldMetadata> fields = entity.getFields();
         for (FieldMetadata item : fields.values()) {
         	if (!item.isInternal() && item.getRelation() != null) {
     			if (item.getRelation().getType().equals("OneToOne")
     					|| item.getRelation().getType().equals("OneToMany")) {
     				haveMonoRelation = true;
-    			}
+    			}else if (item.getRelation().getType().equals("ManyToMany")
+    					|| item.getRelation().getType().equals("ManyToOne")) {
+    				haveMultiRelation = true;
+				}
 			}
 		}
         
+        // Checkable entities
+        if (haveMultiRelation) {
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckable.cs",
+	                String.format("%s%sCheckable.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckable.cs",
+	                        entity.getName())));
+	        
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckableManager.cs",
+	                String.format("%s%sCheckableManager.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
+	                        entity.getName())));
+        }
+        // Radioable entities
         if (haveMonoRelation) {
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioable.cs",
@@ -847,87 +852,93 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 "View/" + entity.getName()  + "/" + String.format("%sListState.cs",
                         entity.getName())));
 
-        // Add Checkable list for C#
-        // Base Checkable Views
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckListPage.xaml.cs",
-                String.format("%s%sCheckListPage.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml.cs",
-                        entity.getName()),
-                String.format("%sCheckListPage.xaml",
-                        entity.getName())));
-
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckListPage.xaml",
-                String.format("%s%sCheckListPage.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml",
-                        entity.getName())));
-        
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckListUserControl.xaml.cs",
-                String.format("%s%sCheckListUserControl.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml.cs",
-                        entity.getName()),
-                String.format("%sCheckListUserControl.xaml",
-                        entity.getName())));
-
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckListUserControl.xaml",
-                String.format("%s%sCheckListUserControl.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
-                        entity.getName())));
-        
-        // State Checkable Views
-        result.add(new SourceFile(
-                templatePath + "TemplateCheckListState.cs",
-                String.format("%s%sCheckListState.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
-                        entity.getName())));
-        
-        // Add Radioable list for C#
-        // Base Radioable Views
         Boolean haveMonoRelation = false;
+        Boolean haveMultiRelation = false;
         Map<String,FieldMetadata> fields = entity.getFields();
         for (FieldMetadata item : fields.values()) {
         	if (!item.isInternal() && item.getRelation() != null) {
     			if (item.getRelation().getType().equals("OneToOne")
     					|| item.getRelation().getType().equals("OneToMany")) {
     				haveMonoRelation = true;
-    			}
+    			}else if (item.getRelation().getType().equals("ManyToMany")
+    					|| item.getRelation().getType().equals("ManyToOne")) {
+    				haveMultiRelation = true;
+				}
 			}
 		}
         
+        // Add Checkable list for C#
+        if (haveMultiRelation) {
+	        // Base Checkable Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckListPage.xaml.cs",
+	                String.format("%s%sCheckListPage.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sCheckListPage.xaml",
+	                        entity.getName())));
+	
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckListPage.xaml",
+	                String.format("%s%sCheckListPage.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml",
+	                        entity.getName())));
+	        
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckListUserControl.xaml.cs",
+	                String.format("%s%sCheckListUserControl.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sCheckListUserControl.xaml",
+	                        entity.getName())));
+	
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckListUserControl.xaml",
+	                String.format("%s%sCheckListUserControl.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
+	                        entity.getName())));
+	        
+	        // State Checkable Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCheckListState.cs",
+	                String.format("%s%sCheckListState.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
+	                        entity.getName())));
+        }
+        
+        // Add Radioable list for C#
         if (haveMonoRelation) {
+        	// Base Radioable Views
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioListPage.xaml.cs",
 	                String.format("%s%sRadioListPage.xaml.cs",

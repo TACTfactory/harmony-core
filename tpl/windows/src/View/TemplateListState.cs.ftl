@@ -13,7 +13,7 @@
 <#assign mono = false>
 <#list fields?values as field >
     <#if field.relation??>
-        <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany" >
+        <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne" >
             <#assign multi = true>
         <#else>
             <#assign mono = true>
