@@ -142,7 +142,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             ViewStateMachine.Instance.SetTransition(
                 Transition.${curr.name?cap_first}SoloTo${rel.relation.targetEntity?cap_first}ShowPage
-                    , new ${rel.relation.targetEntity?cap_first}ListPage());
+                    , new ${rel.relation.targetEntity?cap_first}ShowPage());
         }            
                 </#if>
             </#list>
