@@ -194,7 +194,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             foreach (var item in parent.${field.relation.inversedBy?cap_first})
             {
-                this.Context.Delete<${curr.name?cap_first}>(item);
+                this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
             }
         }
                 </#if>
