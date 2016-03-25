@@ -220,6 +220,13 @@ namespace ${project_namespace}.Data.Base
         /// <returns>1 if insert/update, 0 otherwise</returns>
         public Int32 InsertOrUpdate(${curr.name?cap_first} item)
         {
+            // We need to take care of updating an item with an id of 0.
+            // If we do default behaviour for SQLite library is to assign
+            // 0 value on all foreign keys.
+            if (item.Id == 0)
+            {
+                item.Id = LastInsertedRowId() + 1;
+            }
             this.Context.InsertOrReplace(item);
             return LastInsertedRowId();
         }
