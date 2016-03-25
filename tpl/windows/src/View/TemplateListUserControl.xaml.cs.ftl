@@ -47,7 +47,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
             <#assign wishedrelation = []/>
             <#list curr.relations as rel>
-                <#if ((rel.relation.type=="ManyToOne") || (rel.relation.type=="ManyToMany"))>
+                <#if ((rel.relation.type == "ManyToOne") || (rel.relation.type == "ManyToMany"))>
                     <#assign wishedrelation = wishedrelation + [rel.relation.targetEntity]/>
                 </#if>
             </#list>

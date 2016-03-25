@@ -57,7 +57,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             <#assign item_count = 0/>
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden && field.relation??)>
-                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
+                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne")>
                         <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
@@ -96,7 +96,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             <#assign item_count = 0/>
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden && field.relation??)>
-                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
+                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne")>
                         <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {

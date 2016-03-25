@@ -264,7 +264,10 @@ namespace ${project_namespace}.View
             ${entity.name?lower_case}Show.AddTransition(
                 Transition.${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPage, 
                     StateID.${field.relation.targetEntity?cap_first}ListPageEnter);
-                    
+            
+            ${field.relation.targetEntity?lower_case}List.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPageBack, 
+                    StateID.${entity.name?cap_first}ShowPageEnter);        
             ${field.relation.targetEntity?lower_case}List.AddTransition(
                 Transition.${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ShowPageBack, 
                     StateID.${entity.name?cap_first}ShowPageEnter);
