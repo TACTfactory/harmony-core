@@ -205,7 +205,9 @@ namespace ${project_namespace}.View.Navigation.States
                 && ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
                     </#if>
                 </#if>
-            </#list><#if item_count == 1>)
+            </#list>
+            <#if item_count == 1>
+            )
             {
                 this.${curr.name?lower_case}ShowPage
                     .ShowBrowser
