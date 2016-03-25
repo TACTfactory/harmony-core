@@ -272,7 +272,9 @@ namespace ${project_namespace}.View
                     <#else>
             #region ${entity.name?cap_first} OneToOne and ManyToOne relations.    
                 
-            // CreateState.
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage, 
+                    StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
             ${entity.name?lower_case}Create.AddTransition(
                 Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);

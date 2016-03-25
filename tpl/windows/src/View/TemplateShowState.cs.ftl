@@ -232,7 +232,8 @@ namespace ${project_namespace}.View.Navigation.States
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
                     <#if (item_count == 0)>     
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                && (ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                    || ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}CreatePage))
                 && NotInBaseTransition(ViewStateMachine.Instance.NextTransition))
             {
                 ViewStateMachine.Instance.SetTransition(
@@ -242,7 +243,8 @@ namespace ${project_namespace}.View.Navigation.States
                         <#assign item_count = 1/>
                     <#else>
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                && (ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                    || ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}CreatePage))
                 && NotInBaseTransition(ViewStateMachine.Instance.NextTransition))
             {
                 ViewStateMachine.Instance.SetTransition(
@@ -253,7 +255,8 @@ namespace ${project_namespace}.View.Navigation.States
                 <#else>
                     <#if (item_count == 0)>     
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage))
+                && (ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                    || ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}CreatePage)))
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
@@ -262,7 +265,8 @@ namespace ${project_namespace}.View.Navigation.States
                         <#assign item_count = 1/>
                     <#else>
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
-                && ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage))
+                && (ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}ShowPage)
+                    || ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}CreatePage)))
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
