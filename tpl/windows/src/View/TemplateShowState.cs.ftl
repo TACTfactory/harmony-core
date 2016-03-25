@@ -195,18 +195,12 @@ namespace ${project_namespace}.View.Navigation.States
             </#list>
             }
             
-            <#assign item_count = 0/>
+            if (ViewStateMachine.Instance.DidTransitionContains(Transition.${curr.name?cap_first}ListPage)
             <#list wishedfields as field>
-                <#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
-                    <#if item_count == 0>
-            if ( ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
-                        <#assign item_count = 1/>
-                    <#else>
-                && ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
-                    </#if>
+                <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
+                || ViewStateMachine.Instance.DidTransitionContains(Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}ListPage)
                 </#if>
             </#list>
-            <#if item_count == 1>
             )
             {
                 this.${curr.name?lower_case}ShowPage
@@ -216,7 +210,6 @@ namespace ${project_namespace}.View.Navigation.States
                                 .ShowBrowser
                                     .Btn_Existing);
             }
-            </#if>
         }
         </#if>
 
