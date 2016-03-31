@@ -63,9 +63,22 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?lower_case} use to retrieve checked item.</param>
         public void SetRadioed(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})
         {
-            if (this.${curr.name?lower_case}Radioables.Find(i => i.${curr.name?cap_first}.${id?cap_first} == ${field.relation.targetEntity?lower_case}.${curr.name?cap_first}) != null)
+                        <#list entities?values as entity>
+                            <#if entity.name == field.relation.targetEntity>
+                                <#assign relatedEntity = entity />
+                            </#if>
+                        </#list>
+                        <#assign fields = ViewUtils.getAllFields(relatedEntity) />
+                        <#list fields?values as field>
+                            <#if field.id>
+                                <#assign id = field.name />
+                            <#elseif field.relation?? && field.relation.targetEntity == curr.name>
+                                <#assign field_mapped = field.name>
+                            </#if>
+                        </#list>
+            if (this.${curr.name?lower_case}Radioables.Find(i => i.${curr.name?cap_first}.${id?cap_first} == ${field.relation.targetEntity?lower_case}.${field_mapped?cap_first}) != null)
             {
-                this.${curr.name?lower_case}Radioables.Find(i => i.${curr.name?cap_first}.${id?cap_first} == ${field.relation.targetEntity?lower_case}.${curr.name?cap_first}).Radio = true;
+                this.${curr.name?lower_case}Radioables.Find(i => i.${curr.name?cap_first}.${id?cap_first} == ${field.relation.targetEntity?lower_case}.${field_mapped?cap_first}).Radio = true;
             }
         }
                     </#if>
@@ -91,12 +104,25 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?cap_first} to save change.</param>
         public void Save(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})
         {
+                        <#list entities?values as entity>
+                            <#if entity.name == field.relation.targetEntity>
+                                <#assign relatedEntity = entity />
+                            </#if>
+                        </#list>
+                        <#assign fields = ViewUtils.getAllFields(relatedEntity) />
+                        <#list fields?values as field>
+                            <#if field.id>
+                                <#assign id = field.name />
+                            <#elseif field.relation?? && field.relation.targetEntity == curr.name>
+                                <#assign field_mapped = field.name>
+                            </#if>
+                        </#list>
                 <#if field.relation.type == "OneToMany" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
             Entity.${curr.name?cap_first} ${curr.name?lower_case} = this.GetBaseItem();
             if (${curr.name?lower_case} != null)
             {
-                ${field.relation.targetEntity?lower_case}.${field.relation.mappedBy?cap_first} = ${curr.name?lower_case}.${id?cap_first};
+                ${field.relation.targetEntity?lower_case}.${field_mapped?cap_first} = ${curr.name?lower_case}.${id?cap_first};
                 adapter.Update(${field.relation.targetEntity?lower_case});
             }
                 <#elseif field.relation.type == "OneToOne" >
@@ -104,7 +130,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
             Entity.${curr.name?cap_first} ${curr.name?lower_case} = this.GetBaseItem();
             if (${curr.name?lower_case} != null)
             {
-                ${field.relation.targetEntity?lower_case}.${curr.name?cap_first} = ${curr.name?lower_case}.${id?cap_first};
+                ${field.relation.targetEntity?lower_case}.${field_mapped?cap_first} = ${curr.name?lower_case}.${id?cap_first};
                 adapter.Update(${field.relation.targetEntity?lower_case});
             }
                 </#if>

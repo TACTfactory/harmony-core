@@ -80,10 +80,23 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?cap_first} to save change.</param>
         public void Save(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})
         {
+                        <#list entities?values as entity>
+                            <#if entity.name == field.relation.targetEntity>
+                                <#assign relatedEntity = entity />
+                            </#if>
+                        </#list>
+                        <#assign fields = ViewUtils.getAllFields(relatedEntity) />
+                        <#list fields?values as field>
+                            <#if field.id>
+                                <#assign id = field.name />
+                            <#elseif field.relation?? && field.relation.targetEntity == curr.name>
+                                <#assign field_mapped = field.name>
+                            </#if>
+                        </#list>
                 <#if field.relation.type == "ManyToMany" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
             this.${curr.name?lower_case}Checkables = this.${curr.name?lower_case}Checkables.FindAll(i => i.Check == true);
-            ${field.relation.targetEntity?lower_case}.${field.relation.mappedBy?cap_first} = this.GetBaseList();
+            ${field.relation.targetEntity?lower_case}.${field_mapped?cap_first} = this.GetBaseList();
             adapter.Update(${field.relation.targetEntity?lower_case});
                 <#elseif field.relation.type == "ManyToOne" >
             ${field.relation.targetEntity?cap_first}SQLiteAdapter adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);

@@ -87,6 +87,8 @@ namespace ${project_namespace}.Data.Base
                 <#list fields?values as field>
                     <#if field.id>
                         <#assign id = field.name />
+                    <#elseif field.relation?? && field.relation.targetEntity == curr.name>
+                        <#assign field_mapped = field.name>
                     </#if>
                 </#list>
                 <#if field.relation.type == "ManyToMany">
@@ -94,14 +96,14 @@ namespace ${project_namespace}.Data.Base
         {
             ${field.relation.targetEntity} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            return parent.${field.relation.mappedBy?cap_first};
+            return parent.${field_mapped?cap_first};
         }
         
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            parent.${field.relation.mappedBy?cap_first}.Add(item);
+            parent.${field_mapped?cap_first}.Add(item);
             this.Insert(item);
             ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
@@ -113,7 +115,7 @@ namespace ${project_namespace}.Data.Base
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            foreach (var item in parent.${field.relation.mappedBy?cap_first})
+            foreach (var item in parent.${field_mapped?cap_first})
             {
                 this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
             }
@@ -122,7 +124,7 @@ namespace ${project_namespace}.Data.Base
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
             ${curr.name?cap_first} child = 
-                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${curr.name?cap_first});
+                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${field_mapped?cap_first});
             return child;
         }
         
@@ -147,7 +149,7 @@ namespace ${project_namespace}.Data.Base
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
             ${curr.name?cap_first} child = 
-                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${curr.name?cap_first});
+                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${field_mapped?cap_first});
             return child;
         }
         
@@ -155,7 +157,7 @@ namespace ${project_namespace}.Data.Base
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            parent.${curr.name?cap_first} = this.Insert(item);
+            parent.${field_mapped?cap_first} = this.Insert(item);
             ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
@@ -166,7 +168,7 @@ namespace ${project_namespace}.Data.Base
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            this.Context.Delete<${curr.name?cap_first}>(parent.${curr.name?cap_first});
+            this.Context.Delete<${curr.name?cap_first}>(parent.${field_mapped?cap_first});
         }
                 <#elseif field.relation.type == "ManyToOne">
         public List<${curr.name?cap_first}> GetByParentId(${field.relation.targetEntity?cap_first} parentId)
