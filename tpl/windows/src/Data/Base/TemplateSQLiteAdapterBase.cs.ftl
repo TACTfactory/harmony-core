@@ -117,7 +117,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             foreach (var item in parent.${field_mapped?cap_first})
             {
-                this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
+                this.Context.Delete<${curr.name?cap_first}>(item.${idCurr?cap_first});
             }
         }
                 <#elseif field.relation.type == "OneToMany">
@@ -196,7 +196,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             foreach (var item in parent.${field.relation.inversedBy?cap_first})
             {
-                this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
+                this.Context.Delete<${curr.name?cap_first}>(item.${idCurr?cap_first});
             }
         }
                 </#if>
@@ -225,9 +225,9 @@ namespace ${project_namespace}.Data.Base
             // We need to take care of updating an item with an id of 0.
             // If we do default behaviour for SQLite library is to assign
             // 0 value on all foreign keys.
-            if (item.${id?cap_first} == 0)
+            if (item.${idCurr?cap_first} == 0)
             {
-                item.${id?cap_first} = LastInsertedRowId() + 1;
+                item.${idCurr?cap_first} = LastInsertedRowId() + 1;
             }
             this.Context.InsertOrReplace(item);
             return LastInsertedRowId();

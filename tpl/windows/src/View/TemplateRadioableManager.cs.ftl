@@ -70,9 +70,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
                         </#list>
                         <#assign fields = ViewUtils.getAllFields(relatedEntity) />
                         <#list fields?values as field>
-                            <#if field.id>
-                                <#assign id = field.name />
-                            <#elseif field.relation?? && field.relation.targetEntity == curr.name>
+                            <#if field.relation?? && field.relation.targetEntity == curr.name>
                                 <#assign field_mapped = field.name>
                             </#if>
                         </#list>
@@ -94,7 +92,6 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
                 <#assign fields = ViewUtils.getAllFields(relatedEntity) />
                 <#list fields?values as field>
                     <#if field.id>
-                        <#assign id = field.name />
                     </#if>
                 </#list>
 
@@ -111,9 +108,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
                         </#list>
                         <#assign fields = ViewUtils.getAllFields(relatedEntity) />
                         <#list fields?values as field>
-                            <#if field.id>
-                                <#assign id = field.name />
-                            <#elseif field.relation?? && field.relation.targetEntity == curr.name>
+                            <#if field.relation?? && field.relation.targetEntity == curr.name>
                                 <#assign field_mapped = field.name>
                             </#if>
                         </#list>
