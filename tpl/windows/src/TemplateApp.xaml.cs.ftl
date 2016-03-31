@@ -26,10 +26,10 @@ namespace ${project_namespace}
         {
             // Standard XAML initialization
             this.InitializeComponent();
-            
+
             // Initialization of current ${project_name?cap_first}ApplicationBase used to manage application info
             this.${project_name?lower_case}ApplicationBase = new ${project_name?cap_first}ApplicationBase();
-            
+
             // Bind suspending event to manage application state
             base.Suspending += OnSuspending;
         }

@@ -45,6 +45,3 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
-
-
-

@@ -14,7 +14,7 @@ using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
 using ${project_namespace}.Utils.StateMachine;
 <#if wishedrelation?has_content>
-    <#list wishedrelation as targetEntity> 
+    <#list wishedrelation as targetEntity>
 using ${project_namespace}.View.${targetEntity?cap_first};
     </#list>
 </#if>
@@ -29,7 +29,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
     public sealed partial class ${curr.name?cap_first}CreateUserControl : UserControl
     {
         /// <summary>
-        /// ${curr.name?cap_first}CreateUserControl button stackpanel 
+        /// ${curr.name?cap_first}CreateUserControl button stackpanel
         /// use in state item view part to manage UI navigation display.
         /// </summary>
         public StackPanel Stackpanel_btn { get; set; }
@@ -50,7 +50,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// <summary>
         /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
         /// </summary>
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         }
 
         /// <summary>
-        /// Retrieve all informations to save current ${curr.name?cap_first} item 
+        /// Retrieve all informations to save current ${curr.name?cap_first} item
         /// check if comming from other state to save parent item association.
         /// </summary>
         /// <param name="sender">Tapped item.</param>
@@ -108,7 +108,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             </#if>
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}CreatePageBack, 
+                Transition.${curr.name?cap_first}CreatePageBack,
                     new ${curr.name?cap_first}ListPage());
         }
 
@@ -116,7 +116,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             <#list curr.relations as rel>
                 <#if rel.relation.type == "ManyToMany" || rel.relation.type == "OneToMany">
         /// <summary>
-        /// Retrieve all informations to save current ${curr.name?cap_first} item 
+        /// Retrieve all informations to save current ${curr.name?cap_first} item
         /// and navigate to display relative ${rel.relation.targetEntity?cap_first} list.
         /// </summary>
         /// <param name="sender">Tapped item.</param>
@@ -131,7 +131,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         }
                 <#else>
         /// <summary>
-        /// Retrieve all informations to save current ${curr.name?cap_first} item 
+        /// Retrieve all informations to save current ${curr.name?cap_first} item
         /// and navigate to add relative ${rel.relation.targetEntity?cap_first} item.
         /// </summary>
         /// <param name="sender">Tapped item.</param>
@@ -143,7 +143,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             ViewStateMachine.Instance.SetTransition(
                 Transition.${curr.name?cap_first}SoloTo${rel.relation.targetEntity?cap_first}ShowPage
                     , new ${rel.relation.targetEntity?cap_first}ShowPage());
-        }            
+        }
                 </#if>
             </#list>
         </#if>

@@ -38,11 +38,11 @@ namespace ${project_namespace}.Entity
                 </#if>
             </#if>
         </#list>
-        
+
         <#if (curr.inheritance?? && curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0)>
         [Column(IsDiscriminator = true)]
         public string DiscKey;
-        
+
         </#if>
         <#list curr_fields as field>
             <#if !field.id && !field.relation?? && !field.enum??>
@@ -76,7 +76,7 @@ namespace ${project_namespace}.Entity
         public Int32 ${field.name?cap_first}
                 <#elseif field.relation.type == "OneToMany">
         [OneToMany]
-        public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}        
+        public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
                 <#elseif field.relation.type == "ManyToMany">
         [ManyToMany(typeof(${field.relation.joinTable}))]
         public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
@@ -96,7 +96,7 @@ namespace ${project_namespace}.Entity
                     </#if>
                 </#if>
             }
-            
+
             set
             {
                 <#if field.id || !field.relation??>
@@ -106,7 +106,7 @@ namespace ${project_namespace}.Entity
                     <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
                 this.${field.name} = value;
                 OnPropertyChanged("${field.name}");
-                
+
                     <#else>
                 this.${field.name} = value;
                 OnPropertyChanged("${field.name}");
@@ -134,11 +134,11 @@ namespace ${project_namespace}.Entity
             </#if>
             </#if>
         </#list>
-        
+
         <#if (curr.inheritance?? && curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0)>
         [Column(IsDiscriminator = true)]
         public string DiscKey;
-        
+
         </#if>
         [PrimaryKey, AutoIncrement]
         [Column(${curr.name?cap_first}Contract.COL_${curr.name?upper_case}_ID)]
@@ -148,7 +148,7 @@ namespace ${project_namespace}.Entity
             {
                 return this.${curr.name?lower_case}_id;
             }
-            
+
             set
             {
                 this.${curr.name?lower_case}_id = value;
@@ -174,7 +174,7 @@ namespace ${project_namespace}.Entity
         public Int32 ${field.name?cap_first}
                 <#elseif field.relation.type == "OneToMany">
         [OneToMany]
-        public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}        
+        public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
                 <#elseif field.relation.type == "ManyToMany">
         [ManyToMany(typeof(PoneyToJockey))]
         public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
@@ -194,7 +194,7 @@ namespace ${project_namespace}.Entity
                     </#if>
                 </#if>
             }
-            
+
             set
             {
                 <#if field.id || !field.relation??>

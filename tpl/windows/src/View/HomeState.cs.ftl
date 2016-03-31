@@ -11,7 +11,7 @@ namespace ${project_namespace}.View.Navigation.States
     class HomeState : ViewStateMachineState
     {
         /// <summary>
-        /// Constructor that initialyze HomeState stateID 
+        /// Constructor that initialyze HomeState stateID
         /// to HomeStatePageEnter for state machine base state on enter.
         /// </summary>
         public HomeState()

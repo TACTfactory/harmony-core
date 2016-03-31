@@ -151,7 +151,7 @@ namespace ${project_namespace}.Utils.StateMachine
                 return;
             }
 
-            // Update the currentStateID and currentState       
+            // Update the currentStateID and currentState
             currentStateID = id;
             foreach (BaseViewStateMachineState state in states)
             {

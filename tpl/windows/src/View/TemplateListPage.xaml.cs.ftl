@@ -9,7 +9,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
 {
     /// <summary>
     /// ${curr.name?cap_first}ListPage allow to create a new item based on ${curr.name?cap_first} entity
-    /// This ${curr.name?cap_first}ListPage load graphical context and be managed by ${curr.name?cap_first}ListState 
+    /// This ${curr.name?cap_first}ListPage load graphical context and be managed by ${curr.name?cap_first}ListState
     /// </summary>
     public partial class ${curr.name?cap_first}ListPage : Page
     {
@@ -17,7 +17,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
         /// Used to manage ${curr.name?cap_first}List UserControl in ${curr.name?cap_first}ListState.
         /// </summary>
         public ${curr.name?cap_first}ListUserControl ${curr.name?cap_first}ListUserControl { get; set; }
-        
+
         /// <summary>
         /// Used to manage NavigationBrowser in ${curr.name?cap_first}ListState.
         /// </summary>
@@ -35,4 +35,3 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
         }
     }
 }
-

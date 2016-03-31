@@ -21,15 +21,15 @@ using Windows.UI.Xaml.Input;
 namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     /// <summary>
-    /// ${curr.name?cap_first}CheckListUserControl contain 
+    /// ${curr.name?cap_first}CheckListUserControl contain
     /// real check list display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
     public sealed partial class ${curr.name?cap_first}CheckListUserControl : UserControl
     {
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            
-        private ${curr.name?cap_first}CheckableManager ${curr.name?lower_case}CheckableManager = 
+
+        private ${curr.name?cap_first}CheckableManager ${curr.name?lower_case}CheckableManager =
             new ${curr.name?cap_first}CheckableManager();
 
         private ObservableCollection<${curr.name?cap_first}Checkable> obs;
@@ -53,7 +53,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             List<Entity.${curr.name?cap_first}> items = ${curr.name?lower_case}Adapter.GetAll();
 
             ${curr.name?lower_case}CheckableManager.ParseInCheckables(items);
-            
+
             <#assign item_count = 0/>
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden && field.relation??)>
@@ -85,9 +85,9 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
         /// <summary>
         /// Validate button use to save datas change in database.
-        /// For any possible relations beetwen ${curr.name?cap_first} 
-        /// and others entities mapped with ManyToMany or OneToMany 
-        /// update all references if have to. 
+        /// For any possible relations beetwen ${curr.name?cap_first}
+        /// and others entities mapped with ManyToMany or OneToMany
+        /// update all references if have to.
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>
@@ -114,12 +114,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                     </#if>
                 </#if>
             </#list>
-            
+
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}CheckListPageBack, 
+                Transition.${curr.name?cap_first}CheckListPageBack,
                     new ${curr.name?cap_first}ListPage());
         }
-        
+
         private void itemsList_ItemClick(object sender, ItemClickEventArgs e)
         {
             ${curr.name?cap_first}Checkable item = e.ClickedItem as ${curr.name?cap_first}Checkable;

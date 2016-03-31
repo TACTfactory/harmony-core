@@ -17,7 +17,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
         /// Used to manage ${curr.name?cap_first}Show UserControl in ${curr.name?cap_first}ShowState.
         /// </summary>
         public ${curr.name?cap_first}ShowUserControl ${curr.name?cap_first}ShowUserControl { get; set; }
-        
+
         /// <summary>
         /// Used to manage ShowBrowser in ${curr.name?cap_first}ShowState.
         /// </summary>

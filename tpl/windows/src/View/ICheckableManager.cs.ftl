@@ -15,7 +15,7 @@ namespace ${project_namespace}.View.Checkable.Manager
     }
 
     /// <summary>
-    /// Parent item link to base item on where we have to save datas 
+    /// Parent item link to base item on where we have to save datas
     /// or find parent item linked base item.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>

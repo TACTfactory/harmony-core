@@ -17,7 +17,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
     /// </summary>
     public sealed partial class ${curr.name?cap_first}EditUserControl : BindingUserControl
     {
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
 
         private Entity.${curr.name?cap_first} ${curr.name?lower_case}Item;
@@ -38,10 +38,10 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 base.OnPropertyChanged("${curr.name?cap_first}Item");
             }
         }
-        
+
         /// <summary>
         /// Default constructor.
-        /// Initialize current DataContext and ${curr.name?cap_first}Item 
+        /// Initialize current DataContext and ${curr.name?cap_first}Item
         /// with appropriate datas extract from ViewStateMachine.
         /// </summary>
         public ${curr.name?cap_first}EditUserControl()
@@ -60,8 +60,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
         /// <summary>
         /// Update button use to save datas in database.
-        /// For any possible relations beetwen ${curr.name?cap_first} 
-        /// and others entities update all references if have to. 
+        /// For any possible relations beetwen ${curr.name?cap_first}
+        /// and others entities update all references if have to.
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>

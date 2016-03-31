@@ -13,22 +13,22 @@ namespace ${project_namespace}.View.Navigation.UsersControls
         /// UserControl back button.
         /// </summary>
         public Button Btn_Back { get; set; }
-        
+
         /// <summary>
         /// UserControl new button.
         /// </summary>
         public Button Btn_New { get; set; }
-        
+
         /// <summary>
         /// UserControl existing button.
         /// </summary>
         public Button Btn_Existing { get; set; }
-        
+
         /// <summary>
         /// UserControl erase all button.
         /// </summary>
         public Button Btn_Erase_All { get; set; }
-        
+
         /// <summary>
         /// UserControl button stackpanel.
         /// </summary>

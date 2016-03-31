@@ -10,12 +10,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
 {
     /// <summary>
     /// Manager for all action on RadioableEntities.
-    /// Have to implement one IRadioableManagerBase 
+    /// Have to implement one IRadioableManagerBase
     /// and multiple IRadioableManagerParent.
     /// </summary>
     class ${curr.name?cap_first}RadioableManager : IRadioableManagerBase<Entity.${curr.name?cap_first}><#list curr_fields as field><#if field.relation?? && !field.internal><#if field.relation.type == "OneToOne" || field.relation.type == "OneToMany">, IRadioableManagerParent<Entity.${field.relation.targetEntity?cap_first}></#if></#if></#list>
     {
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
         private List<${curr.name?cap_first}Radioable> ${curr.name?lower_case}Radioables;
 
@@ -27,7 +27,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
             get { return ${curr.name?lower_case}Radioables; }
             set { ${curr.name?lower_case}Radioables = value; }
         }
-        
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -35,7 +35,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
         {
             this.${curr.name?lower_case}Radioables = new List<${curr.name?cap_first}Radioable>();
         }
-        
+
         /// <summary>
         /// Update current ${curr.name?cap_first} entity to set it Radioable.
         /// </summary>
@@ -96,7 +96,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable.Manager
                 </#list>
 
         /// <summary>
-        /// Save current ${curr.name?cap_first} items relations for ${field.relation.targetEntity?cap_first} entity. 
+        /// Save current ${curr.name?cap_first} items relations for ${field.relation.targetEntity?cap_first} entity.
         /// </summary>
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?cap_first} to save change.</param>
         public void Save(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})

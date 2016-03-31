@@ -30,7 +30,7 @@ namespace ${project_namespace}.View.Navigation.States
         private ${curr.name?cap_first}CheckListPage ${curr.name?lower_case}CheckListPage;
 
         /// <summary>
-        /// Constructor that initialyze ${curr.name?cap_first}CheckListState stateID 
+        /// Constructor that initialyze ${curr.name?cap_first}CheckListState stateID
         /// to ${curr.name?cap_first}CheckListPageEnter for state machine base state on enter.
         /// </summary>
         public ${curr.name?cap_first}CheckListState()
@@ -73,9 +73,8 @@ namespace ${project_namespace}.View.Navigation.States
         private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}CheckListPageBack, 
+                Transition.${curr.name?cap_first}CheckListPageBack,
                     new ${curr.name?cap_first}ListPage());
         }
     }
 }
-

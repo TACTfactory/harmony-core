@@ -22,7 +22,7 @@ namespace ${project_namespace}.Provider.Contract
             </#if>
             </#if>
         </#list>
-        
+
         public const string TABLE_NAME = "${curr.name?cap_first}";
     }
 }

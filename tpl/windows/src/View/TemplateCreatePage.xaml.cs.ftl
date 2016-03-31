@@ -9,7 +9,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
 {
     /// <summary>
     /// ${curr.name?cap_first}CreatePage allow to create a new item based on ${curr.name?cap_first} entity
-    /// This ${curr.name?cap_first}CreatePage load graphical context and be managed by ${curr.name?cap_first}CreateState 
+    /// This ${curr.name?cap_first}CreatePage load graphical context and be managed by ${curr.name?cap_first}CreateState
     /// </summary>
     public partial class ${curr.name?cap_first}CreatePage : Page
     {
@@ -17,7 +17,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
         /// Used to manage ${curr.name?cap_first}Create UserControl in ${curr.name?cap_first}CreateState.
         /// </summary>
         public ${curr.name?cap_first}CreateUserControl ${curr.name?cap_first}CreateUserControl { get; set; }
-        
+
         /// <summary>
         /// Used to manage BackBrowser in ${curr.name?cap_first}CreateState.
         /// </summary>

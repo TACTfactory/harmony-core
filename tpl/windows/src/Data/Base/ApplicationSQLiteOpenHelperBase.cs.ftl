@@ -51,11 +51,11 @@ namespace ${project_namespace}.Data.Base
         /// </summary>
         private const String DB_NAME = "${project_name?lower_case}.sqlite";
 
-        private static string databasePath = 
+        private static string databasePath =
             Path.Combine(
                 Windows.Storage.ApplicationData.Current.LocalFolder.Path
                 , ${project_name?cap_first}SQLiteOpenHelperBase.DB_NAME);
-        private static ISQLitePlatform sqlitePlatform = 
+        private static ISQLitePlatform sqlitePlatform =
             new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT();
 
         /// <summary>

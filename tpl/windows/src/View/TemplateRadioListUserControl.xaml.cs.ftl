@@ -21,15 +21,15 @@ using Windows.UI.Xaml.Input;
 namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     /// <summary>
-    /// ${curr.name?cap_first}RadioListUserControl contain 
+    /// ${curr.name?cap_first}RadioListUserControl contain
     /// real radio list display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
     public sealed partial class ${curr.name?cap_first}RadioListUserControl : UserControl
     {
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            
-        private ${curr.name?cap_first}RadioableManager ${curr.name?lower_case}RadioableManager = 
+
+        private ${curr.name?cap_first}RadioableManager ${curr.name?lower_case}RadioableManager =
             new ${curr.name?cap_first}RadioableManager();
 
         private ObservableCollection<${curr.name?cap_first}Radioable> obs;
@@ -81,9 +81,9 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
         /// <summary>
         /// Validate button use to save datas change in database.
-        /// For any possible relations beetwen ${curr.name?cap_first} 
-        /// and others entities mapped with ManyToMany or OneToMany 
-        /// update all references if have to. 
+        /// For any possible relations beetwen ${curr.name?cap_first}
+        /// and others entities mapped with ManyToMany or OneToMany
+        /// update all references if have to.
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>
@@ -112,12 +112,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                     </#if>
                 </#if>
             </#list>
-            
+
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}RadioListPageBack, 
+                Transition.${curr.name?cap_first}RadioListPageBack,
                     new ${curr.name?cap_first}ShowPage());
         }
-        
+
         private void itemsList_ItemClick(object sender, ItemClickEventArgs e)
         {
             ${curr.name?cap_first}Radioable item = e.ClickedItem as ${curr.name?cap_first}Radioable;

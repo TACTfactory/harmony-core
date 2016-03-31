@@ -94,10 +94,10 @@ namespace ${project_namespace}.Utils.StateMachine
         ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPageBack = ${increment},
         <#assign increment = increment + 1 />
                 </#if>
-            </#list>  
-        #endregion    
+            </#list>
+        #endregion
         </#if>
-        #endregion 
+        #endregion
         </#if>
         </#list>
     }

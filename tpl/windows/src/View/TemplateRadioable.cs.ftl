@@ -25,7 +25,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Radioable
                 OnPropertyChanged("${curr.name?cap_first}");
             }
         }
-        
+
         /// <summary>
         /// Default constructor.
         /// </summary>

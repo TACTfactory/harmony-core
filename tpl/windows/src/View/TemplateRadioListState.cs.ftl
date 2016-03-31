@@ -30,7 +30,7 @@ namespace ${project_namespace}.View.Navigation.States
         private ${curr.name?cap_first}RadioListPage ${curr.name?lower_case}RadioListPage;
 
         /// <summary>
-        /// Constructor that initialyze ${curr.name?cap_first}RadioListState stateID 
+        /// Constructor that initialyze ${curr.name?cap_first}RadioListState stateID
         /// to ${curr.name?cap_first}RadioListPageEnter for state machine base state on enter.
         /// </summary>
         public ${curr.name?cap_first}RadioListState()
@@ -73,9 +73,8 @@ namespace ${project_namespace}.View.Navigation.States
         private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}RadioListPageBack, 
+                Transition.${curr.name?cap_first}RadioListPageBack,
                     new ${curr.name?cap_first}ShowPage());
         }
     }
 }
-

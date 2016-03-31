@@ -16,10 +16,10 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
     public sealed partial class ${curr.name?cap_first}ListUserControl : UserControl
     {
         /// <summary>
-        /// Current ${curr.name?cap_first}SQLiteAdapter managing database ${curr.name?cap_first} 
+        /// Current ${curr.name?cap_first}SQLiteAdapter managing database ${curr.name?cap_first}
         /// item finding for ${curr.name?cap_first}ListUserControl.
         /// </summary>
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
         /// <summary>
         /// Constructor.
-        /// Setup item .cs list and .xaml list. 
+        /// Setup item .cs list and .xaml list.
         /// </summary>
         public ${curr.name?cap_first}ListUserControl()
         {
@@ -52,23 +52,23 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 </#if>
             </#list>
             <#if wishedrelation?has_content>
-                <#list wishedrelation as targetEntity> 
+                <#list wishedrelation as targetEntity>
                     <#if (targetEntity?is_first)>
             if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
                 items = ${curr.name?lower_case}Adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
-            }    
+            }
                     <#else>
             else if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
                 items = ${curr.name?lower_case}Adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
             }
-                    </#if> 
+                    </#if>
                 </#list>
             else
             {
                 items = ${curr.name?lower_case}Adapter.GetAll();
-            }  
+            }
             <#else>
             items = ${curr.name?lower_case}Adapter.GetAll();
             </#if>
@@ -83,9 +83,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         private void itemsList_ItemClick(object sender, ItemClickEventArgs e)
         {
             // Save clicked item to procced with.
-            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}ShowPage, 
+            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}ShowPage,
                 new ${curr.name?cap_first}.${curr.name?cap_first}ShowPage(), e.ClickedItem);
         }
     }
 }
-

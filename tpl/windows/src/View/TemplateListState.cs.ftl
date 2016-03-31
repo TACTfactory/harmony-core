@@ -44,11 +44,11 @@ namespace ${project_namespace}.View.Navigation.States
         /// <summary>
         /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
         /// </summary>
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
-            
+
         /// <summary>
-        /// Constructor that initialyze ${curr.name?cap_first}CreateState stateID 
+        /// Constructor that initialyze ${curr.name?cap_first}CreateState stateID
         /// to ${curr.name?cap_first}ListStateEnter for state machine base state on enter.
         /// </summary>
         public ${curr.name?cap_first}ListState()
@@ -80,13 +80,13 @@ namespace ${project_namespace}.View.Navigation.States
             <#if multi>
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped -= Btn_Existing_Tapped;
             </#if>
-            
+
             <#if wishedfields?has_content>
             if (ViewStateMachine.Instance.${curr.name?cap_first} != null)
             {
                 ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetWithChildren(ViewStateMachine.Instance.${curr.name?cap_first});
             }
-            
+
             <#assign item_count = 0/>
             <#list wishedfields as field>
                 <#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
@@ -94,13 +94,13 @@ namespace ${project_namespace}.View.Navigation.States
             if(ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage)
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance).GetByParentId(ViewStateMachine.Instance.${curr.name?cap_first});
-            }            
+            }
                         <#assign item_count = 1/>
                     <#else>
             else if(ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage)
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance).GetByParentId(ViewStateMachine.Instance.${curr.name?cap_first});
-            }         
+            }
                     </#if>
                 </#if>
             </#list>
@@ -110,14 +110,14 @@ namespace ${project_namespace}.View.Navigation.States
             <#assign item_count = 0/>
             if(<#list wishedfields as field>
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
-                    <#if (item_count == 0)>     
+                    <#if (item_count == 0)>
                 ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack
                         <#assign item_count = 1/>
                     <#else>
                     || ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack
                     </#if>
                 <#else>
-                    <#if (item_count == 0)>     
+                    <#if (item_count == 0)>
                 ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack
                         <#assign item_count = 1/>
                     <#else>
@@ -148,18 +148,18 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Erase_All.Tapped += Btn_Erase_All_Tapped;
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
             <#if multi>
-            
+
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped += Btn_Existing_Tapped;
             </#if>
-            
+
         <#if wishedfields?has_content>
             this.UpdateUI();
-        </#if> 
+        </#if>
         }
 
         <#if wishedfields?has_content>
         /// <summary>
-        /// Update ${curr.name?cap_first}ListUserControl UI to remove existing button 
+        /// Update ${curr.name?cap_first}ListUserControl UI to remove existing button
         /// if do not comming from other display tree state.
         /// </summary>
         public void UpdateUI()
@@ -190,11 +190,11 @@ namespace ${project_namespace}.View.Navigation.States
             <#if wishedfields?has_content>
                 <#list wishedfields as field>
                     <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
-                        <#if (item_count == 0)>     
+                        <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                    Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack,
                         new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                             <#assign item_count = 1/>
@@ -202,16 +202,16 @@ namespace ${project_namespace}.View.Navigation.States
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                    Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack,
                         new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                         </#if>
                     <#else>
-                        <#if (item_count == 0)>     
+                        <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                    Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack,
                         new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                             <#assign item_count = 1/>
@@ -219,7 +219,7 @@ namespace ${project_namespace}.View.Navigation.States
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                    Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack,
                         new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                         </#if>
@@ -228,12 +228,12 @@ namespace ${project_namespace}.View.Navigation.States
             else
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}HomePageBack, 
+                    Transition.${curr.name?cap_first}HomePageBack,
                         new HomePage());
             }
-            <#else> 
+            <#else>
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}HomePageBack, 
+                Transition.${curr.name?cap_first}HomePageBack,
                     new HomePage());
             </#if>
         }
@@ -283,7 +283,7 @@ namespace ${project_namespace}.View.Navigation.States
         private void Btn_New_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}CreatePage, 
+                Transition.${curr.name?cap_first}CreatePage,
                     new ${curr.name?cap_first}.${curr.name?cap_first}CreatePage());
         }
 
@@ -308,11 +308,10 @@ namespace ${project_namespace}.View.Navigation.States
             </#list>
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}CheckListPage, 
+                    Transition.${curr.name?cap_first}CheckListPage,
                         new ${curr.name?cap_first}CheckListPage());
             }
         }
         </#if>
     }
 }
-

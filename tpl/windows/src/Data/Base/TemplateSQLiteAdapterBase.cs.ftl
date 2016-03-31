@@ -118,7 +118,7 @@ namespace ${project_namespace}.Data.Base
         /// <returns>List of referenced ${curr.name?cap_first} items.</returns>
         public List<${curr.name?cap_first}> GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity} parent = 
+            ${field.relation.targetEntity} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             return parent.${field_mapped?cap_first};
         }
@@ -131,11 +131,11 @@ namespace ${project_namespace}.Data.Base
         /// <returns>${curr.name?cap_first} item database new id.</returns>
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             parent.${field_mapped?cap_first}.Add(item);
             this.Insert(item);
-            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter =
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
             return LastInsertedRowId();
@@ -147,7 +147,7 @@ namespace ${project_namespace}.Data.Base
         /// <param name="parentId">${field.relation.targetEntity?cap_first} item containing ${curr.name?cap_first} items.</param>
         public void Clear(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             foreach (var item in parent.${field_mapped?cap_first})
             {
@@ -162,7 +162,7 @@ namespace ${project_namespace}.Data.Base
         /// <returns>${curr.name?cap_first} item.</returns>
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${curr.name?cap_first} child = 
+            ${curr.name?cap_first} child =
                 this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${field_mapped?cap_first});
             return child;
         }
@@ -175,10 +175,10 @@ namespace ${project_namespace}.Data.Base
         /// <returns>${curr.name?cap_first} item database new id.</returns>
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             parent.${field.relation.mappedBy?cap_first} = this.Insert(item);
-            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter =
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
             return LastInsertedRowId();
@@ -190,10 +190,10 @@ namespace ${project_namespace}.Data.Base
         /// <param name="parentId">${field.relation.targetEntity?cap_first} item containing ${curr.name?cap_first} items.</param>
         public void Clear(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
                 this.Context.Delete<${curr.name?cap_first}>(parent.${id?cap_first});
-        }        
+        }
                 <#elseif field.relation.type == "OneToOne">
         /// <summary>
         /// Get ${curr.name?cap_first} item referenced by ${field.relation.targetEntity?cap_first} parent.
@@ -202,7 +202,7 @@ namespace ${project_namespace}.Data.Base
         /// <returns>${curr.name?cap_first} item.</returns>
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${curr.name?cap_first} child = 
+            ${curr.name?cap_first} child =
                 this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${field_mapped?cap_first});
             return child;
         }
@@ -215,10 +215,10 @@ namespace ${project_namespace}.Data.Base
         /// <returns>${curr.name?cap_first} item database new id.</returns>
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             parent.${field_mapped?cap_first} = this.Insert(item);
-            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter =
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
             return LastInsertedRowId();
@@ -230,7 +230,7 @@ namespace ${project_namespace}.Data.Base
         /// <param name="parentId">${field.relation.targetEntity?cap_first} item containing ${curr.name?cap_first} items.</param>
         public void Clear(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             this.Context.Delete<${curr.name?cap_first}>(parent.${field_mapped?cap_first});
         }
@@ -241,8 +241,8 @@ namespace ${project_namespace}.Data.Base
         /// <param name="parentId">Parent item where we checkout related items regarding is id.</param>
         /// <returns>List of referenced ${curr.name?cap_first} items.</returns>
         public List<${curr.name?cap_first}> GetByParentId(${field.relation.targetEntity?cap_first} parentId)
-        {      
-            ${field.relation.targetEntity} parent = 
+        {
+            ${field.relation.targetEntity} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             return parent.${field.relation.inversedBy?cap_first};
         }
@@ -255,11 +255,11 @@ namespace ${project_namespace}.Data.Base
         /// <returns>${curr.name?cap_first} item database new id.</returns>
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             parent.${field.relation.inversedBy?cap_first}.Add(item);
             this.Insert(item);
-            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter =
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
             return LastInsertedRowId();
@@ -271,7 +271,7 @@ namespace ${project_namespace}.Data.Base
         /// <param name="parentId">${field.relation.targetEntity?cap_first} item containing ${curr.name?cap_first} items.</param>
         public void Clear(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity?cap_first} parent = 
+            ${field.relation.targetEntity?cap_first} parent =
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             foreach (var item in parent.${field.relation.inversedBy?cap_first})
             {
@@ -373,7 +373,7 @@ namespace ${project_namespace}.Data.Base
             <#if (singleTabInheritance)><#list curr.inheritance.subclasses as subclass><#if (subclass.relations?size > 0)>
             + ${subclass.name}SQLiteAdapter.getSchemaConstraints()<#if subclass_has_next || MetadataUtils.hasRelationOrIds(curr, false)> + ","
             </#if></#if></#list></#if>
-    
+
     <#if (curr.relations??)>
         <#list (curr.relations) as relation>
             <#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
@@ -417,7 +417,7 @@ namespace ${project_namespace}.Data.Base
         {
             throw new NotImplementedException();
         }
-        
+
 </#if>
 /*
         public override ${curr.name} Refresh(${curr.name} item)

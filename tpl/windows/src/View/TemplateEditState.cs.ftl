@@ -25,7 +25,7 @@ namespace ${project_namespace}.View.Navigation.States
         private ${curr.name?cap_first}EditPage ${curr.name?lower_case}EditPage;
 
         /// <summary>
-        /// Constructor that initialyze ${curr.name?cap_first}EditState stateID 
+        /// Constructor that initialyze ${curr.name?cap_first}EditState stateID
         /// to ${curr.name?cap_first}EditPageEnter for state machine base state on enter.
         /// </summary>
         public ${curr.name?cap_first}EditState()
@@ -60,7 +60,7 @@ namespace ${project_namespace}.View.Navigation.States
         /// </summary>
         public override void DoAfterEntering()
         {
-            this.${curr.name?lower_case}EditPage.BackBrowser.Btn_Back.Tapped += Btn_Back_Tapped;  
+            this.${curr.name?lower_case}EditPage.BackBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
         }
 
 

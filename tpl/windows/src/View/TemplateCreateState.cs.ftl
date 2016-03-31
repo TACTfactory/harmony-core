@@ -25,7 +25,7 @@ namespace ${project_namespace}.View.Navigation.States
         private ${curr.name?cap_first}CreatePage ${curr.name?lower_case}CreatePage;
 
         /// <summary>
-        /// Constructor that initialyze ${curr.name?cap_first}CreateState stateID 
+        /// Constructor that initialyze ${curr.name?cap_first}CreateState stateID
         /// to ${curr.name?cap_first}CreatePageEnter for state machine base state on enter.
         /// </summary>
         public ${curr.name?cap_first}CreateState()
@@ -63,9 +63,9 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}CreatePage.BackBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
         <#if wishedfields?has_content>
             this.UpdateUI();
-        </#if>    
+        </#if>
         }
-        
+
         <#if wishedfields?has_content>
         /// <summary>
         /// Update ${curr.name?cap_first}CreateUserControl UI to remove button if comming from other display tree state.
@@ -92,7 +92,7 @@ namespace ${project_namespace}.View.Navigation.States
                             this.${curr.name?lower_case}CreatePage
                                 .${curr.name?cap_first}CreateUserControl
                                     .Btn_list_related_${field.relation.targetEntity?lower_case});
-                <#else>      
+                <#else>
                 this.${curr.name?lower_case}CreatePage
                     .${curr.name?cap_first}CreateUserControl
                         .Stackpanel_btn.Children.Remove(

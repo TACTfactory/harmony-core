@@ -11,12 +11,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager
 {
     /// <summary>
     /// Manager for all action on CheckableEntities.
-    /// Have to implement one ICheckableManagerBase 
+    /// Have to implement one ICheckableManagerBase
     /// and multiple ICheckableManagerParent.
     /// </summary>
     class ${curr.name?cap_first}CheckableManager : ICheckableManagerBase<Entity.${curr.name?cap_first}><#list curr_fields as field><#if field.relation?? && !field.internal><#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">, ICheckableManagerParent<Entity.${field.relation.targetEntity?cap_first}></#if></#if></#list>
     {
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter =
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
         private List<${curr.name?cap_first}Checkable> ${curr.name?lower_case}Checkables;
 
@@ -28,7 +28,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager
             get { return ${curr.name?lower_case}Checkables; }
             set { ${curr.name?lower_case}Checkables = value; }
         }
-        
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -57,7 +57,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager
             <#if field.relation?? && !field.internal>
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
             /// <summary>
-        /// Setup current ${curr.name?cap_first} entity checkable list checked for all items 
+        /// Setup current ${curr.name?cap_first} entity checkable list checked for all items
         /// linked to ${field.relation.targetEntity?cap_first} entity.
         /// </summary>
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?lower_case} use to retrieve checked item.</param>
@@ -75,7 +75,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager
         <#list curr_fields as field>
             <#if field.relation?? && !field.internal && field.relation.type != "OneToOne" && field.relation.type != "OneToMany" >
         /// <summary>
-        /// Save current ${curr.name?cap_first} items relations for ${field.relation.targetEntity?cap_first} entity. 
+        /// Save current ${curr.name?cap_first} items relations for ${field.relation.targetEntity?cap_first} entity.
         /// </summary>
         /// <param name="${field.relation.targetEntity?lower_case}">Linked ${field.relation.targetEntity?cap_first} to save change.</param>
         public void Save(Entity.${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?lower_case})

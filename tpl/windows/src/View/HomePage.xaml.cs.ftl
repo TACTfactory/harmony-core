@@ -20,11 +20,11 @@ namespace ${project_namespace}.View
         }
         <#list entities?values as entity>
             <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
-        
+
         private void Button${entity.name}_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
-                Transition.${entity.name}ListPage, 
+                Transition.${entity.name}ListPage,
                 new ${entity.name}.${entity.name}ListPage());
         }
             </#if>
