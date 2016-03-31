@@ -14,14 +14,11 @@ namespace ${project_namespace}.Utils.StateMachine
     {
         private List<BaseViewStateMachineState> states;
 
-        ///// <summary>
-        ///// Pages container for navigation undo.
-        ///// </summary>
-        //public List<Page> Pages = new List<Page>();
-        
-        //TODO comment
+        /// <summary>
+        /// Current list of transition from current point to base opened entity list.
+        /// </summary>
         public List<Transition> Transitions { get; set; }
-        
+
         /// <summary>
         /// Current Page container for navigation to.
         /// </summary>
@@ -31,12 +28,12 @@ namespace ${project_namespace}.Utils.StateMachine
         // Don't change the CurrentState directly
         private StateID currentStateID;
         private BaseViewStateMachineState currentState;
-        
+
         /// <summary>
         /// State machine current state ID.
         /// </summary>
         public StateID CurrentStateID { get { return currentStateID; } }
-        
+
         /// <summary>
         /// State machine current state.
         /// </summary>
@@ -50,8 +47,12 @@ namespace ${project_namespace}.Utils.StateMachine
             states = new List<BaseViewStateMachineState>();
             Transitions = new List<Transition>();
         }
-        
-        //TODO comment
+
+        /// <summary>
+        /// Check current list of transition to checkup for whiched transition.
+        /// </summary>
+        /// <param name="trans">Transition to check for.</param>
+        /// <returns>True if finded elsewhere false.</returns>
         public Boolean DidTransitionContains(Transition trans)
         {
             foreach (var item in Transitions)
@@ -160,14 +161,9 @@ namespace ${project_namespace}.Utils.StateMachine
                     currentState.DoBeforeLeaving(this.CurrentPage);
 
                     this.currentState = state;
-                    
                     this.CurrentPage = page;
-                    //if (!this.Pages.Contains(this.CurrentPage))
-                    //{
-                    //    this.Pages.Add(this.CurrentPage);
-                    //}
                     Transitions.Add(trans);
-                    
+
                     // Reset the state to its desired condition before it can reason or act
                     this.currentState.DoBeforeEntering(page);
 

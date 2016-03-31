@@ -9,6 +9,9 @@
 
 namespace ${project_namespace}.Provider.Contract.Base
 {
+    /// <summary>
+    /// ${curr.name?cap_first} contract for SQLite database mapping.
+    /// </summary>
     public abstract class ${curr.name?cap_first}ContractBase
     {
 <#if !curr.internal>

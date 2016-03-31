@@ -12,10 +12,18 @@ namespace ${project_namespace}.Data
         #region Singleton
         private static ${project_name?cap_first}SQLiteOpenHelper instance;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         protected ${project_name?cap_first}SQLiteOpenHelper()
         {
         }
 
+        /// <summary>
+        /// Instance of openhelper use to manage :
+        ///     - Database connection
+        ///     - Database creation / deletion
+        /// </summary>
         public static ${project_name?cap_first}SQLiteOpenHelper Instance
         {
             get

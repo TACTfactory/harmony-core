@@ -9,7 +9,6 @@ using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 
-
 namespace ${project_namespace}.Entity
 {
     <#if (!curr.inheritance?? || (curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0))>

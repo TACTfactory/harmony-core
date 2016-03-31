@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace ${project_namespace}.Harmony.Util
 {
-    /** 
-     * Utility class for date manipulation.
-     */
+    /// <summary>
+    /// Utility class for date manipulation.
+    /// </summary>
     public class DateUtils
     {
         /** TAG for debug purpose. */

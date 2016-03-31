@@ -16,7 +16,7 @@ namespace ${project_namespace}.Utils.StateMachine
     {
         protected Dictionary<Transition, StateID> map = new Dictionary<Transition, StateID>();
         protected StateID stateID;
-        
+
         /// <summary>
         /// State current state ID.
         /// </summary>

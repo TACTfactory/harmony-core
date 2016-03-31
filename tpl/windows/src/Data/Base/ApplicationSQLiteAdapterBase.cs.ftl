@@ -13,7 +13,11 @@ namespace ${project_namespace}.Data.Base
     {
 
     }
-    
+
+    /// <summary>
+    /// Base adapter class to connect to SQLite.
+    /// </summary>
+    /// <typeparam name="T">Whished entity to map.</typeparam>
     public abstract class SQLiteAdapterBase<T> : SQLiteAdapterBase where T : class
     {
         private const string TAG = "${project_name?cap_first}SQLiteAdapterBase";
@@ -28,6 +32,9 @@ namespace ${project_namespace}.Data.Base
         /// </summary>
         protected T Items { get; set; }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         protected SQLiteAdapterBase(SQLiteConnection context)
         {
             this.Context = context;
@@ -78,6 +85,9 @@ namespace ${project_namespace}.Data.Base
             this.Context.UpdateWithChildren(item);
         }
 
+        /// <summary>
+        /// Remove all entity items.
+        /// </summary>
         public virtual Int32 Clear()
         {
             return this.Context.DeleteAll<T>();
@@ -97,7 +107,7 @@ namespace ${project_namespace}.Data.Base
         {
             this.Context.Commit();
         }
-        
+
         /// <summary>
         /// Delete an entity.
         /// </summary>
@@ -140,6 +150,10 @@ namespace ${project_namespace}.Data.Base
         /// <returns>List of cols</returns>
         public abstract string[] getCols();
 
+        /// <summary>
+        /// Get the table's columns alias.
+        /// </summary>
+        /// <returns>List of cols</returns>
         public abstract string[] getAliasedCols();
     }
 }

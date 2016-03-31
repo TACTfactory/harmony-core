@@ -10,7 +10,7 @@ namespace ${project_namespace}.Utils.StateMachine
     {
         NullTransition = 0, // Use this transition to represent a non-existing transition in the system.
         HomePage = 1,
-        
+
         <#assign increment = 2 />
         <#list entities?values as entity>
         <#if !entity.internal >
@@ -37,14 +37,14 @@ namespace ${project_namespace}.Utils.StateMachine
             <#assign increment = increment + 1 />
         ${entity.name?cap_first}EditPage = ${increment}, // ${entity.name?cap_first} transition to edit item page.
             <#assign increment = increment + 1 />
-            
+
             <#if multi>
         ${entity.name?cap_first}CheckListPage = ${increment}, // ${entity.name?cap_first} transition to check list item page.
             <#assign increment = increment + 1 />
         ${entity.name?cap_first}CheckListPageBack = ${increment},
             <#assign increment = increment + 1 />
             </#if>
-            
+
             <#if mono>
         ${entity.name?cap_first}RadioListPage = ${increment}, // ${entity.name?cap_first} transition to check list item page.
             <#assign increment = increment + 1 />
@@ -60,10 +60,10 @@ namespace ${project_namespace}.Utils.StateMachine
             <#assign increment = increment + 1 />
         ${entity.name?cap_first}EditPageBack = ${increment},
             <#assign increment = increment + 1 />
-            
+
         ${entity.name?cap_first}HomePageBack = ${increment},
             <#assign increment = increment + 1 />
-        
+
         #region ${entity.name?cap_first}State relations transitions.
             <#if multi>
         #region ${entity.name?cap_first} ManyToMany and OneToMany relations.

@@ -16,7 +16,7 @@ namespace ${project_namespace}.Data
         /// <param name="context">Current SQLite connection to use.</param>
         protected SQLiteAdapter(SQLiteConnection context) : base(context)
         {
-            
+
         }
     }
 }

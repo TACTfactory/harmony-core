@@ -1,6 +1,5 @@
 <@header?interpret />
 
-
 using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View;
 using System;
@@ -16,7 +15,7 @@ namespace ${project_namespace}
     {
         // Base object used on application initialization
         public ${project_name?cap_first}ApplicationBase ${project_name?lower_case}ApplicationBase { get; set; }
-        
+
         /// <summary>
         /// Constructor for the Application object.
         /// Used a singleton to manage is access.
@@ -88,7 +87,7 @@ namespace ${project_namespace}
         {
             base.OnActivated(args);
         }
-        
+
         /// <summary>
         /// Called on Page navigation failed
         /// </summary>

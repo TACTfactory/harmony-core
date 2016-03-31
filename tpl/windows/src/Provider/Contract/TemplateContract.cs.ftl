@@ -5,6 +5,10 @@ using ${project_namespace}.Provider.Contract.Base;
 
 namespace ${project_namespace}.Provider.Contract
 {
+    /// <summary>
+    /// ${curr.name?cap_first} contract for SQLite database mapping.
+    /// This can be override if you need to setup modifications.
+    /// </summary>
     public abstract class ${curr.name?cap_first}Contract : ${curr.name?cap_first}ContractBase
     {
         public const string COL_${curr.name?upper_case}_ID = "${curr.name?lower_case}_id";

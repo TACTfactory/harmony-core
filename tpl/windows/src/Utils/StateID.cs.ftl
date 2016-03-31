@@ -15,7 +15,7 @@ namespace ${project_namespace}.Utils.StateMachine
         <#list entities?values as entity>
         <#if !entity.internal>
         #region ${entity.name?cap_first}State base transitions.
-        
+
         ${entity.name?cap_first}ListPageEnter = ${increment},
         <#assign increment = increment + 1 />
         ${entity.name?cap_first}CreatePageEnter = ${increment},

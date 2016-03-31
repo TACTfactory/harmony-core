@@ -16,27 +16,27 @@ namespace ${project_namespace}
         /// Date format.
         /// </summary>
         public static string DateFormat { get; protected set; }
-        
+
         /// <summary>
         /// Time format.
         /// </summary>
         public static String TimeFormat { get; protected set; }
-        
+
         /// <summary>
         /// 24HFormat
         /// </summary>
         public static bool Is24Hour { get; protected set; }
-        
+
         /// <summary>
         /// Application container name
         /// </summary>
         private const string DEMACT_CONTAINER = "demact_container";
-        
+
         /// <summary>
         /// Application local setting base container
         /// </summary>
         private ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-        
+
         /// <summary>
         /// Preferences
         /// </summary>

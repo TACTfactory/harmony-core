@@ -11,15 +11,26 @@ using ${project_namespace}.Fixture;
 
 namespace ${project_namespace}.Data.Base
 {
+    /// <summary>
+    /// Openhelper to manage SQLite connection.
+    /// </summary>
     public class ${project_name?cap_first}SQLiteOpenHelperBase : SQLiteConnection
     {
         #region Singleton
         private static ${project_name?cap_first}SQLiteOpenHelperBase instance;
 
+        /// <summary>
+        /// Default constructor calling base class.
+        /// </summary>
         protected ${project_name?cap_first}SQLiteOpenHelperBase() : base(SqlitePlatform, DatabasePath)
         {
         }
 
+        /// <summary>
+        /// Instance of openhelper use to manage :
+        ///     - Database connection
+        ///     - Database creation / deletion
+        /// </summary>
         public static ${project_name?cap_first}SQLiteOpenHelperBase Instance
         {
             get
@@ -32,7 +43,7 @@ namespace ${project_namespace}.Data.Base
             }
         }
         #endregion
-        
+
         private const string TAG = "${project_name?cap_first}SQLiteOpenHelperBase";
 
         /// <summary>
@@ -46,7 +57,10 @@ namespace ${project_namespace}.Data.Base
                 , ${project_name?cap_first}SQLiteOpenHelperBase.DB_NAME);
         private static ISQLitePlatform sqlitePlatform = 
             new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT();
-            
+
+        /// <summary>
+        /// DatabasePath item property to set it on or directly use default.
+        /// </summary>
         public static new string DatabasePath
         {
             get
@@ -60,6 +74,9 @@ namespace ${project_namespace}.Data.Base
             }
         }
 
+        /// <summary>
+        /// SqlitePlatform item property to set it on or directly use default.
+        /// </summary>
         public static ISQLitePlatform SqlitePlatform
         {
             get
@@ -72,7 +89,12 @@ namespace ${project_namespace}.Data.Base
                 sqlitePlatform = value;
             }
         }
-            
+
+        /// <summary>
+        /// Create database if not already exist.
+        /// Take care you need to use DeleteDatabase() if your database structure
+        /// have been modified.
+        /// </summary>
         public void CreateDatabase()
         {
         <#list entities?values as entity>
@@ -80,13 +102,16 @@ namespace ${project_namespace}.Data.Base
         </#list>
         }
 
+        /// <summary>
+        /// Delete all tables in database.
+        /// </summary>
         public void DeleteDatabase()
         {
         <#list entities?values as entity>
             this.DropTable<${entity.name?cap_first}>();
         </#list>
         }
-        
+
         <#if options.fixture?? && options.fixture.enabled>
         private void LoadData()
         {
