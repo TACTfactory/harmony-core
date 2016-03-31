@@ -12,6 +12,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View
 {
+    // <summary>
+    /// Application state macine for views.
+    /// </summary>
     class ViewStateMachine
     {
         /// <summary>
@@ -24,6 +27,9 @@ namespace ${project_namespace}.View
         {
         }
 
+        /// <summary>
+        /// Instance of current state machine.
+        /// </summary>
         public static ViewStateMachine Instance
         {
             get
@@ -40,6 +46,9 @@ namespace ${project_namespace}.View
 
         private BaseViewStateMachine bsm;
 
+        /// <summary>
+        /// Last played transition or will be played.
+        /// </summary>
         public Transition NextTransition { get; set; }
         <#list entities?values as entity>
             <#if !entity.internal >
@@ -47,6 +56,12 @@ namespace ${project_namespace}.View
             </#if>
         </#list>
 
+        /// <summary>
+        /// Setup a transition to navigate to.
+        /// </summary>
+        /// <param name="t">Transition to do.</param>
+        /// <param name="page">Page to navigate to.</param>
+        /// <param name="item">Passed item (default = null).</param>
         public void SetTransition(Transition t, Page page, Object item = null)
         {
             if (item != null)
@@ -55,9 +70,12 @@ namespace ${project_namespace}.View
             }
 
             this.NextTransition = t;
-            bsm.PerformTransition(t, page);
+            this.bsm.PerformTransition(t, page);
         }
 
+        /// <summary>
+        /// All state machine entities item set to null.
+        /// </summary>
         public void SetItemsNull()
         {
         <#list entities?values as entity>
@@ -65,13 +83,17 @@ namespace ${project_namespace}.View
             this.${entity.name?cap_first} = null;
             </#if>
         </#list>
-            bsm.Transitions = new List<Transition>();
+            this.bsm.Transitions = new List<Transition>();
         }
 
-        //TODO comment
+        /// <summary>
+        /// Call base state machine DidTransitionContains.
+        /// </summary>
+        /// <param name="trans">Transition to check for.</param>
+        /// <returns>true if finded elsewhere false.</returns>
         public Boolean DidTransitionContains(Transition trans)
         {
-            return bsm.DidTransitionContains(trans);
+            return this.bsm.DidTransitionContains(trans);
         }
 
         private void SetItem(Object item)
@@ -116,14 +138,24 @@ namespace ${project_namespace}.View
             /// Base navigation into entities.
             /// Navigation states definitions :
             ///     - HomeState
-            ///         - ListState
-            ///             - CreateState
-            ///                 - Back
-            ///             - ShowState
-            ///                 - EditState
-            ///                     - Back
-            ///                 - Back
-            ///             - Back
+            ///         - ListState :
+            ///             - Back => HomeState
+            ///             - Create New => CreateSate :
+            ///                 - Back => ListState
+            ///                 - List related entity (if have) => RelatedEntity ListState
+            ///                 - Add entity (if have) => AddEntity ShowState
+            ///                 - Validate => ListState
+            ///             - Erase All
+            ///             - Item click => ShowState :
+            ///                 - Back => ListState
+            ///                 - Edit => EditState :
+            ///                     - Back => ShowState
+            ///                     - Update => ShowState
+            ///                 - Delete => ListState
+            ///                 - List related entity (if have or if on list base item) => RelatedEntity ListState
+            ///                 - Show entity (if have or if on list base item) => ShowEntity ShowState
+            ///                 - Use Existing (if not on list base item) => UseExisting ExistingState
+            ///             - Use Existing (if not on list base item) => UseExisting ExistingState
             /// </summary>
             #region ${entity.name?cap_first}State base transitions.
             // ListState.
@@ -302,15 +334,15 @@ namespace ${project_namespace}.View
             </#list>
 
             // Create and add all states to state machine.
-            bsm = new BaseViewStateMachine();
-            bsm.AddState(homeState);
+            this.bsm = new BaseViewStateMachine();
+            this.bsm.AddState(homeState);
 
             <#list entities?values as entity>
                 <#if !entity.internal >
-            bsm.AddState(${entity.name?lower_case}List);
-            bsm.AddState(${entity.name?lower_case}Create);
-            bsm.AddState(${entity.name?lower_case}Show);
-            bsm.AddState(${entity.name?lower_case}Edit);
+            this.bsm.AddState(${entity.name?lower_case}List);
+            this.bsm.AddState(${entity.name?lower_case}Create);
+            this.bsm.AddState(${entity.name?lower_case}Show);
+            this.bsm.AddState(${entity.name?lower_case}Edit);
                     <#assign fields = ViewUtils.getAllFields(entity) />
                     <#assign multi = false>
                     <#assign mono = false>
@@ -324,10 +356,10 @@ namespace ${project_namespace}.View
                         </#if>
                     </#list>
                     <#if multi>
-            bsm.AddState(${entity.name?lower_case}CheckList);
+            this.bsm.AddState(${entity.name?lower_case}CheckList);
                     </#if>
                     <#if mono>
-            bsm.AddState(${entity.name?lower_case}RadioList);
+            this.bsm.AddState(${entity.name?lower_case}RadioList);
                     </#if>
                 </#if>
 
