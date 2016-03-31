@@ -56,12 +56,23 @@ namespace ${project_namespace}.Entity
         [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case})]
         public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
             <#elseif field.relation??>
+                <#list entities?values as entity>
+                    <#if entity.name == field.relation.targetEntity>
+                        <#assign relatedEntity = entity />
+                    </#if>
+                </#list>
+                <#assign fields = ViewUtils.getAllFields(relatedEntity) />
+                <#list fields?values as field>
+                    <#if field.id>
+                        <#assign id = field.name />
+                    </#if>
+                </#list>
                 <#if field.relation.type == "ManyToOne">
-        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}_ID),
+        [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case}_${id?upper_case}),
             ForeignKey(typeof(${field.relation.targetEntity?cap_first}))]
         public Int32 ${field.name?cap_first}
                 <#elseif field.relation.type == "OneToOne">
-        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}_ID),
+        [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case}_${id?upper_case}),
             ForeignKey(typeof(${field.relation.targetEntity?cap_first}))]
         public Int32 ${field.name?cap_first}
                 <#elseif field.relation.type == "OneToMany">
