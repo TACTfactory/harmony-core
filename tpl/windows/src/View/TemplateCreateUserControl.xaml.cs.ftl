@@ -155,7 +155,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                             <#if (!field.internal && !field.hidden)>
                                 <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
                                     <#if (field.harmony_type?lower_case == "boolean")>
-            ${curr.name?lower_case}.${field.name?cap_first} = this.checkbox_${field.name}.IsChecked;
+            ${curr.name?lower_case}.${field.name?cap_first} = this.checkbox_${field.name}.IsChecked.Value;
                                     <#elseif (field.harmony_type?lower_case == "int")>
             Int32 result${field.name?cap_first};
             if(Int32.TryParse(this.text_box_${field.name}.Text, out result${field.name?cap_first}))
