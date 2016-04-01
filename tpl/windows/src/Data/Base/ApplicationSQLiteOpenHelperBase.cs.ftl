@@ -1,3 +1,4 @@
+<#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 
 using System;
@@ -98,7 +99,16 @@ namespace ${project_namespace}.Data.Base
         public void CreateDatabase()
         {
         <#list entities?values as entity>
+            <#assign fields = ViewUtils.getAllFields(entity) />
+            <#assign haveFields = false />
+            <#list fields?values as field>
+                <#if !field.internal>
+                    <#assign haveFields = true />
+                </#if>
+            </#list>
+            <#if haveFields>
             this.CreateTable<${entity.name?cap_first}>();
+            </#if>
         </#list>
         }
 
@@ -108,7 +118,16 @@ namespace ${project_namespace}.Data.Base
         public void DeleteDatabase()
         {
         <#list entities?values as entity>
+            <#assign fields = ViewUtils.getAllFields(entity) />
+            <#assign haveFields = false />
+            <#list fields?values as field>
+                <#if !field.internal>
+                    <#assign haveFields = true />
+                </#if>
+            </#list>
+            <#if haveFields>
             this.DropTable<${entity.name?cap_first}>();
+            </#if>
         </#list>
         }
 

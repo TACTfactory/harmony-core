@@ -14,18 +14,15 @@ namespace ${project_namespace}.Entity
     <#if (!curr.inheritance?? || (curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0))>
     [Table(${curr.name?cap_first}Contract.TABLE_NAME)]
     </#if>
-    <#if (curr.inheritance?? && curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0)>
-        <#list curr.inheritance.subclasses as entity>
-    [InheritanceMapping(Code = "${entity.name}", Type = typeof(${entity.name}))]
-        </#list>
-    [InheritanceMapping(Code = "${curr.name}", Type = typeof(${curr.name}), IsDefault = true)]
-    </#if>
     public class ${curr.name}<#if (curr.inheritance?? && (curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??))> : ${curr.inheritance.superclass.name}<#else> : EntityBase</#if>
     {
 <#if !curr.internal>
         <#list curr_fields as field>
-            <#if !field.id && !field.relation?? && !field.enum??>
+            <#if !field.id && !field.relation?? && !field.enum?? && FieldsUtils.getJavaType(field) != "Char" >
         private ${FieldsUtils.getJavaType(field)} ${field.name};
+            <#elseif FieldsUtils.getJavaType(field) == "Char">
+        // We cannot use char here because of SQLite lib.
+        private String ${field.name};
             <#elseif field.enum??>
         private ${enums[field.enum.targetEnum].name} ${field.name};
             <#elseif field.id>
@@ -40,14 +37,18 @@ namespace ${project_namespace}.Entity
         </#list>
 
         <#if (curr.inheritance?? && curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0)>
-        [Column(IsDiscriminator = true)]
+        //TODO manage item as a single concatained class
         public string DiscKey;
 
         </#if>
         <#list curr_fields as field>
-            <#if !field.id && !field.relation?? && !field.enum??>
+            <#if !field.id && !field.relation?? && !field.enum?? && FieldsUtils.getJavaType(field) != "Char" >
         [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case})]
         public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
+            <#elseif FieldsUtils.getJavaType(field) == "Char">
+        // We cannot use char here because of SQLite lib.
+        [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case})]
+        public String ${field.name?cap_first}
             <#elseif field.enum??>
         public ${enums[field.enum.targetEnum].name} ${field.name?cap_first}
             <#elseif field.id>
@@ -82,7 +83,6 @@ namespace ${project_namespace}.Entity
         public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
                 </#if>
             </#if>
-            <#if !field.internal>
         {
             get
             {
@@ -114,7 +114,6 @@ namespace ${project_namespace}.Entity
                 </#if>
             }
         }
-            </#if>
         </#list>
 <#else>
         private Int32 ${curr.name?lower_case}_id;

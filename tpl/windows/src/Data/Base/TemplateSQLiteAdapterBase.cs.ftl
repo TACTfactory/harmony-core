@@ -110,7 +110,7 @@ namespace ${project_namespace}.Data.Base
                         <#assign field_mapped = field.name>
                     </#if>
                 </#list>
-                <#if field.relation.type == "ManyToMany">
+                <#if field.relation.type == "ManyToMany" && MetadataUtils.getInversingField(field)??>
         /// <summary>
         /// Get list of ${curr.name?cap_first} items referenced by ${field.relation.targetEntity?cap_first} parent.
         /// </summary>
@@ -154,7 +154,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.Delete<${curr.name?cap_first}>(item.${idCurr?cap_first});
             }
         }
-                <#elseif field.relation.type == "OneToMany">
+                <#elseif field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field)??>
         /// <summary>
         /// Get ${curr.name?cap_first} item referenced by ${field.relation.targetEntity?cap_first} parent.
         /// </summary>
@@ -194,7 +194,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
                 this.Context.Delete<${curr.name?cap_first}>(parent.${id?cap_first});
         }
-                <#elseif field.relation.type == "OneToOne">
+                <#elseif field.relation.type == "OneToOne" && MetadataUtils.getInversingField(field)??>
         /// <summary>
         /// Get ${curr.name?cap_first} item referenced by ${field.relation.targetEntity?cap_first} parent.
         /// </summary>
@@ -234,7 +234,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             this.Context.Delete<${curr.name?cap_first}>(parent.${field_mapped?cap_first});
         }
-                <#elseif field.relation.type == "ManyToOne">
+                <#elseif field.relation.type == "ManyToOne" && MetadataUtils.getInversingField(field)??>
         /// <summary>
         /// Get list of ${curr.name?cap_first} items referenced by ${field.relation.targetEntity?cap_first} parent.
         /// </summary>
