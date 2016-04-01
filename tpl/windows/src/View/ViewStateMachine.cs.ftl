@@ -96,6 +96,11 @@ namespace ${project_namespace}.View
             return this.bsm.DidTransitionContains(trans);
         }
 
+        /// <summary>
+        /// Used when SetTransition was called with an object to setup state machine
+        /// element with current object value.
+        /// </summary>
+        /// <param name="item">Item to check for state machine.</param>
         private void SetItem(Object item)
         {
             <#list entities?values as entity>
@@ -115,6 +120,9 @@ namespace ${project_namespace}.View
             </#list>
         }
 
+        /// <summary>
+        /// Build up state machine with all transition states to provide navigation between pages.
+        /// </summary>
         private void BuildStateMachine()
         {
             /// <summary>
@@ -135,8 +143,8 @@ namespace ${project_namespace}.View
             <#list entities?values as entity>
                 <#if !entity.internal >
             /// <summary>
-            /// Base navigation into entities.
-            /// Navigation states definitions :
+            /// Navigation into entities.
+            /// Navigation states transition definitions :
             ///     - HomeState
             ///         - ListState :
             ///             - Back => HomeState
@@ -241,42 +249,6 @@ namespace ${project_namespace}.View
             <#list entities?values as entity>
 
                 <#if !entity.internal >
-            /// <summary>
-            /// Relations navigation into entities.
-            /// Relations navigation states definitions :
-            ///     - CreateState :
-            ///         - Associate ListState (ManyToMany, OneToMany)
-            ///             - Associate CreateState
-            ///                 - Back
-            ///             - Associate ShowState
-            ///                 - Back
-            ///                 - Associate EditState
-            ///                     - Back
-            ///             - Associate CheckListState
-            ///             - Back
-            ///         - Associate ShowState (OneToOne, ManyToOne)
-            ///             - Associate EditState
-            ///                 - Back
-            ///             - Associate RadioListState
-            ///                 - Back
-            ///             - Back
-            ///     - ShowState :
-            ///         - Associate ListState (ManyToMany, OneToMany)
-            ///             - Associate CreateState
-            ///                 - Back
-            ///             - Associate ShowState
-            ///                 - Back
-            ///                 - Associate EditState
-            ///                     - Back
-            ///             - Associate CheckListState
-            ///             - Back
-            ///         - Associate ShowState (OneToOne, ManyToOne)
-            ///             - Associate EditState
-            ///                 - Back
-            ///             - Associate RadioListState
-            ///                 - Back
-            ///             - Back
-            /// </summary>
             #region ${entity.name?cap_first}State relations transitions.
                 <#assign fields = ViewUtils.getAllFields(entity) />
                 <#assign wishedfields = [] />
