@@ -53,7 +53,11 @@ namespace ${project_namespace}.Provider.Contract.Base
             </#if>
         </#list>
 
-        public const string TABLE_NAME = "${curr.name?cap_first}";
+        <#if curr.tableName??>
+        public const string TABLE_NAME = "${curr.tableName}";
+        <#else>
+        public const string TABLE_NAME = "${curr.name}";
+        </#if>
 
         public static string[] COLS = {
         <#list curr_fields as field>
