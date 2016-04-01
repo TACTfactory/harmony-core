@@ -67,16 +67,18 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// <param name="e">Tapped event.</param>
         private void btn_update_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            <#assign looper = 0/>
             <#assign item_count = 0/>
             <#list fields?values as field>
                 <#if field.id>
                     <#assign id = field.name />
                 </#if>
             </#list>
-            <#if fields?values?has_content>
+            <#if fields?values?has_content && MetadataUtils.hasRelationsWithoutSuper(curr)>
                 <#list fields?values as field>
-                    <#if (!field.internal && !field.hidden)>
-                        <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne")>
+                    <#if (!field.internal && !field.hidden) && MetadataUtils.getInversingField(field)??>
+                        <#assign looper = 1/>
+                        <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne") >
                             <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
                                 <#assign item_count = 1/>
@@ -104,7 +106,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack,
                     new ${curr.name?cap_first}ShowPage());
             }
-                        <#elseif field.relation??>
+                        <#elseif field.relation?? && (field.relation.type == "OneToOne" || field.relation.type == "OneToMany") >
                             <#if (item_count == 0)>
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
                                 <#assign item_count = 1/>
@@ -135,6 +137,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                         </#if>
                     </#if>
                 </#list>
+                <#if looper == 1>
             else
             {
                 ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?cap_first}Item;
@@ -143,7 +146,15 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 Transition.${curr.name?cap_first}EditPageBack,
                     new ${curr.name?cap_first}ShowPage());
             }
+                </#if>
             <#else>
+            ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetWithChildren(this.${curr.name?cap_first}Item);
+            this.${curr.name?lower_case}Adapter.Update(ViewStateMachine.Instance.${curr.name?cap_first});
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}EditPageBack,
+                    new ${curr.name?cap_first}ShowPage());
+            </#if>
+            <#if looper == 1>
             ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetWithChildren(this.${curr.name?cap_first}Item);
             this.${curr.name?lower_case}Adapter.Update(ViewStateMachine.Instance.${curr.name?cap_first});
             ViewStateMachine.Instance.SetTransition(

@@ -4,7 +4,7 @@
 <@header?interpret />
 <#assign wishedrelation = []/>
 <#list curr.relations as rel>
-    <#if ((rel.relation.type=="OneToMany") || (rel.relation.type=="ManyToMany") || (rel.relation.type=="OneToOne") || (rel.relation.type=="ManyToOne"))>
+    <#if !rel.internal && ((rel.relation.type=="OneToMany") || (rel.relation.type=="ManyToMany") || (rel.relation.type=="OneToOne") || (rel.relation.type=="ManyToOne")) && MetadataUtils.getInversingField(rel)??>
         <#assign wishedrelation = wishedrelation + [rel.relation.targetEntity]/>
     </#if>
 </#list>
@@ -35,7 +35,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         public StackPanel Stackpanel_btn { get; set; }
 
         <#list fields?values as field>
-            <#if (!field.internal && !field.hidden && field.relation??)>
+            <#if (!field.internal && !field.hidden && field.relation??) && MetadataUtils.getInversingField(field)??>
         /// <summary>
         /// Use to navigate to linked ${field.relation.targetEntity?cap_first} entity.
         /// </summary>
@@ -61,7 +61,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             this.InitializeComponent();
             this.Stackpanel_btn = this.stackpanel_btn;
         <#list fields?values as field>
-            <#if (!field.internal && !field.hidden && field.relation??)>
+            <#if (!field.internal && !field.hidden && field.relation??) && MetadataUtils.getInversingField(field)??>
                 <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
             this.Btn_list_related_${field.relation.targetEntity?lower_case} = this.btn_list_related_${field.relation.targetEntity?lower_case};
                 <#else>
@@ -114,7 +114,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
         <#if curr.relations?has_content>
             <#list curr.relations as rel>
-                <#if rel.relation.type == "ManyToMany" || rel.relation.type == "OneToMany">
+                <#if rel.relation.type == "ManyToMany" || rel.relation.type == "OneToMany" && MetadataUtils.getInversingField(rel)??>
         /// <summary>
         /// Retrieve all informations to save current ${curr.name?cap_first} item
         /// and navigate to display relative ${rel.relation.targetEntity?cap_first} list.
@@ -129,7 +129,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 Transition.${curr.name?cap_first}MultiTo${rel.relation.targetEntity?cap_first}ListPage
                     , new ${rel.relation.targetEntity?cap_first}ListPage());
         }
-                <#else>
+                <#elseif MetadataUtils.getInversingField(rel)??>
         /// <summary>
         /// Retrieve all informations to save current ${curr.name?cap_first} item
         /// and navigate to add relative ${rel.relation.targetEntity?cap_first} item.
@@ -155,7 +155,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                             <#if (!field.internal && !field.hidden)>
                                 <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
                                     <#if (field.harmony_type?lower_case == "boolean")>
-            ${curr.name?lower_case}.${field.name?cap_first} = this.checkbox_${field.name?lower_case}.IsChecked;
+            ${curr.name?lower_case}.${field.name?cap_first} = this.checkbox_${field.name}.IsChecked;
                                     <#elseif (field.harmony_type?lower_case == "int")>
             Int32 result${field.name?cap_first};
             if(Int32.TryParse(this.text_box_${field.name}.Text, out result${field.name?cap_first}))

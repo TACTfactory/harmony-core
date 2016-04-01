@@ -4,7 +4,7 @@
 <#assign wishedfields = [] />
 <#list fields?values as field>
     <#if (!field.internal && !field.hidden)>
-        <#if field.relation?? && ((field.relation.type=="OneToMany") || (field.relation.type=="ManyToMany") || (field.relation.type=="OneToOne") || (field.relation.type=="ManyToOne"))>
+        <#if field.relation?? && ((field.relation.type=="OneToMany") || (field.relation.type=="ManyToMany") || (field.relation.type=="OneToOne") || (field.relation.type=="ManyToOne")) && MetadataUtils.getInversingField(field)??>
             <#assign wishedfields = wishedfields + [field]/>
         </#if>
     </#if>
@@ -13,9 +13,9 @@
 <#assign mono = false>
 <#list fields?values as field >
     <#if field.relation??>
-        <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne" >
+        <#if (field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne") && MetadataUtils.getInversingField(field)?? >
             <#assign multi = true>
-        <#else>
+        <#elseif MetadataUtils.getInversingField(field)??>
             <#assign mono = true>
         </#if>
     </#if>

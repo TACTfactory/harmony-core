@@ -23,18 +23,20 @@
 </#function>
 
 <#function getInversingField field>
-	<#assign entityT = entities[field.relation.targetEntity] />
-	<#list entityT.relations as f>
-		<#if field.relation.inversedBy??>
-			<#if f.name == field.relation.inversedBy>
-				<#return f />
-			</#if>
-		<#elseif field.relation.mappedBy??>
-			<#if f.name == field.relation.mappedBy>
-				<#return f />
-			</#if>
-		</#if>
-	</#list>
+    <#if field.relation??>
+    	<#assign entityT = entities[field.relation.targetEntity] />
+    	<#list entityT.relations as f>
+    		<#if field.relation.inversedBy??>
+    			<#if f.name == field.relation.inversedBy>
+    				<#return f />
+    			</#if>
+    		<#elseif field.relation.mappedBy??>
+    			<#if f.name == field.relation.mappedBy>
+    				<#return f />
+    			</#if>
+    		</#if>
+    	</#list>
+    </#if>
 </#function>
 
 <#function hasFieldType entity fieldType>
@@ -70,6 +72,10 @@
 
 <#function hasRelations entity>
 	<#return (ViewUtils.getAllRelations(entity)?? && ViewUtils.getAllRelations(entity)?size > 0) />
+</#function>
+
+<#function hasRelationsWithoutSuper entity>
+    <#return (ViewUtils.getAllRelationsWithoutSuper(entity)?? && ViewUtils.getAllRelationsWithoutSuper(entity)?size > 0) />
 </#function>
 
 <#function hasToManyRelations entity>

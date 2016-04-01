@@ -1,3 +1,4 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 
@@ -47,7 +48,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 
             <#assign wishedrelation = []/>
             <#list curr.relations as rel>
-                <#if ((rel.relation.type == "ManyToOne") || (rel.relation.type == "ManyToMany"))>
+                <#if !rel.internal && ((rel.relation.type == "ManyToOne") || (rel.relation.type == "ManyToMany")) && MetadataUtils.getInversingField(rel)?? >
                     <#assign wishedrelation = wishedrelation + [rel.relation.targetEntity]/>
                 </#if>
             </#list>

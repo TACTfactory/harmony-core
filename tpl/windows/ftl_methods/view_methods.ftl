@@ -127,6 +127,11 @@
 	<#return relations />
 </#function>
 
+<#function getAllRelationsWithoutSuper class>
+    <#assign relations = class.relations />
+    <#return relations />
+</#function>
+
 <#function hasTypeBoolean fieldsArray>
 	<#list fieldsArray as field>
 		<#if (field.type?lower_case == "boolean" || field.type?lower_case == "bool")>
