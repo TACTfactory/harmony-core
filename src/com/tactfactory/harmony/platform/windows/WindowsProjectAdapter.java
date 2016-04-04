@@ -69,17 +69,17 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 templatePath + "Package.appxmanifest",
                 filePath + "Package.appxmanifest",
                 false));
-        
+
         result.add(new SourceFile(
                 templatePath + "ApplicationInsights.config",
                 filePath + "ApplicationInsights.config",
                 false));
-        
+
         result.add(new SourceFile(
                 templatePath + "project.json",
                 filePath + "project.json",
                 false));
-        
+
         result.add(new SourceFile(
                 templatePath + "project.lock.json",
                 filePath + "project.lock.json",
@@ -93,7 +93,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "Properties/" + "AssemblyInfo.cs"));
-        
+
         result.add(new SourceFile(
                 templatePath + "Properties/Default.rd.xml",
                 filePath + "Properties/Default.rd.xml",
@@ -122,6 +122,15 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "Harmony/Util/" + "DateUtils.cs"));
+
+        result.add(new SourceFile(
+                templatePath + "EnumTypeToListConverter.cs",
+                filePath + "EnumTypeToListConverter.cs",
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Harmony/Util/" + "EnumTypeToListConverter.cs"));
 
         return result;
     }
@@ -153,7 +162,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Page,
                 "View/" + "HomePage.xaml"));
-        
+
         // State Home Views
         result.add(new SourceFile(
                 templatePath + "HomeState.cs",
@@ -163,7 +172,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + "HomeState.cs"));
-        
+
         // Browsers
         result.add(new SourceFile(
                 templatePath + "BackBrowser.xaml.cs",
@@ -183,7 +192,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Page,
                 "View/" + "BackBrowser.xaml"));
-        
+
         result.add(new SourceFile(
                 templatePath + "ShowBrowser.xaml.cs",
                 filePath + "ShowBrowser.xaml.cs",
@@ -202,7 +211,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Page,
                 "View/" + "ShowBrowser.xaml"));
-        
+
         result.add(new SourceFile(
                 templatePath + "NavigationBrowser.xaml.cs",
                 filePath + "NavigationBrowser.xaml.cs",
@@ -231,7 +240,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + "ViewStateMachine.cs"));
-        
+
         result.add(new SourceFile(
                 templatePath + "ViewStateMachineStates.cs",
                 filePath + "ViewStateMachineStates.cs",
@@ -240,7 +249,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + "ViewStateMachineStates.cs"));
-        
+
         // Base Utils for views
         templatePath = this.adapter.getTemplateSourcePath();
         filePath = this.adapter.getSourcePath();
@@ -274,12 +283,12 @@ public class WindowsProjectAdapter implements IAdapterProject {
 				+ "Utils/UIUtils.cs", true));
 
 		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "UIUtils.cs"));
-		
+
 		result.add(new SourceFile(templatePath + "Utils/BindingUserControl.cs", filePath
 				+ "Utils/BindingUserControl.cs", true));
 
 		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "BindingUserControl.cs"));
-		
+
 		// Checkables
 		result.add(new SourceFile(templatePath
 				+ "View/CheckableBase.cs", filePath
@@ -287,14 +296,14 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
 		result.add(new ProjectUpdater(FileType.Compile, "View/"
 				+ "CheckableBase.cs"));
-		
+
 		result.add(new SourceFile(templatePath
 				+ "View/ICheckableManager.cs", filePath
 				+ "View/ICheckableManager.cs", true));
 
 		result.add(new ProjectUpdater(FileType.Compile, "View/"
 				+ "ICheckableManager.cs"));
-		
+
 		// Radioables
 		result.add(new SourceFile(templatePath
 				+ "View/RadioableBase.cs", filePath
@@ -302,7 +311,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
 		result.add(new ProjectUpdater(FileType.Compile, "View/"
 				+ "RadioableBase.cs"));
-				
+
 		result.add(new SourceFile(templatePath
 				+ "View/IRadioableManager.cs", filePath
 				+ "View/IRadioableManager.cs", true));
@@ -424,7 +433,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         }else{
         	String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
             String filePath = this.adapter.getSourcePath() + "Entity/";
-            
+
         	result.add(new SourceFile(
                     templatePath + "TemplateEntity.cs",
                     String.format("%s%s.cs",
@@ -449,7 +458,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                     FileType.Compile,
                     this.adapter.getSourcePath() + "Provider/Contract/Base/" + String.format("%sContractBase.cs",
                             entity.getName())));
-            
+
             templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/";
             result.add(new SourceFile(
                     templatePath + "TemplateContract.cs",
@@ -509,7 +518,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sCreatePage.xaml",
                         entity.getName())));
-        
+
         result.add(new SourceFile(
                 templatePath + "TemplateCreateUserControl.xaml.cs",
                 String.format("%s%sCreateUserControl.xaml.cs",
@@ -535,7 +544,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sCreateUserControl.xaml",
                         entity.getName())));
-        
+
         // State Create Views
         result.add(new SourceFile(
                 templatePath + "TemplateCreateState.cs",
@@ -548,7 +557,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sCreateState.cs",
                         entity.getName())));
-        
+
         return result;
     }
 
@@ -587,7 +596,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml",
                         entity.getName())));
-        
+
         result.add(new SourceFile(
                 templatePath + "TemplateEditUserControl.xaml.cs",
                 String.format("%s%sEditUserControl.xaml.cs",
@@ -626,7 +635,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
                         entity.getName())));
-        
+
         Boolean haveMonoRelation = false;
         Boolean haveMultiRelation = false;
         Map<String,FieldMetadata> fields = entity.getFields();
@@ -641,7 +650,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 				}
 			}
 		}
-        
+
         // Checkable entities
         if (haveMultiRelation) {
 	        result.add(new SourceFile(
@@ -650,19 +659,19 @@ public class WindowsProjectAdapter implements IAdapterProject {
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckable.cs",
 	                        entity.getName())));
-	        
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateCheckableManager.cs",
 	                String.format("%s%sCheckableManager.cs",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
@@ -676,19 +685,19 @@ public class WindowsProjectAdapter implements IAdapterProject {
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioable.cs",
 	                        entity.getName())));
-	        
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioableManager.cs",
 	                String.format("%s%sRadioableManager.cs",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioableManager.cs",
@@ -732,7 +741,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml",
                         entity.getName())));
-        
+
         result.add(new SourceFile(
                 templatePath + "TemplateShowUserControl.xaml.cs",
                 String.format("%s%sShowUserControl.xaml.cs",
@@ -758,7 +767,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml",
                         entity.getName())));
-        
+
         // State Show Views
         result.add(new SourceFile(
                 templatePath + "TemplateShowState.cs",
@@ -812,7 +821,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml",
                         entity.getName())));
-        
+
         result.add(new SourceFile(
                 templatePath + "TemplateListUserControl.xaml.cs",
                 String.format("%s%sListUserControl.xaml.cs",
@@ -838,7 +847,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml",
                         entity.getName())));
-     
+
         // State List Views
         result.add(new SourceFile(
                 templatePath + "TemplateListState.cs",
@@ -866,7 +875,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 				}
 			}
 		}
-        
+
         // Add Checkable list for C#
         if (haveMultiRelation) {
 	        // Base Checkable Views
@@ -876,52 +885,52 @@ public class WindowsProjectAdapter implements IAdapterProject {
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml.cs",
 	                        entity.getName()),
 	                String.format("%sCheckListPage.xaml",
 	                        entity.getName())));
-	
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateCheckListPage.xaml",
 	                String.format("%s%sCheckListPage.xaml",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Page,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml",
 	                        entity.getName())));
-	        
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateCheckListUserControl.xaml.cs",
 	                String.format("%s%sCheckListUserControl.xaml.cs",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml.cs",
 	                        entity.getName()),
 	                String.format("%sCheckListUserControl.xaml",
 	                        entity.getName())));
-	
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateCheckListUserControl.xaml",
 	                String.format("%s%sCheckListUserControl.xaml",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Page,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
 	                        entity.getName())));
-	        
+
 	        // State Checkable Views
 	        result.add(new SourceFile(
 	                templatePath + "TemplateCheckListState.cs",
@@ -929,13 +938,13 @@ public class WindowsProjectAdapter implements IAdapterProject {
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
 	                        entity.getName())));
         }
-        
+
         // Add Radioable list for C#
         if (haveMonoRelation) {
         	// Base Radioable Views
@@ -945,52 +954,52 @@ public class WindowsProjectAdapter implements IAdapterProject {
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml.cs",
 	                        entity.getName()),
 	                String.format("%sRadioListPage.xaml",
 	                        entity.getName())));
-	
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioListPage.xaml",
 	                String.format("%s%sRadioListPage.xaml",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Page,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml",
 	                        entity.getName())));
-	        
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioListUserControl.xaml.cs",
 	                String.format("%s%sRadioListUserControl.xaml.cs",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml.cs",
 	                        entity.getName()),
 	                String.format("%sRadioListUserControl.xaml",
 	                        entity.getName())));
-	
+
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioListUserControl.xaml",
 	                String.format("%s%sRadioListUserControl.xaml",
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Page,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml",
 	                        entity.getName())));
-	        
+
 	        // State Radioable Views
 	        result.add(new SourceFile(
 	                templatePath + "TemplateRadioListState.cs",
@@ -998,7 +1007,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 	                        filePath,
 	                        entity.getName()),
 	                false));
-	
+
 	        result.add(new ProjectUpdater(
 	                FileType.Compile,
 	                "View/" + entity.getName()  + "/" + String.format("%sRadioListState.cs",
@@ -1195,7 +1204,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.ApplicationDefinition,
                 "App.xaml"));
-        
+
         // Load Assets
         List<String> assets = new ArrayList<String>();
         assets.add("LockScreenLogo.scale-200.png");
@@ -1205,16 +1214,16 @@ public class WindowsProjectAdapter implements IAdapterProject {
         assets.add("Square44x44Logo.targetsize-24_altform-unplated.png");
         assets.add("StoreLogo.png");
         assets.add("Wide310x150Logo.scale-200.png");
-        
+
         templatePath = this.adapter.getHarmonyAssetsPath();
         filePath = this.adapter.getAssetsPath();
-        
+
         for (String asset : assets) {
             result.add(new CopyFile(
             		templatePath + asset,
                     filePath + asset));
         }
-        
+
         return result;
     }
 
@@ -1295,17 +1304,17 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 templatePath + "Package.appxmanifest",
                 filePath + "Package.appxmanifest",
                 false));
-        
+
         result.add(new SourceFile(
                 templatePath + "project.json",
                 filePath + "project.json",
                 false));
-        
+
         result.add(new SourceFile(
                 templatePath + "project.lock.json",
                 filePath + "project.lock.json",
                 false));
-        
+
         result.add(new SourceFile(
                 templatePath + "Properties/Default.rd.xml",
                 filePath + "Properties/Default.rd.xml",
@@ -1320,16 +1329,16 @@ public class WindowsProjectAdapter implements IAdapterProject {
         assets.add("Square44x44Logo.targetsize-24_altform-unplated.png");
         assets.add("StoreLogo.png");
         assets.add("Wide310x150Logo.scale-200.png");
-        
+
         templatePath = this.adapter.getHarmonyTestAssetsPath();
         filePath = this.adapter.getTestAssetsPath();
-        
+
         for (String asset : assets) {
             result.add(new CopyFile(
             		templatePath + asset,
                     filePath + asset));
         }
-        
+
         return result;
     }
 
@@ -1388,7 +1397,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Compile,
                 filePath + String.format("%s.cs",
                         entity.getName())));
-        
+
         // Contract
         templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/Base/";
         result.add(new SourceFile(
@@ -1402,7 +1411,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Compile,
                 this.adapter.getSourcePath() + "Provider/Contract/Base/" + String.format("%sContractBase.cs",
                         entity.getName())));
-        
+
         templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/";
         result.add(new SourceFile(
                 templatePath + "TemplateContract.cs",
@@ -1458,11 +1467,11 @@ public class WindowsProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getEntityBaseFiles() {
         List<IUpdater> result = new ArrayList<IUpdater>();
-        
+
         String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
 
         String filePath = this.adapter.getSourcePath() + "Entity/";
-        
+
         result.add(new SourceFile(
                 templatePath + "TemplateEntityBase.cs",
                 filePath + "EntityBase.cs",
@@ -1471,7 +1480,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "Entity/" + "EntityBase.cs"));
-        
+
         return result;
     }
 

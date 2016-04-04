@@ -14,14 +14,38 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
+<#assign item_count = 0/>
+<#list fields?values as field>
+    <#if (!field.internal && !field.hidden && field.harmony_type?lower_case == "enum" && item_count == 0) >
+    <UserControl.Resources>
+        <util:EnumTypeToListConverter x:Key="enumConverter"/>
+    </UserControl.Resources>
+        <#assign item_count = 1/>
+    </#if>
+</#list>
+
     <ScrollViewer>
         <StackPanel x:Name="root_stackpanel">
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden)>
                     <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
                         <#if (field.harmony_type?lower_case == "boolean")>
-             <TextBlock x:Name="text_block_${field.name}" Text="${curr.name?cap_first} : ${field.name}"/>
-             <CheckBox x:Name="checkbox_${field.name}"/>
+            <TextBlock x:Name="text_block_${field.name}" Text="${curr.name?cap_first} : ${field.name}"/>
+            <CheckBox x:Name="checkbox_${field.name}"/>
+                        <#elseif (field.harmony_type?lower_case == "enum")>
+            <TextBlock x:Name="text_block_${field.name}" Text="${curr.name?cap_first} : ${field.name}"/>
+            <ComboBox x:Name="combobox_${field.name}" HorizontalAlignment="Stretch" ItemsSource="{Binding ${field.name?cap_first}s, Converter={StaticResource enumConverter}, Mode=OneTime}" SelectedItem="{Binding ${field.name?cap_first}, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding }" FontSize="14"/>
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+                        <#elseif (field.harmony_type?lower_case == "date" || field.harmony_type?lower_case == "datetime")>
+            <TextBlock x:Name="text_block_${field.name}" Text="${curr.name?cap_first} : ${field.name}"/>
+            <CalendarDatePicker x:Name="calendar_${field.name}"/>
                         <#else>
             <TextBlock x:Name="text_block_${field.name}" Text="${curr.name?cap_first} : ${field.name}"/>
             <TextBox x:Name="text_box_${field.name}"/>

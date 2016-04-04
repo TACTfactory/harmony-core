@@ -11,11 +11,11 @@
 
 using ${project_namespace}.Utils;
 using ${project_namespace}.Utils.StateMachine;
-<#if wishedrelation?has_content>
-    <#list wishedrelation as targetEntity>
-using ${project_namespace}.View.${targetEntity?cap_first};
-    </#list>
-</#if>
+<#list curr.relations as rel>
+    <#if !rel.internal && ((rel.relation.type=="OneToMany") || (rel.relation.type=="ManyToMany") || (rel.relation.type=="OneToOne") || (rel.relation.type=="ManyToOne"))>
+using ${project_namespace}.View.${rel.relation.targetEntity?cap_first};
+    </#if>
+</#list>
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
