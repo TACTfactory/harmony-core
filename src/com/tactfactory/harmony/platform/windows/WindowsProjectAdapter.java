@@ -486,300 +486,308 @@ public class WindowsProjectAdapter implements IAdapterProject {
     public List<IUpdater> getCreateView(EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        String templatePath = this.adapter.getTemplateSourceControlerPath();
+        if (entity.getFields().size() - entity.getIds().size() != 0) {
 
-        // Base Create Views
-        String filePath = String.format("%s%s/",
-                this.adapter.getSourceControllerPath(),
-                entity.getName());
+	        String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-        result.add(new SourceFile(
-                templatePath + "TemplateCreatePage.xaml.cs",
-                String.format("%s%sCreatePage.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        // Base Create Views
+	        String filePath = String.format("%s%s/",
+	                this.adapter.getSourceControllerPath(),
+	                entity.getName());
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCreatePage.xaml.cs",
-                        entity.getName()),
-                String.format("%sCreatePage.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCreatePage.xaml.cs",
+	                String.format("%s%sCreatePage.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateCreatePage.xaml",
-                String.format("%s%sCreatePage.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCreatePage.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sCreatePage.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sCreatePage.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCreatePage.xaml",
+	                String.format("%s%sCreatePage.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateCreateUserControl.xaml.cs",
-                String.format("%s%sCreateUserControl.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sCreatePage.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCreateUserControl.xaml.cs",
-                        entity.getName()),
-                String.format("%sCreateUserControl.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCreateUserControl.xaml.cs",
+	                String.format("%s%sCreateUserControl.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateCreateUserControl.xaml",
-                String.format("%s%sCreateUserControl.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCreateUserControl.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sCreateUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sCreateUserControl.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCreateUserControl.xaml",
+	                String.format("%s%sCreateUserControl.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        // State Create Views
-        result.add(new SourceFile(
-                templatePath + "TemplateCreateState.cs",
-                String.format("%s%sCreateState.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sCreateUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCreateState.cs",
-                        entity.getName())));
+	        // State Create Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateCreateState.cs",
+	                String.format("%s%sCreateState.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sCreateState.cs",
+	                        entity.getName())));
+        }
         return result;
     }
 
     @Override
     public List<IUpdater> getEditView(EntityMetadata entity) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
-    	String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-        String filePath = String.format("%s%s/",
-                this.adapter.getSourceControllerPath(),
-                entity.getName());
+    	if (entity.getFields().size() - entity.getIds().size() != 0) {
+	    	String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-        // Base Edit Views
-        result.add(new SourceFile(
-                templatePath + "TemplateEditPage.xaml.cs",
-                String.format("%s%sEditPage.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        String filePath = String.format("%s%s/",
+	                this.adapter.getSourceControllerPath(),
+	                entity.getName());
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml.cs",
-                        entity.getName()),
-                String.format("%sEditPage.xaml",
-                        entity.getName())));
+	        // Base Edit Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateEditPage.xaml.cs",
+	                String.format("%s%sEditPage.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateEditPage.xaml",
-                String.format("%s%sEditPage.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sEditPage.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateEditPage.xaml",
+	                String.format("%s%sEditPage.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateEditUserControl.xaml.cs",
-                String.format("%s%sEditUserControl.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml.cs",
-                        entity.getName()),
-                String.format("%sEditUserControl.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateEditUserControl.xaml.cs",
+	                String.format("%s%sEditUserControl.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateEditUserControl.xaml",
-                String.format("%s%sEditUserControl.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sEditUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateEditUserControl.xaml",
+	                String.format("%s%sEditUserControl.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        // State Edit Views
-        result.add(new SourceFile(
-                templatePath + "TemplateEditState.cs",
-                String.format("%s%sEditState.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
-                        entity.getName())));
+	        // State Edit Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateEditState.cs",
+	                String.format("%s%sEditState.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        Boolean haveMonoRelation = false;
-        Boolean haveMultiRelation = false;
-        Map<String,FieldMetadata> fields = entity.getFields();
-        for (FieldMetadata item : fields.values()) {
-        	if (!item.isInternal() && item.getRelation() != null) {
-    			if (item.getRelation().getType().equals("OneToOne")
-    					|| item.getRelation().getType().equals("OneToMany")) {
-    				haveMonoRelation = true;
-    			}else if (item.getRelation().getType().equals("ManyToMany")
-    					|| item.getRelation().getType().equals("ManyToOne")) {
-    				haveMultiRelation = true;
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
+	                        entity.getName())));
+
+	        Boolean haveMonoRelation = false;
+	        Boolean haveMultiRelation = false;
+	        Map<String,FieldMetadata> fields = entity.getFields();
+	        for (FieldMetadata item : fields.values()) {
+	        	if (!item.isInternal() && item.getRelation() != null) {
+	    			if (item.getRelation().getType().equals("OneToOne")
+	    					|| item.getRelation().getType().equals("OneToMany")) {
+	    				haveMonoRelation = true;
+	    			}else if (item.getRelation().getType().equals("ManyToMany")
+	    					|| item.getRelation().getType().equals("ManyToOne")) {
+	    				haveMultiRelation = true;
+					}
 				}
 			}
-		}
 
-        // Checkable entities
-        if (haveMultiRelation) {
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckable.cs",
-	                String.format("%s%sCheckable.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+	        // Checkable entities
+	        if (haveMultiRelation) {
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckable.cs",
+		                String.format("%s%sCheckable.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckable.cs",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckable.cs",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckableManager.cs",
-	                String.format("%s%sCheckableManager.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckableManager.cs",
+		                String.format("%s%sCheckableManager.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
-	                        entity.getName())));
-        }
-        // Radioable entities
-        if (haveMonoRelation) {
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioable.cs",
-	                String.format("%s%sRadioable.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
+		                        entity.getName())));
+	        }
+	        // Radioable entities
+	        if (haveMonoRelation) {
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioable.cs",
+		                String.format("%s%sRadioable.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioable.cs",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioable.cs",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioableManager.cs",
-	                String.format("%s%sRadioableManager.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioableManager.cs",
+		                String.format("%s%sRadioableManager.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioableManager.cs",
-	                        entity.getName())));
-        }
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioableManager.cs",
+		                        entity.getName())));
+	        }
+    	}
         return result;
     }
 
     @Override
     public List<IUpdater> getShowView(EntityMetadata entity) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
-    	String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-        String filePath = String.format("%s%s/",
-                this.adapter.getSourceControllerPath(),
-                entity.getName());
+    	if (entity.getFields().size() - entity.getIds().size() != 0) {
+	    	String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-        // Base Show Views
-        result.add(new SourceFile(
-                templatePath + "TemplateShowPage.xaml.cs",
-                String.format("%s%sShowPage.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        String filePath = String.format("%s%s/",
+	                this.adapter.getSourceControllerPath(),
+	                entity.getName());
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml.cs",
-                        entity.getName()),
-                String.format("%sShowPage.xaml",
-                        entity.getName())));
+	        // Base Show Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateShowPage.xaml.cs",
+	                String.format("%s%sShowPage.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateShowPage.xaml",
-                String.format("%s%sShowPage.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sShowPage.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateShowPage.xaml",
+	                String.format("%s%sShowPage.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateShowUserControl.xaml.cs",
-                String.format("%s%sShowUserControl.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml.cs",
-                        entity.getName()),
-                String.format("%sShowUserControl.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateShowUserControl.xaml.cs",
+	                String.format("%s%sShowUserControl.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateShowUserControl.xaml",
-                String.format("%s%sShowUserControl.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sShowUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml",
-                        entity.getName())));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateShowUserControl.xaml",
+	                String.format("%s%sShowUserControl.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        // State Show Views
-        result.add(new SourceFile(
-                templatePath + "TemplateShowState.cs",
-                String.format("%s%sShowState.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sShowState.cs",
-                        entity.getName())));
+	        // State Show Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateShowState.cs",
+	                String.format("%s%sShowState.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sShowState.cs",
+	                        entity.getName())));
+    	}
 
         return result;
     }
@@ -788,230 +796,232 @@ public class WindowsProjectAdapter implements IAdapterProject {
     public List<IUpdater> getListView(EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        String templatePath = this.adapter.getTemplateSourceControlerPath();
+        if (entity.getFields().size() - entity.getIds().size() != 0) {
+	        String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-        String filePath = String.format("%s%s/",
-                this.adapter.getSourceControllerPath(),
-                entity.getName());
+	        String filePath = String.format("%s%s/",
+	                this.adapter.getSourceControllerPath(),
+	                entity.getName());
 
-        // Add default list items for C#
-        // Base List Views
-        result.add(new SourceFile(
-                templatePath + "TemplateListPage.xaml.cs",
-                String.format("%s%sListPage.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        // Add default list items for C#
+	        // Base List Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateListPage.xaml.cs",
+	                String.format("%s%sListPage.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml.cs",
-                        entity.getName()),
-                String.format("%sListPage.xaml",
-                        entity.getName())));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sListPage.xaml",
+	                        entity.getName())));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateListPage.xaml",
-                String.format("%s%sListPage.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateListPage.xaml",
+	                String.format("%s%sListPage.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml",
-                        entity.getName())));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml",
+	                        entity.getName())));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateListUserControl.xaml.cs",
-                String.format("%s%sListUserControl.xaml.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateListUserControl.xaml.cs",
+	                String.format("%s%sListUserControl.xaml.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml.cs",
-                        entity.getName()),
-                String.format("%sListUserControl.xaml",
-                        entity.getName())));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml.cs",
+	                        entity.getName()),
+	                String.format("%sListUserControl.xaml",
+	                        entity.getName())));
 
-        result.add(new SourceFile(
-                templatePath + "TemplateListUserControl.xaml",
-                String.format("%s%sListUserControl.xaml",
-                        filePath,
-                        entity.getName()),
-                false));
+	        result.add(new SourceFile(
+	                templatePath + "TemplateListUserControl.xaml",
+	                String.format("%s%sListUserControl.xaml",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new ProjectUpdater(
-                FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml",
-                        entity.getName())));
+	        result.add(new ProjectUpdater(
+	                FileType.Page,
+	                "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml",
+	                        entity.getName())));
 
-        // State List Views
-        result.add(new SourceFile(
-                templatePath + "TemplateListState.cs",
-                String.format("%s%sListState.cs",
-                        filePath,
-                        entity.getName()),
-                false));
+	        // State List Views
+	        result.add(new SourceFile(
+	                templatePath + "TemplateListState.cs",
+	                String.format("%s%sListState.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
 
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sListState.cs",
-                        entity.getName())));
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "View/" + entity.getName()  + "/" + String.format("%sListState.cs",
+	                        entity.getName())));
 
-        Boolean haveMonoRelation = false;
-        Boolean haveMultiRelation = false;
-        Map<String,FieldMetadata> fields = entity.getFields();
-        for (FieldMetadata item : fields.values()) {
-        	if (!item.isInternal() && item.getRelation() != null) {
-    			if (item.getRelation().getType().equals("OneToOne")
-    					|| item.getRelation().getType().equals("OneToMany")) {
-    				haveMonoRelation = true;
-    			}else if (item.getRelation().getType().equals("ManyToMany")
-    					|| item.getRelation().getType().equals("ManyToOne")) {
-    				haveMultiRelation = true;
+	        Boolean haveMonoRelation = false;
+	        Boolean haveMultiRelation = false;
+	        Map<String,FieldMetadata> fields = entity.getFields();
+	        for (FieldMetadata item : fields.values()) {
+	        	if (!item.isInternal() && item.getRelation() != null) {
+	    			if (item.getRelation().getType().equals("OneToOne")
+	    					|| item.getRelation().getType().equals("OneToMany")) {
+	    				haveMonoRelation = true;
+	    			}else if (item.getRelation().getType().equals("ManyToMany")
+	    					|| item.getRelation().getType().equals("ManyToOne")) {
+	    				haveMultiRelation = true;
+					}
 				}
 			}
-		}
 
-        // Add Checkable list for C#
-        if (haveMultiRelation) {
-	        // Base Checkable Views
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckListPage.xaml.cs",
-	                String.format("%s%sCheckListPage.xaml.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+	        // Add Checkable list for C#
+	        if (haveMultiRelation) {
+		        // Base Checkable Views
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckListPage.xaml.cs",
+		                String.format("%s%sCheckListPage.xaml.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml.cs",
-	                        entity.getName()),
-	                String.format("%sCheckListPage.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml.cs",
+		                        entity.getName()),
+		                String.format("%sCheckListPage.xaml",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckListPage.xaml",
-	                String.format("%s%sCheckListPage.xaml",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckListPage.xaml",
+		                String.format("%s%sCheckListPage.xaml",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Page,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Page,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckListUserControl.xaml.cs",
-	                String.format("%s%sCheckListUserControl.xaml.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckListUserControl.xaml.cs",
+		                String.format("%s%sCheckListUserControl.xaml.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml.cs",
-	                        entity.getName()),
-	                String.format("%sCheckListUserControl.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml.cs",
+		                        entity.getName()),
+		                String.format("%sCheckListUserControl.xaml",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckListUserControl.xaml",
-	                String.format("%s%sCheckListUserControl.xaml",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckListUserControl.xaml",
+		                String.format("%s%sCheckListUserControl.xaml",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Page,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Page,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
+		                        entity.getName())));
 
-	        // State Checkable Views
-	        result.add(new SourceFile(
-	                templatePath + "TemplateCheckListState.cs",
-	                String.format("%s%sCheckListState.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        // State Checkable Views
+		        result.add(new SourceFile(
+		                templatePath + "TemplateCheckListState.cs",
+		                String.format("%s%sCheckListState.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
-	                        entity.getName())));
-        }
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
+		                        entity.getName())));
+	        }
 
-        // Add Radioable list for C#
-        if (haveMonoRelation) {
-        	// Base Radioable Views
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioListPage.xaml.cs",
-	                String.format("%s%sRadioListPage.xaml.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+	        // Add Radioable list for C#
+	        if (haveMonoRelation) {
+	        	// Base Radioable Views
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioListPage.xaml.cs",
+		                String.format("%s%sRadioListPage.xaml.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml.cs",
-	                        entity.getName()),
-	                String.format("%sRadioListPage.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml.cs",
+		                        entity.getName()),
+		                String.format("%sRadioListPage.xaml",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioListPage.xaml",
-	                String.format("%s%sRadioListPage.xaml",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioListPage.xaml",
+		                String.format("%s%sRadioListPage.xaml",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Page,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Page,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioListPage.xaml",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioListUserControl.xaml.cs",
-	                String.format("%s%sRadioListUserControl.xaml.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioListUserControl.xaml.cs",
+		                String.format("%s%sRadioListUserControl.xaml.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml.cs",
-	                        entity.getName()),
-	                String.format("%sRadioListUserControl.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml.cs",
+		                        entity.getName()),
+		                String.format("%sRadioListUserControl.xaml",
+		                        entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioListUserControl.xaml",
-	                String.format("%s%sRadioListUserControl.xaml",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioListUserControl.xaml",
+		                String.format("%s%sRadioListUserControl.xaml",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Page,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Page,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioListUserControl.xaml",
+		                        entity.getName())));
 
-	        // State Radioable Views
-	        result.add(new SourceFile(
-	                templatePath + "TemplateRadioListState.cs",
-	                String.format("%s%sRadioListState.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+		        // State Radioable Views
+		        result.add(new SourceFile(
+		                templatePath + "TemplateRadioListState.cs",
+		                String.format("%s%sRadioListState.cs",
+		                        filePath,
+		                        entity.getName()),
+		                false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "View/" + entity.getName()  + "/" + String.format("%sRadioListState.cs",
-	                        entity.getName())));
+		        result.add(new ProjectUpdater(
+		                FileType.Compile,
+		                "View/" + entity.getName()  + "/" + String.format("%sRadioListState.cs",
+		                        entity.getName())));
+	        }
         }
         return result;
     }
