@@ -51,7 +51,7 @@ namespace ${project_namespace}.View
         /// </summary>
         public Transition NextTransition { get; set; }
         <#list entities?values as entity>
-            <#if !entity.internal >
+            <#if !entity.internal && FieldsUtils.hasShowableFields(entity.fields?values)>
         public Entity.${entity.name?cap_first} ${entity.name?cap_first} { get; set; }
             </#if>
         </#list>
@@ -79,7 +79,7 @@ namespace ${project_namespace}.View
         public void SetItemsNull()
         {
         <#list entities?values as entity>
-            <#if !entity.internal >
+            <#if !entity.internal && FieldsUtils.hasShowableFields(entity.fields?values)>
             this.${entity.name?cap_first} = null;
             </#if>
         </#list>
@@ -104,7 +104,7 @@ namespace ${project_namespace}.View
         private void SetItem(Object item)
         {
             <#list entities?values as entity>
-            <#if !entity.internal >
+            <#if !entity.internal && FieldsUtils.hasShowableFields(entity.fields?values)>
                 <#if entity?is_first>
             if (item is Entity.${entity.name?cap_first})
             {
@@ -132,7 +132,7 @@ namespace ${project_namespace}.View
             HomeState homeState = new HomeState();
             homeState.AddTransition(Transition.HomePage, StateID.HomePageEnter);
             <#list entities?values as entity>
-                <#if !entity.internal >
+                <#if !entity.internal && FieldsUtils.hasShowableFields(entity.fields?values)>
             homeState.AddTransition(
                 Transition.${entity.name?cap_first}ListPage,
                     StateID.${entity.name?cap_first}ListPageEnter);
@@ -141,7 +141,7 @@ namespace ${project_namespace}.View
             #endregion
 
             <#list entities?values as entity>
-                <#if !entity.internal >
+                <#if !entity.internal && FieldsUtils.hasShowableFields(entity.fields?values)>
             /// <summary>
             /// Navigation into entities.
             /// Navigation states transition definitions :
@@ -310,7 +310,7 @@ namespace ${project_namespace}.View
             this.bsm.AddState(homeState);
 
             <#list entities?values as entity>
-                <#if !entity.internal >
+                <#if !entity.internal && FieldsUtils.hasShowableFields(entity.fields?values)>
             this.bsm.AddState(${entity.name?lower_case}List);
             this.bsm.AddState(${entity.name?lower_case}Create);
             this.bsm.AddState(${entity.name?lower_case}Show);
