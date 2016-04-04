@@ -486,7 +486,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
     public List<IUpdater> getCreateView(EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        if (entity.getFields().size() - entity.getIds().size() != 0) {
+        if (entity.getFields(true).size() - entity.getIds().size() != 0) {
 
 	        String templatePath = this.adapter.getTemplateSourceControlerPath();
 
@@ -567,7 +567,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
     public List<IUpdater> getEditView(EntityMetadata entity) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
 
-    	if (entity.getFields().size() - entity.getIds().size() != 0) {
+    	if (entity.getFields(true).size() - entity.getIds().size() != 0) {
 	    	String templatePath = this.adapter.getTemplateSourceControlerPath();
 
 	        String filePath = String.format("%s%s/",
@@ -715,7 +715,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
     public List<IUpdater> getShowView(EntityMetadata entity) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
 
-    	if (entity.getFields().size() - entity.getIds().size() != 0) {
+    	if (entity.getFields(true).size() - entity.getIds().size() != 0) {
 	    	String templatePath = this.adapter.getTemplateSourceControlerPath();
 
 	        String filePath = String.format("%s%s/",
@@ -796,7 +796,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
     public List<IUpdater> getListView(EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        if (entity.getFields().size() - entity.getIds().size() != 0) {
+        if (entity.getFields(true).size() - entity.getIds().size() != 0) {
 	        String templatePath = this.adapter.getTemplateSourceControlerPath();
 
 	        String filePath = String.format("%s%s/",
@@ -1023,6 +1023,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 		                        entity.getName())));
 	        }
         }
+
         return result;
     }
 
