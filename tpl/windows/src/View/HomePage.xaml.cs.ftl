@@ -1,3 +1,4 @@
+<#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 
 using ${project_namespace}.Utils.StateMachine;
@@ -19,7 +20,7 @@ namespace ${project_namespace}.View
             InitializeComponent();
         }
         <#list entities?values as entity>
-            <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
+            <#if (FieldsUtils.hasShowableFields(entity.fields?values) && !entity.internal && entity.listAction)>
 
         private void Button${entity.name}_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {

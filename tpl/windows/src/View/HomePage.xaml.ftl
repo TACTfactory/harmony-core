@@ -1,3 +1,4 @@
+<#include utilityPath + "all_imports.ftl" />
 <!-- <@header?interpret /> -->
 
 <Page
@@ -105,7 +106,7 @@
                     Margin="0,0,0,20"
                     Text="https://support.tactfactory.com/projects/harmony/wiki"/>
                 <#list entities?values as entity>
-                    <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
+                    <#if (FieldsUtils.hasShowableFields(entity.fields?values) && !entity.internal && entity.listAction)>
                 <Button Name="Button${entity.name}" Content="List all ${entity.name}" Click="Button${entity.name}_Click"/>
                     </#if>
                 </#list>
