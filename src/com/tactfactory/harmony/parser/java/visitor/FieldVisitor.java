@@ -56,7 +56,7 @@ public class FieldVisitor {
 	/** Id annotation name. */
 	private static final String FILTER_ID	 		=
 			PackageUtils.extractNameEntity(Id.class);
-	
+
 	/** Id annotation name. */
 	private static final String FILTER_GENERATED_VALUE	 		=
 			PackageUtils.extractNameEntity(GeneratedValue.class);
@@ -84,7 +84,7 @@ public class FieldVisitor {
 	/** ManyToMany annotation name. */
 	private static final String FILTER_MANY2MANY 	=
 			PackageUtils.extractNameEntity(ManyToMany.class);
-	
+
 	/** ColumnResult annotation name. */
 	private static final String FILTER_COLUMNRESULT 	=
 			PackageUtils.extractNameEntity(ColumnResult.class);
@@ -125,7 +125,7 @@ public class FieldVisitor {
 
 	/** Column annotation column name attribute. */
 	private static final String ATTRIBUTE_COLUMN_NAME = "columnName";
-	
+
 	/** Column annotation order attribute. */
 	private static final String ATTRIBUTE_ORDER = "order";
 
@@ -138,18 +138,18 @@ public class FieldVisitor {
 
 	/** Relations annotation inversedBy attribute. */
 	private static final String ATTRIBUTE_INVERSED_BY = "inversedBy";
-	
+
 	/** The project entities metadata. */
-	private Map<String, EntityMetadata> projectEntities = 
+	private Map<String, EntityMetadata> projectEntities =
 			ApplicationMetadata.INSTANCE.getEntities();
-	
+
 	/** The project classes metadata. */
-	private Map<String, ClassMetadata> projectClasses = 
+	private Map<String, ClassMetadata> projectClasses =
 			ApplicationMetadata.INSTANCE.getClasses();
-	
+
 	/** Annotation map for this field. */
 	private Map<String, AnnotationExpr> annotationMap;
-	
+
 	/**
 	 * Visit a field declaration to extract metadata.
 	 * @param field The field declaration.
@@ -159,7 +159,7 @@ public class FieldVisitor {
 	public final FieldMetadata visit(final FieldDeclaration field,
 			final ClassMetadata classMeta) {
 		FieldMetadata result = null;
-		
+
 		this.annotationMap = this.getAnnotMap(field);
     	// Call the parsers which have been registered by the bundle
     	for (final BaseParser bParser
@@ -174,7 +174,7 @@ public class FieldVisitor {
 			// General (required !)
 			// FIXME not manage multi-variable
 			String fieldName = field.getVariables().get(0).getId().getName();
-			
+
 			if (classMeta.getFields().containsKey(fieldName)) {
 				result = classMeta.getFields().get(fieldName);
 			} else {
@@ -182,9 +182,9 @@ public class FieldVisitor {
 				result.setName(fieldName);
 			}
 			result.setInternal(false);
-			
+
 			String javaType = field.getType().toString();
-			
+
 			result.setStatic(ModifierSet.isStatic(field.getModifiers()));
 
 			if (Type.fromString(javaType) != null) {
@@ -212,22 +212,24 @@ public class FieldVisitor {
 			result.setHidden(false);
 
 			// Database definitions
-			final RelationMetadata rel = new RelationMetadata();		
+			final RelationMetadata rel = new RelationMetadata();
 			final EntityMetadata referencedEntity;
 			boolean isColumn = false;
 			boolean isId = false;
 			boolean isRelation = false;
 
-			String referencedEntityName = 
+			String referencedEntityName =
 					PackageUtils.extractClassNameFromArray(javaType);
 			// Prepare relation ?
 			if (projectEntities.containsKey(referencedEntityName)) {
 				referencedEntity = this.projectEntities.get(referencedEntityName);
+			} else if (classMeta.getName().equals(referencedEntityName)) {
+                referencedEntity = (EntityMetadata) classMeta;
 			} else {
 				referencedEntity = new EntityMetadata();
 				referencedEntity.setName(referencedEntityName);
 			}
-			
+
 			rel.setEntityRef(referencedEntity);
 
 			// Analyze
@@ -258,15 +260,15 @@ public class FieldVisitor {
 					rel.setType(annotationType);
 					result.setHarmonyType(Type.RELATION.getValue());
 				}
-				
+
 				if (annotationType.equals(FILTER_COLUMNRESULT)) {
 					result.setColumnResult(true);
 				}
-				
+
 				if (annotationType.equals(FILTER_GENERATED_VALUE)) {
 					Strategy strategy = Strategy.MODE_NONE;
 					if (annotationExpr instanceof NormalAnnotationExpr) {
-						List<MemberValuePair> pairs = 
+						List<MemberValuePair> pairs =
 								((NormalAnnotationExpr) annotationExpr)
 										.getPairs();
 						if (pairs != null) {
@@ -278,10 +280,10 @@ public class FieldVisitor {
 										strategyName = ((StringLiteralExpr)
 												pair.getValue()).getValue();
 									} else {
-										strategyName = 
+										strategyName =
 												pair.getValue().toString();
 									}
-									
+
 									strategyName = strategyName.substring(
 											strategyName.lastIndexOf('.') + 1);
 									strategy = Strategy.valueOf(strategyName);
@@ -296,13 +298,13 @@ public class FieldVisitor {
 						result,
 						annotationExpr,
 						annotationType);
-				
+
 				if (Type.ENUM.getValue().equals(result.getHarmonyType())) {
 					EnumTypeMetadata enumMeta = new EnumTypeMetadata();
 					enumMeta.setTargetEnum(field.getType().toString());
 					result.setEnumMeta(enumMeta);
 				}
-				
+
 				if (field.getType().toString().matches("^[a-z].*")) {
 					result.setPrimitive(true);
 				}
@@ -318,21 +320,21 @@ public class FieldVisitor {
 				this.projectEntities.put(
 						referencedEntityName,
 						referencedEntity);
-				
-				this.projectClasses.put( 
+
+				this.projectClasses.put(
 						referencedEntityName,
 						referencedEntity);
-				
+
 				result.setRelation(rel);
 				rel.setField(result.getName());
-				
+
 				if (rel.getType().equals("OneToMany")
 						&& rel.getMappedBy() == null) {
 					this.createMappingField(result);
 				} else if (rel.getType().equals("ManyToMany")) {
 					this.createJoinTable(result);
 				}
-				
+
 				if (rel.getType().equals("OneToMany") ||
 						rel.getType().equals("ManyToMany")) {
 					this.parseOrderBysAnnotation(rel);
@@ -493,11 +495,11 @@ public class FieldVisitor {
 							FieldMetadata fieldRef;
 							if (rel.getEntityRef().getFields().containsKey(
 									fieldName)) {
-								fieldRef = 
+								fieldRef =
 										rel.getEntityRef().getFields().get(
 												fieldName);
 							} else {
-								RelationMetadata inversingRel = 
+								RelationMetadata inversingRel =
 										new RelationMetadata();
 								inversingRel.setType("ManyToOne");
 								fieldRef = new FieldMetadata(rel.getEntityRef());
@@ -520,7 +522,7 @@ public class FieldVisitor {
 									fieldRef = rel.getEntityRef().getFields().get(
 											fieldName);
 								} else {
-									RelationMetadata inversingRel = 
+									RelationMetadata inversingRel =
 											new RelationMetadata();
 									inversingRel.setMappedBy(result);
 									inversingRel.setType("OneToMany");
@@ -545,7 +547,7 @@ public class FieldVisitor {
 									fieldRef = rel.getEntityRef().getFields().get(
 											fieldName);
 								} else {
-									RelationMetadata inversingRel = 
+									RelationMetadata inversingRel =
 											new RelationMetadata();
 									inversingRel.setMappedBy(result);
 									inversingRel.setInversedBy(result);
@@ -560,7 +562,7 @@ public class FieldVisitor {
 								rel.setMappedBy(fieldRef);
 							}
 						} else
-							
+
 						if (annotationType.equals(FILTER_COLUMNRESULT)) {
 							if (mvp.getName().equals(ATTRIBUTE_COLUMN_NAME)) {
 								String command = ((StringLiteralExpr)
@@ -659,10 +661,10 @@ public class FieldVisitor {
 
 		return isRelation;
 	}
-	
+
 	/**
 	 * Creates a field mapping the relation given.
-	 * 
+	 *
 	 * @param currentField The field containing the relation to map.
 	 */
 	private void createMappingField(final FieldMetadata currentField) {
@@ -674,13 +676,13 @@ public class FieldVisitor {
 		newField.setNullable(true);
 		newField.setInternal(true);
 		newField.setName(
-				currentField.getOwner().getName() 
-				+ currentField.getName() 
+				currentField.getOwner().getName()
+				+ currentField.getName()
 				+ "Internal");
-		
+
 		newField.setColumnName(
-				currentField.getOwner().getName() 
-				+ "_" + currentField.getName() 
+				currentField.getOwner().getName()
+				+ "_" + currentField.getName()
 				+ "_internal");
 		newField.setHarmonyType(Column.Type.RELATION.getValue());
 		newField.setRelation(new RelationMetadata());
@@ -688,14 +690,14 @@ public class FieldVisitor {
 		newField.getRelation().setField(newField.getName());
 		newField.getRelation().setType("ManyToOne");
 		newField.getRelation().setInversedBy(currentField);
-				
+
 		entityRef.getFields().put(newField.getName(), newField);
 		entityRef.getRelations().put(
 				newField.getName(), newField);
-		
+
 		currentField.getRelation().setMappedBy(newField);
 	}
-	
+
 	/**
 	 * Create a jointable for the manytomany relation.
 	 * @param currentField The field containing the relation.
@@ -715,10 +717,10 @@ public class FieldVisitor {
 						rel.getEntityRef().getName() + "to" + cm.getName());
 			}
 		}
-		
+
 		ConsoleUtils.displayDebug(
 				"Association Table => ", rel.getJoinTable());
-		
+
 		EntityMetadata joinTable;
 		// If jointable doesn't exist yet, create it
 		if (!this.projectEntities.containsKey(rel.getJoinTable())) {
@@ -731,7 +733,7 @@ public class FieldVisitor {
 		} else {
 			joinTable = this.projectEntities.get(rel.getJoinTable());
 		}
-		
+
 		// Create or retrieve inversing field in the joinTable
 		FieldMetadata invertField = currentField.getRelation().getMappedBy();
 		if (invertField == null) {
@@ -743,10 +745,10 @@ public class FieldVisitor {
 		} else {
 			invertFieldName = currentField.getOwner().getName() + "InternalId";
 		}
-		
-		FieldMetadata joinTableInvertField = 
+
+		FieldMetadata joinTableInvertField =
 				joinTable.getFields().get(invertFieldName);
-		
+
 		if (joinTableInvertField == null) {
 			joinTableInvertField = new FieldMetadata(joinTable);
 			joinTableInvertField.setName(invertFieldName);
@@ -761,13 +763,13 @@ public class FieldVisitor {
 					(EntityMetadata) currentField.getOwner());
 			joinTableInvertField.getRelation().setType("ManyToOne");
 		}
-		
+
 		currentField.getRelation().setMappedBy(joinTableInvertField);
-		
+
 		// Create or retrieve associated field in the joinTable
-		FieldMetadata joinTableAssociatedField = 
+		FieldMetadata joinTableAssociatedField =
 				joinTable.getFields().get(currentField.getName());
-		
+
 		if (joinTableAssociatedField == null) {
 			joinTableAssociatedField = new FieldMetadata(joinTable);
 			joinTableAssociatedField.setName(currentField.getName());
@@ -783,7 +785,7 @@ public class FieldVisitor {
 			joinTableAssociatedField.getRelation().setType("ManyToOne");
 		}
 	}
-	
+
     /**
      * Transform the class declaration to an annotation map
      * @param classDecl The class declaration
@@ -791,20 +793,20 @@ public class FieldVisitor {
      */
     private Map<String, AnnotationExpr> getAnnotMap(
     		FieldDeclaration fieldDecl) {
-    	
-    	Map<String, AnnotationExpr> result = 
+
+    	Map<String, AnnotationExpr> result =
     			new HashMap<String, AnnotationExpr>();
     	if (fieldDecl.getAnnotations() != null) {
 	    	for (AnnotationExpr annot : fieldDecl.getAnnotations()) {
 	    		result.put(annot.getName().toString(), annot);
 	    	}
     	}
-    	
+
     	return result;
-    }    
+    }
     /**
      * Parse the indexes array.
-     * 
+     *
      * @param classMeta The class to complete
      * @param indexesArray The indexes array
      */
@@ -813,45 +815,45 @@ public class FieldVisitor {
     	for (Expression orderByAnnot : orderByArray.getValues()) {
 			if (orderByAnnot instanceof AnnotationExpr) {
 				this.parseOrderByAnnotation(
-						relationMeta, 
+						relationMeta,
 						(AnnotationExpr) orderByAnnot);
 			}
 		}
     }
-    
+
     /**
      * Parse an index annotation and put it into the metadata of the class.
-     * 
+     *
      * @param classMeta The class metadata to complete
      * @param indexAnnot The index annotation
      */
-    private void parseOrderByAnnotation(RelationMetadata relationMeta, 
+    private void parseOrderByAnnotation(RelationMetadata relationMeta,
     		AnnotationExpr orderByAnnot) {
     	String columnName = null;
 		String order = null;
-		List<MemberValuePair> indexPairs = 
+		List<MemberValuePair> indexPairs =
 						((NormalAnnotationExpr) orderByAnnot).getPairs();
 		for (MemberValuePair indexPair : indexPairs) {
 			if (ATTRIBUTE_COLUMN_NAME.equals(indexPair.getName())) {
-				columnName = 
+				columnName =
 						((StringLiteralExpr) indexPair.getValue()).getValue();
 			} else if (ATTRIBUTE_ORDER.equals(indexPair.getName())) {
-				order = 
+				order =
 						((StringLiteralExpr) indexPair.getValue()).getValue();
 			}
-		}	
+		}
 		if (columnName != null) {
 			relationMeta.addOrder(columnName, order);
 		}
     }
-    
+
     /**
      * Parse the table annotation.
-     * 
+     *
      * @param classMeta The class to complete
      */
     private void parseOrderBysAnnotation(RelationMetadata relationMeta) {
-    	AnnotationExpr orderBysAnnot = 
+    	AnnotationExpr orderBysAnnot =
     			this.annotationMap.get(ANNOTATION_ORDER_BYS);
     	if (orderBysAnnot != null) {
     		if (orderBysAnnot instanceof SingleMemberAnnotationExpr) {
@@ -865,4 +867,4 @@ public class FieldVisitor {
     	}
     }
 }
-	
+
