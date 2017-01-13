@@ -104,11 +104,11 @@ public class LibraryPool {
 			// Recursive if folder.
 			if (file.isDirectory()) {
 				final File[] files = file.listFiles(this.filter);
+
 				for (File f : files) {
-					
 					// Exclude git and doc folder.
 					if (	!f.getAbsolutePath().contains(".git") &&
-							!f.getAbsolutePath().contains("doc")) {
+							!f.getAbsolutePath().endsWith(String.format("%sdoc", File.separator))) {
 						this.parseLibraries(f);
 					}
 				}
