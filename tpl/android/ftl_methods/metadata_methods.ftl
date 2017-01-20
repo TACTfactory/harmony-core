@@ -152,6 +152,18 @@
     <#return ret>
 </#function>
 
+<#function getEntityIndexOrderByRelation currEntity>
+    <#assign ret = -1 />
+    <#assign orderedEntities = orderEntitiesByRelation() />
+      <#list orderedEntities as entityOrdered>
+          <#assign entity = entities[entityOrdered] />
+          <#if (entity.name == currEntity.name)>
+              <#return entityOrdered_index />
+          </#if>
+      </#list>
+    <#return ret>
+</#function>
+
 
 
 <#function isPrimitive field>
