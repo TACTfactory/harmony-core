@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
-apply from: "gradle/quality_rules.gradle"
+apply from: "gradle_script/quality_rules.gradle"
 
 repositories {
     jcenter()
@@ -18,7 +18,7 @@ dependencies {
     //Configure appcompat version to match your compileSdkVersion
     //Support V4 is embeded in appcompat-v7
     compile 'com.android.support:appcompat-v7:22.2.0'
-    
+
     compile fileTree(dir: 'libs', include: '*.jar', exclude:'android-support-v4.jar')
 
     androidTestCompile "com.android.support.test:runner:0.3"
@@ -31,18 +31,18 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        //multiDexEnabled true 
+        //multiDexEnabled true
 
         applicationId "${project_namespace}"
         minSdkVersion 8
         targetSdkVersion 21
 
-        //Default test project is set with projectName.test 
+        //Default test project is set with projectName.test
         //If you defined another test project set it here
         //testApplicationId "${project_namespace}.test"
         testInstrumentationRunner "com.zutubi.android.junitreport.JUnitReportTestRunner"
     }
-    
+
     signingConfigs {
         release {
             if(new File("$System.env.KEYSTORE_PATH" + "/" + project.name + ".properties").exists()) {
