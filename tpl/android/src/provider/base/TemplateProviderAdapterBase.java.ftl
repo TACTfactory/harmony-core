@@ -122,8 +122,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
     /**
      * Constructor.
-     * @param ctx context
-     * @param db database
+     * @param provider Android application provider of ${project_name?cap_first}
      */
     public ${curr.name?cap_first}ProviderAdapterBase(
             ${project_name?cap_first}ProviderBase provider) {

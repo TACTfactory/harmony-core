@@ -18,7 +18,7 @@ public class ${curr.name?cap_first}ProviderAdapter
 
     /**
      * Constructor.
-     * @param ctx context
+     * @param provider Android application provider of ${project_name?cap_first}
      */
     public ${curr.name?cap_first}ProviderAdapter(
             final ${project_name?cap_first}ProviderBase provider) {
