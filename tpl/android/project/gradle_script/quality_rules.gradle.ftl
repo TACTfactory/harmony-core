@@ -56,7 +56,7 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "connectedDebugAndroidTest")
             "${r"${project.buildDir}"}/intermediates/classes/debug",
             excludes: fileFilter)
 
-    def mainSrc = "${r"${project.projectDir}"}/src/${project_path}"
+    def mainSrc = "${r"${project.projectDir}"}"
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
@@ -72,3 +72,23 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "connectedDebugAndroidTest")
         html.destination = "${r"${buildDir}"}/reports/jacoco"
     }
 }
+
+task pmd (type: Pmd, dependsOn: "assembleDebug") {
+    description 'Run pmd'
+    group 'verification'
+
+    ignoreFailures = true
+
+    ruleSetFiles = files("${r"${project.rootDir}"}/pmd_rules.xml")
+    source = fileTree('src/${project_path}')
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.doLast
+        {
+            project.tasks.getByName("pmd").execute()
+        }

@@ -9,6 +9,7 @@ buildscript {
 
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
+apply plugin: 'pmd'
 apply from: "gradle_script/quality_rules.gradle"
 
 repositories {
