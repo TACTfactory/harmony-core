@@ -3,11 +3,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.1'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
 apply from: "gradle_script/quality_rules.gradle"
 
 repositories {
@@ -28,7 +29,7 @@ dependencies {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         //multiDexEnabled true

@@ -28,10 +28,47 @@ task findbugs(type: FindBugs) {
 
     reports {
         xml {
-            destination "$project.buildDir/reports/findbugs/findbugs.xml"
+            destination "${r"$project"}.buildDir/reports/findbugs/findbugs.xml"
             xml.withMessages true
         }
     }
 
     classpath = files()
+}
+
+task jacocoTestReport(type:JacocoReport, dependsOn: "connectedDebugAndroidTest") {
+
+    group = "Reporting"
+
+    description = "Generate Jacoco coverage reports"
+
+    // exclude auto-generated classes and tests
+    def fileFilter = ['**/R.class',
+                      '**/R$*.class',
+                      '**/BuildConfig.*',
+                      '**/Manifest*.*',
+                      '${project_path}/view/*',
+                      '${project_path}/menu/*',
+                      '${project_path}/harmony/*'
+                      ]
+
+    def debugTree = fileTree(dir:
+            "${r"${project.buildDir}"}/intermediates/classes/debug",
+            excludes: fileFilter)
+
+    def mainSrc = "${r"${project.projectDir}"}/src/${project_path}"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+
+    executionData = fileTree(dir: project.projectDir, includes:
+            ['**/*.exec', '**/*.ec'])
+
+    reports {
+        xml.enabled = true
+        xml.destination = "${r"${buildDir}"}/jacocoTestReport.xml"
+        csv.enabled = false
+        html.enabled = true
+        html.destination = "${r"${buildDir}"}/reports/jacoco"
+    }
 }
