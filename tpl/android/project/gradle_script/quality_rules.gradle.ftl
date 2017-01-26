@@ -1,5 +1,7 @@
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+apply plugin: 'pmd'
 
 check.dependsOn 'checkstyle', 'findbugs'
 
@@ -88,7 +90,6 @@ task pmd (type: Pmd, dependsOn: "assembleDebug") {
     }
 }
 
-check.doLast
-        {
-            project.tasks.getByName("pmd").execute()
-        }
+check.doLast {
+    project.tasks.getByName("pmd").execute()
+}
