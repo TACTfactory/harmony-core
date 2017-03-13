@@ -17,7 +17,7 @@ public class ResourceProviderAdapter
 
     /**
      * Constructor.
-     * @param ctx context
+     * @param provider Android application provider of ${project_name?cap_first}
      */
     public ResourceProviderAdapter(
             final ${project_name?cap_first}ProviderBase provider) {

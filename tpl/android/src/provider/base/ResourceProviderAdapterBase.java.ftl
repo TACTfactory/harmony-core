@@ -59,8 +59,7 @@ public abstract class ResourceProviderAdapterBase
 
     /**
      * Constructor.
-     * @param ctx context
-     * @param db database
+     * @param provider Android application provider of ${project_name?cap_first}
      */
     public ResourceProviderAdapterBase(
             ${project_name?cap_first}ProviderBase provider) {

@@ -18,39 +18,39 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
     public HarmonyCursorAdapter(Context ctx) {
         super(ctx, null, 0);
     }
-    
+
     /**
      * Constructor.
      * @param ctx context
      * @param cursor cursor
      */
-    public HarmonyCursorAdapter(Context context, Cursor cursor) {
-        super(context, cursor, 0);
+    public HarmonyCursorAdapter(Context ctx, Cursor cursor) {
+        super(ctx, cursor, 0);
     }
-    
+
     /** Convert cursor to item. Must be call Contract class. */
     protected abstract T cursorToItem(Cursor cursor);
-    
+
     /** Get the column name (not aliased) from Contract class. */
     protected abstract String getColId();
-    
+
     @Override
     public long getItemId(int position) {
         long result = position;
-        
+
         if (this.hasStableIds()) {
             result = super.getItemId(position);
         }
-        
+
         return result;
     }
-    
+
     @Override
     public boolean hasStableIds() {
         return this.getColId() != null;
     }
-    
-    
+
+
     /**
      * Get a new {@link HarmonyViewHolder} for the item <T>.
      * @param context
@@ -60,7 +60,7 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
      */
     protected abstract HarmonyViewHolder<T> getNewViewHolder(
             Context context, Cursor cursor, ViewGroup group);
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
@@ -72,48 +72,48 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup group) {
         final HarmonyViewHolder<T> viewHolder = this.getNewViewHolder(
                 context, cursor, group);
-        
+
         viewHolder.populate(this.cursorToItem(cursor));
-        
+
         return viewHolder.getView();
     }
-    
+
     @Override
     public Cursor swapCursor(Cursor newCursor) {
         if (newCursor == this.mCursor) {
             return null;
         }
-        
+
         Cursor oldCursor = this.mCursor;
-        
+
         if (oldCursor != null) {
             if (this.mChangeObserver != null) {
                 oldCursor.unregisterContentObserver(this.mChangeObserver);
             }
-            
+
             if (this.mDataSetObserver != null) {
                 oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
             }
         }
-        
+
         mCursor = newCursor;
-        
+
         if (newCursor != null) {
             if (this.mChangeObserver != null) {
                 newCursor.registerContentObserver(this.mChangeObserver);
             }
-            
+
             if (this.mDataSetObserver != null) {
                 newCursor.registerDataSetObserver(this.mDataSetObserver);
             }
-            
+
             if (this.getColId() != null) {
                 this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
                         this.getColId());
             } else {
                 this.mRowIDColumn = -1;
             }
-            
+
             this.mDataValid = true;
             // notify the observers about the new cursor
             this.notifyDataSetChanged();
@@ -123,7 +123,7 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
             // notify the observers about the lack of a data set
             this.notifyDataSetInvalidated();
         }
-        
+
         return oldCursor;
     }
 }

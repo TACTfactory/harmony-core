@@ -32,24 +32,24 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
  * List adapter for ${curr.name} entity.
  */
 public class ${curr.name}ListAdapter extends HarmonyCursorAdapter<${curr.name}> {
-    
+
     /**
      * Constructor.
      * @param ctx context
      */
-    public ${curr.name}ListAdapter(android.content.Context context) {
-        super(context);
+    public ${curr.name}ListAdapter(android.content.Context ctx) {
+        super(ctx);
     }
-    
+
     /**
      * Constructor.
      * @param ctx context
      * @param cursor cursor
      */
-    public ${curr.name}ListAdapter(android.content.Context context, Cursor cursor) {
-        super(context, cursor);
+    public ${curr.name}ListAdapter(android.content.Context ctx, Cursor cursor) {
+        super(ctx, cursor);
     }
-    
+
     @Override
     protected ${curr.name} cursorToItem(Cursor cursor) {
         return ${curr.name}Contract.cursorToItem(cursor);
@@ -64,17 +64,17 @@ public class ${curr.name}ListAdapter extends HarmonyCursorAdapter<${curr.name}> 
         return null;
         </#if>
     }
-    
+
     @Override
     protected HarmonyViewHolder<${curr.name}> getNewViewHolder(
             android.content.Context context,
             Cursor cursor, ViewGroup group) {
         return new ViewHolder(context, group);
     }
-    
+
     /** Holder row. */
     private class ViewHolder extends HarmonyViewHolder<${curr.name}> {
-    
+
         /**
          * Constructor.
          *
@@ -98,11 +98,11 @@ public class ${curr.name}ListAdapter extends HarmonyCursorAdapter<${curr.name}> 
             CheckBox ${field.name}View = (CheckBox) this.getView().findViewById(
                     R.id.row_${curr.name?lower_case}_${field.name?lower_case});
             ${field.name}View.setEnabled(false);
-            
+
                         <#else>
             TextView ${field.name}View = (TextView) this.getView().findViewById(
                     R.id.row_${curr.name?lower_case}_${field.name?lower_case});
-                    
+
                         </#if>
                     </#if>
                 </#if>
