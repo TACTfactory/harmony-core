@@ -785,7 +785,7 @@ public abstract class BaseAdapter implements IAdapter {
 	/**
 	 * @return the service
 	 */
-	public final String getFixture() {
+	public String getFixture() {
 		return this.fixture;
 	}
 
