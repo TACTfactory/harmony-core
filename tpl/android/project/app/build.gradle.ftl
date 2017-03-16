@@ -63,7 +63,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile 'joda-time:joda-time:2.9.7'
-    compile 'com.google.guava:guava:21.0'
+    compile 'com.google.guava:guava:20.0'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 

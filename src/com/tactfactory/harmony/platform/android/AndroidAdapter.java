@@ -113,7 +113,7 @@ public class AndroidAdapter extends BaseAdapter {
         //this.provider		= "provider";
 
         // File
-        this.setManifest("AndroidManifest.xml");
+        this.setManifest("app/src/main/AndroidManifest.xml");
         this.setStrings("strings.xml");
         this.setHome("HomeActivity.java");
         this.setConfigs("configs.xml");
