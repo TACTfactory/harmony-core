@@ -134,16 +134,16 @@ public final class HarmonyContext {
         ConsoleUtils.displayDebug("Detect app folder on " + basePath);
 
         // Set Path
-        this.projectPath         = this.basePath + projectFolder;
+        this.projectPath        = this.basePath + projectFolder;
         this.projectBasePath    = this.projectPath + projectBaseFolder;
-        this.libraryPath         = this.basePath + libraryFolder;
+        this.libraryPath        = this.basePath + libraryFolder;
 
         if (Strings.isNullOrEmpty(bundlePath)) { // TODO check why..
             this.bundlePath     = this.basePath + bundleFolder;
         }
 
         //TODO remove by bundle path
-        this.templatePath     = templateFolder;
+        this.templatePath       = templateFolder;
 
         this.libPool.parseLibraries(new File(this.bundlePath));
     }

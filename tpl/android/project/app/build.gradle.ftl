@@ -18,14 +18,6 @@ dependencies {
     //Configure appcompat version to match your compileSdkVersion
     //Support V4 is embeded in appcompat-v7
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'joda-time:joda-time:2.9.7'
-    compile 'com.google.guava:guava:21.0'
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
-
-
-
 
     compile fileTree(dir: 'libs', include: '*.jar', exclude:'android-support-v4.jar')
 
@@ -42,9 +34,8 @@ android {
         //multiDexEnabled true
 
         applicationId "${project_namespace}"
-        minSdkVersion 19
+        minSdkVersion 8
         targetSdkVersion 21
-        versionCode 1
 
         //Default test project is set with projectName.test
         //If you defined another test project set it here

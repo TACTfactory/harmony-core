@@ -237,13 +237,13 @@ public class AndroidProjectAdapter implements IAdapterProject {
             } else {
                 String tplPath = templatePath
                         + TactFileUtils.absoluteToRelativePath(
-                        		file.getAbsolutePath(),
-                        		fullTemplatePath);
+                                file.getAbsolutePath(),
+                                fullTemplatePath);
 
                 String srcPath = filePath
                         + TactFileUtils.absoluteToRelativePath(
-                        		file.getAbsolutePath(),
-                        		fullTemplatePath);
+                                file.getAbsolutePath(),
+                                fullTemplatePath);
 
                 tplPath = tplPath.substring(0, tplPath.length()
                         - ".ftl".length());
@@ -443,35 +443,35 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         List<String> libraries = new ArrayList<String>();
-        libraries.add("joda-time-2.3.jar");
-        libraries.add("guava-12.0.jar");
-        libraries.add("jsr305.jar");
+//        libraries.add("joda-time-2.3.jar");
+//        libraries.add("guava-12.0.jar");
+//        libraries.add("jsr305.jar");
         libraries.add("core-annotations.jar");
 
-        // TODO add only if an entity has @EntityResource annotation
-        libraries.add("universal-image-loader-1.8.6-with-sources.jar");
+//        // TODO add only if an entity has @EntityResource annotation
+//        libraries.add("universal-image-loader-1.8.6-with-sources.jar");
 
         result.addAll(this.adapter.getLibrariesCopyFile(libraries));
 
-        String appCompatPath = String.format(
-                "%s%s",
-                this.adapter.getLibsPath(),
-                "appcompat-v7");
+//        String appCompatPath = String.format(
+//                "%s%s",
+//                this.adapter.getLibsPath(),
+//                "appcompat-v7");
 
         //Add compatv7
-        CopyFile copyfile = new CopyFile(
-                ApplicationMetadata.getAndroidSdkPath()
-                        + "/extras/android/support/v7/appcompat",
-                appCompatPath);
-
-        result.add(copyfile);
-
-        result.add(new UpdateLibraryAndroid(
-                this.adapter.getApplicationMetadata().getName() + "-appcompat-v7",
-                appCompatPath,
-                "android-23",
-                appCompatPath,
-                true));
+//        CopyFile copyfile = new CopyFile(
+//                ApplicationMetadata.getAndroidSdkPath()
+//                        + "/extras/android/support/v7/appcompat",
+//                appCompatPath);
+//
+//        result.add(copyfile);
+//
+//        result.add(new UpdateLibraryAndroid(
+//                this.adapter.getApplicationMetadata().getName() + "-appcompat-v7",
+//                appCompatPath,
+//                "android-23",
+//                appCompatPath,
+//                true));
 
         return result;
     }
@@ -997,10 +997,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-	public List<IUpdater> getFixtureAssets() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<IUpdater> getFixtureAssets() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public List<IUpdater> getApplicationFiles() {
@@ -1516,7 +1516,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         if (enumMeta.getIdName() != null) {
-        	result.add(new EnumImplementationAndroid(enumMeta));
+            result.add(new EnumImplementationAndroid(enumMeta));
         }
 
         return result;
