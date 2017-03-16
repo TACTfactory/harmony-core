@@ -18,11 +18,11 @@ import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
-import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.platform.BaseAdapter;
 import com.tactfactory.harmony.platform.IAdapterProject;
 import com.tactfactory.harmony.platform.manipulator.JavaFileManipulator;
 import com.tactfactory.harmony.platform.manipulator.SourceFileManipulator;
+import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.ImageUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -118,6 +118,112 @@ public class AndroidAdapter extends BaseAdapter {
         this.setHome("HomeActivity.java");
         this.setConfigs("configs.xml");
     }
+
+    // Begin path overrides.
+
+    @Override
+    public String getStringsTestPathFile() {
+        String result = String.format("%s%s/%s/../%s/%s/%s",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getTest(),
+                this.getResource(),
+                this.getValues(),
+                this.getStrings());
+
+        return result;
+    }
+
+    /**
+     * Get the strings tests templates path.
+     * @return The strings tests templates path
+     */
+    @Override
+    public final String getTemplateStringsTestPathFile() {
+        String result = String.format("%s%s/%s/../%s/%s/%s",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getTest(),
+                this.getResource(),
+                this.getValues(),
+                this.getStrings());
+        return result;
+    }
+
+    /**
+     * Get the resource path.
+     * @return The resource path
+     */
+    @Override
+    public String getRessourcePath() {
+        String result = String.format("%s%s/%s/../%s/",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getResource());
+
+        return result;
+    }
+
+    /**
+     * Get the resource's templates path.
+     * @return The resource's templates path
+     */
+    @Override
+    public final String getTemplateRessourcePath() {
+        return String.format("%s%s/%s/../%s/",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getResource());
+    }
+
+    /**
+     * Get the strings template path.
+     * @return The strings template path
+     */
+    @Override
+    public final String getTemplateStringsPathFile() {
+        return String.format("%s%s/%s/../%s/%s/%s",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getResource(),
+                this.getValues(),
+                this.getStrings());
+    }
+
+    /**
+     * Get the configs path.
+     * @return The configs path
+     */
+    @Override
+    public final String getConfigsPathFile() {
+        return String.format("%s%s/%s/../%s/%s/%s",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getResource(),
+                this.getValues(),
+                this.getConfigs());
+    }
+
+    /**
+     * Get the configs template path.
+     * @return The configs template path
+     */
+    @Override
+    public final String getTemplateConfigsPathFile() {
+        return String.format("%s%s/%s/../%s/%s/%s",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getResource(),
+                this.getValues(),
+                this.getConfigs());
+    }
+
+    // End of path overrides.
 
     @Override
     public String getNameSpaceEntity(final ClassMetadata cm,
@@ -355,6 +461,7 @@ public class AndroidAdapter extends BaseAdapter {
     }
 
     private IAdapterProject adapterProject = new AndroidProjectAdapter(this);
+    @Override
     public IAdapterProject getAdapterProject() {
         return this.adapterProject;
     }
