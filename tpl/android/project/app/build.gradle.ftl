@@ -1,46 +1,24 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
-    }
-}
-
 apply plugin: 'com.android.application'
-apply from: "gradle_script/quality_rules.gradle"
-
-repositories {
-    jcenter()
-}
-
-dependencies {
-    //Configure appcompat version to match your compileSdkVersion
-    //Support V4 is embeded in appcompat-v7
-    compile 'com.android.support:appcompat-v7:22.2.0'
-
-    compile fileTree(dir: 'libs', include: '*.jar', exclude:'android-support-v4.jar')
-
-    androidTestCompile "com.android.support.test:runner:0.3"
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile fileTree(dir: 'test/libs', include: '*.jar')
-}
+//apply from: "gradle_script/quality_rules.gradle"
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
-        //multiDexEnabled true
-
         applicationId "${project_namespace}"
-        minSdkVersion 8
-        targetSdkVersion 21
 
-        //Default test project is set with projectName.test
-        //If you defined another test project set it here
-        //testApplicationId "${project_namespace}.test"
-        testInstrumentationRunner "com.zutubi.android.junitreport.JUnitReportTestRunner"
+        minSdkVersion 19
+        targetSdkVersion 25
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
     signingConfigs {
@@ -64,44 +42,41 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
             signingConfig signingConfigs.release
         }
+
         debug {
             testCoverageEnabled true
         }
     }
 
-    //SourceSets make correct setup path to use gradle with eclipse architecture
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
+//    //Exclude file when using Dex to setup one package for build
+//    //We need to exclude remanente files from all embeded .jar
+//    packagingOptions {
+//        exclude 'META-INF/NOTICE.txt'
+//        exclude 'META-INF/LICENSE.txt'
+//    }
+}
 
-        androidTest {
-            java.srcDirs = ['test/src']
-            manifest.srcFile file('test/AndroidManifest.xml')
-            resources.srcDirs = ['test/src']
-            res.srcDirs = ['test/res']
-            assets.srcDirs = ['test/assets']
-        }
-    }
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    //Exclude file when using Dex to setup one package for build
-    //We need to exclude remanente files from all embeded .jar
-    packagingOptions {
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/LICENSE.txt'
-      }
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    //Because of some compatibilities issues between lint and eclipse projects
-    //we need to continue build process even if lint report issues
-    lintOptions {
-          abortOnError false
-      }
+    compile 'joda-time:joda-time:2.9.7'
+    compile 'com.google.guava:guava:21.0'
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
+    androidTestCompile fileTree(dir: 'test/libs', include: '*.jar')
+
+     androidTestCompile 'com.android.support:support-annotations:25.3.0'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestCompile "com.android.support.test:runner:0.5"
+    androidTestCompile 'junit:junit:4.12'
+
+    testCompile 'junit:junit:4.12'
 }
 
 tasks.all {
@@ -111,3 +86,4 @@ tasks.all {
         task.enabled = false
     }
 }
+
