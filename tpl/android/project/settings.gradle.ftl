@@ -1,3 +1,3 @@
-rootProject.name "${project_name}"
+rootProject.name="${project_name}"
 
 include ':app'
