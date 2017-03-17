@@ -96,9 +96,9 @@ public class AndroidAdapter extends BaseAdapter {
         this.setResource("res");
         this.setAssets("assets");
         this.setSource("app/src/main/java");
-        this.setLibs("libs");
+        this.setLibs("app/libs");
         this.setTest("app/src/test/java");
-        this.setTestLibs("libs");
+        this.setTestLibs("app/libs");
         this.setHarmony("harmony");
         this.setWidget("widget");
         this.setUtil("util");
