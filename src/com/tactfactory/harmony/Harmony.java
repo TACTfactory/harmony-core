@@ -293,7 +293,7 @@ public final class Harmony {
     }
 
     /**
-     * Get the harmony project base path.<br/>
+     * Get the root base path.<br/>
      * eg. /
      * @return the harmony base path
      */
@@ -302,7 +302,7 @@ public final class Harmony {
     }
 
     /**
-     * Get the android project folder.<br/>
+     * Get the project folder.<br/>
      * eg. /app/
      * @return the android project folder
      */
@@ -312,7 +312,7 @@ public final class Harmony {
 
     /**
      * Get the android project path.<br/>
-     * eg./app/android/
+     * eg./app/android/app/
      * @return the android project path
      */
     public static String getProjectAndroidPath() {
