@@ -15,13 +15,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.impl.PluginManagerFactory;
-import net.xeoh.plugins.base.util.JSPFProperties;
-import net.xeoh.plugins.base.util.PluginManagerUtil;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.GeneralCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
@@ -30,6 +26,11 @@ import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
+
+import net.xeoh.plugins.base.PluginManager;
+import net.xeoh.plugins.base.impl.PluginManagerFactory;
+import net.xeoh.plugins.base.util.JSPFProperties;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 /**
  * Harmony main class.<br/>
@@ -288,6 +289,7 @@ public final class Harmony {
      * @return the android SDK version
      * @deprecated Use HarmonyContext.getAndroidSdkVersion()
      */
+    @Deprecated
     public static String getAndroidSDKVersion() {
         return HarmonyContext.getAndroidSdkVersion();
     }

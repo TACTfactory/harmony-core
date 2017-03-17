@@ -8,13 +8,17 @@
  */
 package com.tactfactory.harmony;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jdom2.Document;
@@ -74,7 +78,7 @@ public final class ProjectContext {
             // get project namespace from AndroidManifest.xml
             final File manifest = new File(String.format("%s/%s",
                     this.harmony.getHarmonyContext().getProjectAndroidPath(),
-                    "AndroidManifest.xml"));
+                    "app/src/main/AndroidManifest.xml"));
 
             if (manifest.exists()) {
                 ProjectContext.loadNameSpaceFromManifest(manifest);
@@ -90,11 +94,9 @@ public final class ProjectContext {
                         ProjectContext.getProjectNameFromConfig(config));
             }*/
 
-            // TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
-            // pour récupérer le project name
             final File config = new File(String.format("%s/%s",
                     this.harmony.getHarmonyContext().getProjectAndroidPath(),
-                    "build.xml"));
+                    "settings.gradle"));
 
             if (config.exists()) {
                 ProjectContext.loadProjectNameFromConfig(config);
@@ -228,28 +230,30 @@ public final class ProjectContext {
      * @return Project Name Space
      */
     public static void loadProjectNameFromConfig(final File config) {
-        String result = null;
-        SAXBuilder builder;
-        Document doc;
+        String projectName = null;
 
-        if (config.exists()) {
-            // Make engine
-            builder = new SAXBuilder();
-            try {
-                // Load XML File
-                doc = builder.build(config);
-                // Load Root element
-                final Element rootNode = doc.getRootElement();
-                result = rootNode.getAttribute("name").getValue();
-            } catch (final JDOMException e) {
+        if (config.exists() && config.isFile() && config.canRead()) {
+
+            try (BufferedReader br = new BufferedReader(new FileReader(config))) {
+                Pattern pattern = Pattern.compile("^ *rootProject.name *= *['\"](.+?)['\"] *$");
+                String line = br.readLine();
+
+                while (line != null) {
+                    Matcher matcher = pattern.matcher(line);
+
+                    if (matcher.find()) {
+                        projectName = matcher.group(1);
+                        ApplicationMetadata.INSTANCE.setName(projectName);
+                        line = null;
+                    } else {
+                        line = br.readLine();
+                    }
+                }
+            } catch (FileNotFoundException e) {
                 ConsoleUtils.displayError(e);
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 ConsoleUtils.displayError(e);
             }
-        }
-
-        if (result != null) {
-            ApplicationMetadata.INSTANCE.setName(result.trim());
         }
     }
 
