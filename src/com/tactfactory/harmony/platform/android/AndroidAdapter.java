@@ -97,7 +97,7 @@ public class AndroidAdapter extends BaseAdapter {
         this.setAssets("assets");
         this.setSource("app/src/main/java");
         this.setLibs("app/libs");
-        this.setTest("app/src/test/java");
+        this.setTest("test");
         this.setTestLibs("app/libs");
         this.setHarmony("harmony");
         this.setWidget("widget");
@@ -121,12 +121,30 @@ public class AndroidAdapter extends BaseAdapter {
 
     // Begin path overrides.
 
+    public String getTestDir() {
+        return "app/src/test/java/";
+    }
+
     @Override
-    public String getStringsTestPathFile() {
-        String result = String.format("%s%s/%s/../%s/%s/%s",
+    public String getTestPath() {
+        return String.format("%s%s/%s",
                 Harmony.getProjectPath(),
                 this.getPlatform(),
-                this.getTest(),
+                this.getTestDir());
+    }
+
+    @Override
+    public String getTemplateTestsPath() {
+        return String.format("%s%s/%s",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getTestDir());
+    }
+
+    @Override
+    public String getStringsTestPathFile() {
+        String result = String.format("%s../%s/%s/%s",
+                this.getTestPath(),
                 this.getResource(),
                 this.getValues(),
                 this.getStrings());
@@ -140,10 +158,8 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public final String getTemplateStringsTestPathFile() {
-        String result = String.format("%s%s/%s/../%s/%s/%s",
-                Harmony.getTemplatesPath(),
-                this.getPlatform(),
-                this.getTest(),
+        String result = String.format("%s../%s/%s/%s",
+                this.getTemplateTestsPath(),
                 this.getResource(),
                 this.getValues(),
                 this.getStrings());

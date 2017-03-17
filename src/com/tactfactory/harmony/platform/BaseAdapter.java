@@ -488,7 +488,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * @return The tests templates path
 	 */
 	@Override
-    public final String getTemplateTestsPath() {
+    public String getTemplateTestsPath() {
 		return String.format("%s%s/%s/",
 				Harmony.getTemplatesPath(),
 				this.getPlatform(),

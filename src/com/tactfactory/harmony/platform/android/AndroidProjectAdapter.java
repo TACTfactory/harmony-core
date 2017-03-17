@@ -13,6 +13,7 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
@@ -31,12 +32,11 @@ import com.tactfactory.harmony.platform.android.updater.HomeActivityUpdaterAndro
 import com.tactfactory.harmony.platform.android.updater.ManifestActivityAndroid;
 import com.tactfactory.harmony.platform.android.updater.ManifestApplicationThemeAndroid;
 import com.tactfactory.harmony.platform.android.updater.ManifestProviderAndroid;
-import com.tactfactory.harmony.platform.android.updater.UpdateLibraryAndroid;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
 import com.tactfactory.harmony.updater.impl.DeleteFile;
+import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.impl.XmlAndroid;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
@@ -1146,9 +1146,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateTestsPath();
-        String filePath = String.format("%s%s/%s/%s/",
+        String filePath = String.format("%s/%s/%s/",
                 this.adapter.getTestPath(),
-                this.adapter.getSource(),
                 this.adapter.getApplicationMetadata().getProjectNameSpace(),
                 this.adapter.getTest());
 
@@ -1250,9 +1249,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateTestsPath();
-        String filePath = String.format("%s%s/%s/%s/",
+        String filePath = String.format("%s/%s/%s/",
                 this.adapter.getTestPath(),
-                this.adapter.getSource(),
                 this.adapter.getApplicationMetadata().getProjectNameSpace(),
                 this.adapter.getTest());
 
@@ -1294,9 +1292,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateTestsPath();
-        String filePath = String.format("%s%s/%s/%s/",
+        String filePath = String.format("%s/%s/%s/",
                 this.adapter.getTestPath(),
-                this.adapter.getSource(),
                 this.adapter.getApplicationMetadata().getProjectNameSpace(),
                 this.adapter.getTest());
 
