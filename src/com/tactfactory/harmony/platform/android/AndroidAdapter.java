@@ -151,6 +151,21 @@ public class AndroidAdapter extends BaseAdapter {
     }
 
     /**
+     * Get the strings path.
+     * @return The strings path
+     */
+    @Override
+    public String getStringsPathFile() {
+        return String.format("%s%s/%s/../%s/%s/%s",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getResource(),
+                this.getValues(),
+                this.getStrings());
+    }
+
+    /**
      * Get the resource path.
      * @return The resource path
      */
