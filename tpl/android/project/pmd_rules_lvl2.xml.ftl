@@ -138,7 +138,6 @@
     <rule ref="rulesets/java/controversial.xml/CallSuperInConstructor"></rule>
     <rule ref="rulesets/java/controversial.xml/UnnecessaryParentheses"></rule>
     <rule ref="rulesets/java/controversial.xml/DefaultPackage"></rule>
-    <rule ref="rulesets/java/controversial.xml/BooleanInversion"></rule>
     <rule ref="rulesets/java/controversial.xml/DataflowAnomalyAnalysis">
         <properties>
             <property name="maxViolations" value="0"/>      <!-- Maximum number of anomalies per class -->
