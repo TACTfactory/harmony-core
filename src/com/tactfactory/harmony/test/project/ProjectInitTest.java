@@ -81,7 +81,7 @@ public class ProjectInitTest extends CommonTest {
         CommonTest.hasFindFile("android/app/build.gradle");
         //CommonTest.hasFindFile("android/lint.xml");
         //this.isFindFile("android/local.properties");
-        CommonTest.hasFindFile("android/proguard-project.txt");
+        CommonTest.hasFindFile("android/app/proguard-project.txt");
 
         CommonTest.hasFindFile("android/app/src/main/");
         CommonTest.hasFindFile(ANDROID_SRC_PATH);

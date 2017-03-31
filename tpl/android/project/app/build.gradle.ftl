@@ -40,7 +40,12 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
-            signingConfig signingConfigs.release
+
+            if(new File("$System.env.KEYSTORE_PATH" + "/" + project.name + ".properties").exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig null
+            }
         }
 
         debug {

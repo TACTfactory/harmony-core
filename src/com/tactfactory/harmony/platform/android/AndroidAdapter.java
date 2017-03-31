@@ -122,7 +122,7 @@ public class AndroidAdapter extends BaseAdapter {
     // Begin path overrides.
 
     public String getTestDir() {
-        return "app/src/test/java/";
+        return "app/src/androidTest/java/";
     }
 
     @Override

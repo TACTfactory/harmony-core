@@ -70,9 +70,10 @@ public final class CopyFile implements IUpdater {
         final File dest = new File(this.getFileDestination());
 
         if (!dest.exists()) {
-            TactFileUtils.copyfile(
-                    new File(this.getFileSource()),
-                    dest);
+            File src = new File(this.getFileSource());
+            TactFileUtils.copyfile(src, dest);
+
+            dest.setExecutable(src.canExecute());
         }
     }
 }

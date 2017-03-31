@@ -453,6 +453,11 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(copyfile);
 
         copyfile = new CopyFile(
+                Harmony.getBundlePath() + "tact-core/lib/gradlew.bat",
+                Harmony.getProjectAndroidPath() + "gradlew.bat");
+        result.add(copyfile);
+
+        copyfile = new CopyFile(
                 Harmony.getBundlePath() + "tact-core/lib/gradlew",
                 Harmony.getProjectAndroidPath() + "gradlew");
         result.add(copyfile);
