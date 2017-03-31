@@ -76,30 +76,30 @@ public class ProjectInitTest extends CommonTest {
         // Generate Project
         CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 
-        CommonTest.hasFindFile("android/AndroidManifest.xml");
-        CommonTest.hasFindFile("android/build.xml");
-        CommonTest.hasFindFile("android/lint.xml");
+        CommonTest.hasFindFile("android/app/src/main/AndroidManifest.xml");
+        CommonTest.hasFindFile("android/build.gradle");
+        CommonTest.hasFindFile("android/app/build.gradle");
+        //CommonTest.hasFindFile("android/lint.xml");
         //this.isFindFile("android/local.properties");
         CommonTest.hasFindFile("android/proguard-project.txt");
-        CommonTest.hasFindFile("android/project.properties");
 
-        CommonTest.hasFindFile("android/src");
-        CommonTest.hasFindFile("android/src/"
+        CommonTest.hasFindFile("android/app/src/main/");
+        CommonTest.hasFindFile(ANDROID_SRC_PATH);
+        CommonTest.hasFindFile(ANDROID_SRC_PATH
                 + this.currentMetadata.getProjectNameSpace().replace('.', '/'));
-        CommonTest.hasFindFile("android/src/"
+        CommonTest.hasFindFile(ANDROID_SRC_PATH
                 + this.currentMetadata.getProjectNameSpace().replace('.', '/')
                 + "/entity");
         //this.isFindFile("android/res/");
 
-        CommonTest.hasFindFile("android/libs");
+        CommonTest.hasFindFile("android/app/libs");
         //CommonTest.hasFindFile("android/libs/android-support-v4.jar");
-        CommonTest.hasFindFile("android/libs/core-annotations.jar");
-        CommonTest.hasFindFile("android/libs/joda-time-2.3.jar");
+        CommonTest.hasFindFile("android/app/libs/core-annotations.jar");
 
-        CommonTest.hasFindFile("android/res");
-        CommonTest.hasFindFile("android/res/values");
-        CommonTest.hasFindFile("android/res/values/configs.xml");
-        CommonTest.hasFindFile("android/res/values/strings.xml");
+        CommonTest.hasFindFile(ANDROID_RES_PATH);
+        CommonTest.hasFindFile(ANDROID_RES_PATH + "values");
+        CommonTest.hasFindFile(ANDROID_RES_PATH + "values/configs.xml");
+        CommonTest.hasFindFile(ANDROID_RES_PATH + "values/strings.xml");
 
         System.out.println("\nTest Update SDK Path");
         System.out.println(SHARP_DELIMITOR);

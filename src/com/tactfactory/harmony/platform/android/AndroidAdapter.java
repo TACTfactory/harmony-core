@@ -93,7 +93,7 @@ public class AndroidAdapter extends BaseAdapter {
         // Structure
         this.setProject("project");
         this.setPlatform("android");
-        this.setResource("res");
+        this.setResource("app/src/main/res");
         this.setAssets("assets");
         this.setSource("app/src/main/java");
         this.setLibs("app/libs");
@@ -172,10 +172,9 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public String getStringsPathFile() {
-        return String.format("%s%s/%s/../%s/%s/%s",
+        return String.format("%s%s/%s/%s/%s",
                 Harmony.getProjectPath(),
                 this.getPlatform(),
-                this.getSource(),
                 this.getResource(),
                 this.getValues(),
                 this.getStrings());
@@ -187,10 +186,9 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public String getRessourcePath() {
-        String result = String.format("%s%s/%s/../%s/",
+        String result = String.format("%s%s/%s/",
                 Harmony.getProjectPath(),
                 this.getPlatform(),
-                this.getSource(),
                 this.getResource());
 
         return result;
@@ -202,10 +200,9 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public final String getTemplateRessourcePath() {
-        return String.format("%s%s/%s/../%s/",
+        return String.format("%s%s/%s/",
                 Harmony.getTemplatesPath(),
                 this.getPlatform(),
-                this.getSource(),
                 this.getResource());
     }
 
@@ -215,10 +212,9 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public final String getTemplateStringsPathFile() {
-        return String.format("%s%s/%s/../%s/%s/%s",
+        return String.format("%s%s/%s/%s/%s",
                 Harmony.getTemplatesPath(),
                 this.getPlatform(),
-                this.getSource(),
                 this.getResource(),
                 this.getValues(),
                 this.getStrings());
@@ -230,10 +226,9 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public final String getConfigsPathFile() {
-        return String.format("%s%s/%s/../%s/%s/%s",
+        return String.format("%s%s/%s/%s/%s",
                 Harmony.getProjectPath(),
                 this.getPlatform(),
-                this.getSource(),
                 this.getResource(),
                 this.getValues(),
                 this.getConfigs());
@@ -245,10 +240,9 @@ public class AndroidAdapter extends BaseAdapter {
      */
     @Override
     public final String getTemplateConfigsPathFile() {
-        return String.format("%s%s/%s/../%s/%s/%s",
+        return String.format("%s%s/%s/%s/%s",
                 Harmony.getTemplatesPath(),
                 this.getPlatform(),
-                this.getSource(),
                 this.getResource(),
                 this.getValues(),
                 this.getConfigs());

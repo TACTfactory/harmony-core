@@ -33,7 +33,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  */
 public class FixtureGlobalTest extends CommonTest {
     /** Fixture path. */
-    private static final String FIXTURE_PATH = "android/src/%s/fixture/%s";
+    private static final String FIXTURE_PATH = ANDROID_SRC_PATH + "%s/fixture/%s";
 
     public FixtureGlobalTest (ApplicationMetadata currentMetadata)
             throws Exception {

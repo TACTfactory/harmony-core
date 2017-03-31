@@ -452,6 +452,11 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 Harmony.getProjectAndroidPath() + "gradle/wrapper/gradle-wrapper.jar");
         result.add(copyfile);
 
+        copyfile = new CopyFile(
+                Harmony.getBundlePath() + "tact-core/lib/gradlew",
+                Harmony.getProjectAndroidPath() + "gradlew");
+        result.add(copyfile);
+
         return result;
     }
 
@@ -473,7 +478,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         List<String> libraries = new ArrayList<String>();
-        libraries.add("universal-image-loader-1.8.6-with-sources.jar");
         libraries.add("ImageViewTouch.jar");
 
         result.addAll(this.adapter.getLibrariesCopyFile(libraries));

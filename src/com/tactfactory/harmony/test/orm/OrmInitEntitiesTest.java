@@ -35,10 +35,10 @@ import com.tactfactory.harmony.test.utils.TestUtils;
 public class OrmInitEntitiesTest extends CommonTest {
 
     /** Path of entity folder. */
-    private static final String ENTITY_PATH = "android/src/%s/entity/%s.java";
+    private static final String ENTITY_PATH = ANDROID_SRC_PATH + "%s/entity/%s.java";
 
     /** Path of data folder. */
-    private static final String DATA_PATH = "android/src/%s/data/%s.java";
+    private static final String DATA_PATH = ANDROID_SRC_PATH + "%s/data/%s.java";
 
     public OrmInitEntitiesTest(ApplicationMetadata currentMetadata)
             throws Exception {
