@@ -680,7 +680,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                 ${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
                 ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
                 <#list entities[relation.relation.targetEntity].ids as id>${id.owner?cap_first}Contract.ALIASED_${NamingUtils.alias(id.name)} + "= ?"<#if id_has_next>
-                        + </#if></#list>,
+                        + " AND " + </#if></#list>,
                 new String[]{<#list entities[relation.relation.targetEntity].ids as id>String.valueOf(item.get${relation.name?cap_first}().get${id.name?cap_first}())<#if id_has_next>,
                         </#if></#list>},
                 null);
