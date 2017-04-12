@@ -33,9 +33,9 @@ import com.tactfactory.harmony.test.CommonTest;
 public class GenerateStaticViewTest extends CommonTest {
 
     /** Path of view path. */
-    private static final String VIEW_PATH = "android/src/%s/view/%s/%s%s.java";
+    private static final String VIEW_PATH = ANDROID_SRC_PATH + "%s/view/%s/%s%s.java";
     /** Path for layout path. */
-    private static final String LAYOUT_PATH = "android/res/layout/%s_%s.xml";
+    private static final String LAYOUT_PATH = ANDROID_RES_PATH + "layout/%s_%s.xml";
     /** Test package name. */
     private static final String TEST_PACKAGE_NAME = "test.test2";
     /** Test view name. */

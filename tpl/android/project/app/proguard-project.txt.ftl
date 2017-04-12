@@ -32,6 +32,7 @@
 # Google Guava
 # see http://code.google.com/p/guava-libraries/wiki/UsingProGuardWithGuava
 #-keep public class com.google.common.**
+-dontwarn com.google.common.**
 -dontwarn sun.misc.Unsafe
 -dontwarn com.google.common.collect.MinMaxPriorityQueue
 

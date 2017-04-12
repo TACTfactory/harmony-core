@@ -71,11 +71,9 @@
         <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocMethod -->
         <module name="JavadocMethod">
             <property name="scope" value="public"/>
-            <property name="allowUndeclaredRTE" value="true"/>
         </module>
         <module name="JavadocMethod">
             <property name="scope" value="protected"/>
-            <property name="allowUndeclaredRTE" value="true"/>
         </module>
 
         <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocStyle -->
@@ -105,7 +103,7 @@
         <module name="JavadocVariable">
             <property name="scope" value="protected"/>
         </module>
-        
+
 
 
         <!-- Checks for Naming Conventions.                  -->
@@ -144,9 +142,12 @@
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sourceforge.net/config_imports.html#AvoidStarImport -->
         <module name="AvoidStarImport">
-            <property name="allowClassImports" value="true"/>
-            <property name="allowStaticMemberImports" value="true"/>
+            <property name="allowClassImports" value="false"/>
+            <property name="allowStaticMemberImports" value="false"/>
         </module>
+
+        <!-- See http://checkstyle.sourceforge.net/config_imports.html#AvoidStarImport#AvoidStaticImport -->
+        <module name="AvoidStaticImport"/>
 
         <!-- See http://checkstyle.sourceforge.net/config_imports.html#IllegalImport -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
@@ -165,18 +166,34 @@
             <property name="max" value="120"/>
         </module>
 
+        <!-- See http://checkstyle.sourceforge.net/config_sizes.html#LineLength#MethodCount -->
+        <module name="MethodCount">
+            <property name="maxTotal" value="80"/>
+            <property name="maxPrivate" value="50"/>
+            <property name="maxPackage" value="40"/>
+            <property name="maxProtected" value="40"/>
+            <property name="maxPublic" value="40"/>
+        </module>
+
         <!-- See http://checkstyle.sourceforge.net/config_sizes.html#MethodLength -->
         <module name="MethodLength">
             <property name="countEmpty" value="false"/>
+            <property name="max" value="60"/>
         </module>
 
         <!-- See http://checkstyle.sourceforge.net/config_sizes.html#ParameterNumber -->
         <module name="ParameterNumber">
-            <property name="max" value="10"/>
+            <property name="max" value="6"/>
+            <!--
+            <property name="ignoreOverriddenMethods" value="false"/>
+            Require Release 6.12.1 -->
+            <property name="tokens" value="METHOD_DEF"/>
+        </module>
+        <module name="ParameterNumber">
             <!--
             <property name="ignoreOverriddenMethods" value="true"/>
             Require Release 6.12.1 -->
-            <property name="tokens" value="METHOD_DEF"/>
+            <property name="tokens" value="CTOR_DEF"/>
         </module>
 
         <!-- Checks for whitespace                               -->
@@ -194,7 +211,7 @@
         <!--
         <module name="EmptyLineSeparator">
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
-        </module> 
+        </module>
         Require Release 6.12.1 -->
 
         <!-- See http://checkstyle.sourceforge.net/config_whitespace.html#FileTabCharacter -->
@@ -234,6 +251,28 @@
         <!-- See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAround -->
         <module name="WhitespaceAround"/>
 
+
+        <!-- Modifier Checks                                    -->
+        <!-- See http://checkstyle.sourceforge.net/config_modifier.html#ModifierOrder -->
+        <!-- correct order is:
+            1. public
+            2. protected
+            3. private
+            4. abstract
+            5. static
+            6. final
+            7. transient
+            8. volatile
+            9. synchronized
+            10. native
+            11. strictfp
+        -->
+        <module name="ModifierOrder"/>
+
+        <!-- See http://checkstyle.sourceforge.net/config_modifier.html#RedundantModifier -->
+        <module name="RedundantModifier"/>
+
+
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See http://checkstyle.sourceforge.net/config_blocks.html#AvoidNestedBlocks -->
         <module name="AvoidNestedBlocks"/>
@@ -263,15 +302,31 @@
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#AvoidInlineConditionals -->
         <module name="AvoidInlineConditionals"/>
 
+        <!-- See http://checkstyle.sourceforge.net/config_coding.html#CovariantEquals -->
+        <module name="CovariantEquals"/>
+
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#DefaultComesLast -->
         <module name="DefaultComesLast"/>
 
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#EmptyStatement -->
         <module name="EmptyStatement"/>
 
+        <!-- See http://checkstyle.sourceforge.net/config_coding.html#EqualsAvoidNull -->
+        <module name="EqualsAvoidNull"/>
+
+        <!-- See http://checkstyle.sourceforge.net/config_coding.html#EqualsHashCode -->
+        <module name="EqualsHashCode"/>
+
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#FallThrough -->
         <module name="FallThrough">
             <property name="checkLastCaseGroup" value="true"/>
+        </module>
+
+        <!-- See http://checkstyle.sourceforge.net/config_coding.html#FinalLocalVariable -->
+        <module name="FinalLocalVariable">
+            <!--
+            <property name="validateEnhancedForLoopVariable" value="true"/>
+            Require Release 6.12.1 -->
         </module>
 
         <!-- See http://checkstyle.sourceforge.net/config_coding.html#HiddenField -->
@@ -320,6 +375,9 @@
         <!-- See http://checkstyle.sourceforge.net/config_design.html#HideUtilityClassConstructor -->
         <module name="HideUtilityClassConstructor"/>
 
+        <!-- See http://checkstyle.sourceforge.net/config_design.html#HideUtilityClassConstructor#InterfaceIsType -->
+        <module name="InterfaceIsType"/>
+
         <!-- See http://checkstyle.sourceforge.net/config_design.html#HideUtilityClassConstructor#VisibilityModifier -->
         <module name="VisibilityModifier"/>
 
@@ -347,7 +405,7 @@
     </module>
     <!-- See -->
     <module name="SuppressionFilter">
-        <property name="file" value="checkstyle_exclude.xml" />
+        <property name="file" value="gradle/script/checkstyle_exclude.xml" />
     </module>
 
 </module>

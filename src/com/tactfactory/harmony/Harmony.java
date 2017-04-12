@@ -15,13 +15,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.impl.PluginManagerFactory;
-import net.xeoh.plugins.base.util.JSPFProperties;
-import net.xeoh.plugins.base.util.PluginManagerUtil;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.GeneralCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
@@ -30,6 +26,11 @@ import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
+
+import net.xeoh.plugins.base.PluginManager;
+import net.xeoh.plugins.base.impl.PluginManagerFactory;
+import net.xeoh.plugins.base.util.JSPFProperties;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 /**
  * Harmony main class.<br/>
@@ -288,12 +289,13 @@ public final class Harmony {
      * @return the android SDK version
      * @deprecated Use HarmonyContext.getAndroidSdkVersion()
      */
+    @Deprecated
     public static String getAndroidSDKVersion() {
         return HarmonyContext.getAndroidSdkVersion();
     }
 
     /**
-     * Get the harmony project base path.<br/>
+     * Get the root base path.<br/>
      * eg. /
      * @return the harmony base path
      */
@@ -302,7 +304,7 @@ public final class Harmony {
     }
 
     /**
-     * Get the android project folder.<br/>
+     * Get the project folder.<br/>
      * eg. /app/
      * @return the android project folder
      */
@@ -312,7 +314,7 @@ public final class Harmony {
 
     /**
      * Get the android project path.<br/>
-     * eg./app/android/
+     * eg./app/android/app/
      * @return the android project path
      */
     public static String getProjectAndroidPath() {

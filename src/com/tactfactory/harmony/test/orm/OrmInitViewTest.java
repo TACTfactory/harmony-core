@@ -30,7 +30,7 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 public class OrmInitViewTest extends CommonTest {
     /** Path to the generated view folder. */
-    private final static String VIEW_PATH = "android/src/%s/view/";
+    private final static String VIEW_PATH = ANDROID_SRC_PATH + "%s/view/";
 
     private static final String VIEW_PATH_CREATE_ACTIVITY = VIEW_PATH + "%s/%sCreateActivity.java";
     private static final String VIEW_PATH_CREATE_FRAGMENT = VIEW_PATH + "%s/%sCreateFragment.java";
@@ -43,7 +43,7 @@ public class OrmInitViewTest extends CommonTest {
     private static final String VIEW_PATH_LIST_ADAPTER = VIEW_PATH + "%s/%sListAdapter.java";
     private static final String VIEW_PATH_LIST_LOADER = VIEW_PATH + "%s/%sListLoader.java";
 
-    private static final String LAYOUT_PATH = "android/res/layout/";
+    private static final String LAYOUT_PATH = ANDROID_RES_PATH + "layout/";
 
     private static final String LAYOUT_PATH_CREATE_ACTIVITY = LAYOUT_PATH + "activity_%s_create.xml";
     private static final String LAYOUT_PATH_CREATE_FRAGMENT = LAYOUT_PATH + "fragment_%s_create.xml";

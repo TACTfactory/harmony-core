@@ -76,7 +76,7 @@ public class GenerateConfigFileTest extends CommonTest {
      */
     @Test
     public final void testFiles() {
-        CommonTest.hasFindFile("android/res/values/configs.xml");
+        CommonTest.hasFindFile(ANDROID_RES_PATH + "values/configs.xml");
         //TODO check configs.xml content
     }
 }

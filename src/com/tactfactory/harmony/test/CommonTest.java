@@ -38,6 +38,9 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  */
 public abstract class CommonTest {
 
+    protected static final String ANDROID_SRC_PATH = "android/app/src/main/java/";
+    protected static final String ANDROID_RES_PATH = "android/app/src/main/res/";
+
     /** Current tested metadata. */
     protected final ApplicationMetadata currentMetadata;
 
@@ -219,7 +222,7 @@ public abstract class CommonTest {
                 "entity");
 
         final String destDir = String.format(
-                "%s/src/%s/%s/",
+                "%s/app/src/main/java/%s/%s/",
                 Harmony.getProjectAndroidPath(),
                 pathNameSpace,
                 "entity");

@@ -103,7 +103,7 @@
         <module name="JavadocVariable">
             <property name="scope" value="protected"/>
         </module>
-        
+
 
 
         <!-- Checks for Naming Conventions.                  -->
@@ -211,7 +211,7 @@
         <!--
         <module name="EmptyLineSeparator">
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
-        </module> 
+        </module>
         Require Release 6.12.1 -->
 
         <!-- See http://checkstyle.sourceforge.net/config_whitespace.html#FileTabCharacter -->
@@ -395,7 +395,7 @@
     </module>
     <!-- See -->
     <module name="SuppressionFilter">
-        <property name="file" value="checkstyle_exclude.xml" />
+        <property name="file" value="gradle/script/checkstyle_exclude.xml" />
     </module>
 
 </module>

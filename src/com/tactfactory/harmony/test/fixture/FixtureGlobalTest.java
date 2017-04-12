@@ -33,7 +33,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  */
 public class FixtureGlobalTest extends CommonTest {
     /** Fixture path. */
-    private static final String FIXTURE_PATH = "android/src/%s/fixture/%s";
+    private static final String FIXTURE_PATH = ANDROID_SRC_PATH + "%s/fixture/%s";
 
     public FixtureGlobalTest (ApplicationMetadata currentMetadata)
             throws Exception {
@@ -116,13 +116,13 @@ public class FixtureGlobalTest extends CommonTest {
         for (EntityMetadata entity : this.currentMetadata.getEntities().values()) {
             if (!entity.getFields().isEmpty() && !entity.isInternal()) {
                 CommonTest.hasFindFile(String.format(
-                        "android/assets/test/%s.xml",
+                        "android/app/src/main/assets/test/%s.xml",
                         entity.getName()));
                 CommonTest.hasFindFile(String.format(
-                        "android/assets/app/%s.xml",
+                        "android/app/src/main/assets/app/%s.xml",
                         entity.getName()));
                 CommonTest.hasFindFile(String.format(
-                        "android/assets/debug/%s.xml",
+                        "android/app/src/main/assets/debug/%s.xml",
                         entity.getName()));
                 CommonTest.hasFindFile(String.format(
                         FIXTURE_PATH,
@@ -164,13 +164,13 @@ public class FixtureGlobalTest extends CommonTest {
         for (EntityMetadata entity : this.currentMetadata.getEntities().values()) {
             if (!entity.getFields().isEmpty() && !entity.isInternal()) {
                 CommonTest.hasFindFile(String.format(
-                        "android/assets/test/%s.yml",
+                        "android/app/src/main/assets/test/%s.yml",
                         entity.getName()));
                 CommonTest.hasFindFile(String.format(
-                        "android/assets/app/%s.yml",
+                        "android/app/src/main/assets/app/%s.yml",
                         entity.getName()));
                 CommonTest.hasFindFile(String.format(
-                        "android/assets/debug/%s.yml",
+                        "android/app/src/main/assets/debug/%s.yml",
                         entity.getName()));
                 CommonTest.hasFindFile(String.format(
                         FIXTURE_PATH,

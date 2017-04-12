@@ -3,13 +3,18 @@ apply plugin: 'findbugs'
 apply plugin: 'jacoco'
 apply plugin: 'pmd'
 
-check.dependsOn 'checkstyle', 'findbugs'
+def gradleExtra="${r"${project.rootDir}"}/gradle/script"
+def reportDir="${r"${project.buildDir}"}/reports"
+def outputDir="${r"${project.buildDir}"}/intermediates/classes"
 
 task checkstyle(type: Checkstyle) {
+    description 'Run Checkstyle'
+    group 'verification'
+
     ignoreFailures = true
     showViolations = true
 
-    configFile file("${r"${project.rootDir}"}/checkstyle_rules.xml")
+    configFile file("${r"${gradleExtra}"}/checkstyle_rules_lvl1.xml")
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
@@ -17,12 +22,15 @@ task checkstyle(type: Checkstyle) {
     classpath = files()
 }
 
-task findbugs(type: FindBugs) {
+task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
+    description 'Run Findbugs'
+    group 'verification'
+
     ignoreFailures = true
     effort = "max"
     reportLevel = "high"
-    excludeFilter = new File("${r"${project.rootDir}"}/findbugs_excludes.xml")
-    classes = files("${r"$project"}.buildDir/intermediates/classes/")
+    excludeFilter = new File("${r"${gradleExtra}"}/findbugs_excludes.xml")
+    classes = files("${r"${outputDir}"}")
 
     source 'src'
     include '**/*.java'
@@ -30,7 +38,7 @@ task findbugs(type: FindBugs) {
 
     reports {
         xml {
-            destination "${r"$project"}.buildDir/reports/findbugs/findbugs.xml"
+            destination "${r"${reportDir}"}/findbugs/findbugs.xml"
             xml.withMessages true
         }
     }
@@ -39,9 +47,7 @@ task findbugs(type: FindBugs) {
 }
 
 task jacocoTestReport(type:JacocoReport, dependsOn: "connectedDebugAndroidTest") {
-
     group = "Reporting"
-
     description = "Generate Jacoco coverage reports"
 
     // exclude auto-generated classes and tests
@@ -55,7 +61,7 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "connectedDebugAndroidTest")
                       ]
 
     def debugTree = fileTree(dir:
-            "${r"${project.buildDir}"}/intermediates/classes/debug",
+            "${r"${outputDir}"}/debug",
             excludes: fileFilter)
 
     def mainSrc = "${r"${project.projectDir}"}"
@@ -75,21 +81,17 @@ task jacocoTestReport(type:JacocoReport, dependsOn: "connectedDebugAndroidTest")
     }
 }
 
-task pmd (type: Pmd, dependsOn: "assembleDebug") {
+task pmd (type: Pmd) {
     description 'Run pmd'
     group 'verification'
 
     ignoreFailures = true
 
-    ruleSetFiles = files("${r"${project.rootDir}"}/pmd_rules.xml")
+    ruleSetFiles = files("${r"${gradleExtra}"}/pmd_rules_lvl1.xml")
     source = fileTree('src/${project_path}')
 
     reports {
         xml.enabled = true
         html.enabled = true
     }
-}
-
-check.doLast {
-    project.tasks.getByName("pmd").execute()
 }

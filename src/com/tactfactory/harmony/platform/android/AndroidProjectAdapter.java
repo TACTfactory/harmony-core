@@ -13,6 +13,7 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
@@ -31,12 +32,11 @@ import com.tactfactory.harmony.platform.android.updater.HomeActivityUpdaterAndro
 import com.tactfactory.harmony.platform.android.updater.ManifestActivityAndroid;
 import com.tactfactory.harmony.platform.android.updater.ManifestApplicationThemeAndroid;
 import com.tactfactory.harmony.platform.android.updater.ManifestProviderAndroid;
-import com.tactfactory.harmony.platform.android.updater.UpdateLibraryAndroid;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
 import com.tactfactory.harmony.updater.impl.DeleteFile;
+import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.impl.XmlAndroid;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
@@ -237,13 +237,13 @@ public class AndroidProjectAdapter implements IAdapterProject {
             } else {
                 String tplPath = templatePath
                         + TactFileUtils.absoluteToRelativePath(
-                        		file.getAbsolutePath(),
-                        		fullTemplatePath);
+                                file.getAbsolutePath(),
+                                fullTemplatePath);
 
                 String srcPath = filePath
                         + TactFileUtils.absoluteToRelativePath(
-                        		file.getAbsolutePath(),
-                        		fullTemplatePath);
+                                file.getAbsolutePath(),
+                                fullTemplatePath);
 
                 tplPath = tplPath.substring(0, tplPath.length()
                         - ".ftl".length());
@@ -443,35 +443,24 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         List<String> libraries = new ArrayList<String>();
-        libraries.add("joda-time-2.3.jar");
-        libraries.add("guava-12.0.jar");
-        libraries.add("jsr305.jar");
         libraries.add("core-annotations.jar");
-
-        // TODO add only if an entity has @EntityResource annotation
-        libraries.add("universal-image-loader-1.8.6-with-sources.jar");
 
         result.addAll(this.adapter.getLibrariesCopyFile(libraries));
 
-        String appCompatPath = String.format(
-                "%s%s",
-                this.adapter.getLibsPath(),
-                "appcompat-v7");
-
-        //Add compatv7
         CopyFile copyfile = new CopyFile(
-                ApplicationMetadata.getAndroidSdkPath()
-                        + "/extras/android/support/v7/appcompat",
-                appCompatPath);
-
+                Harmony.getBundlePath() + "tact-core/lib/gradle-wrapper.jar",
+                Harmony.getProjectAndroidPath() + "gradle/wrapper/gradle-wrapper.jar");
         result.add(copyfile);
 
-        result.add(new UpdateLibraryAndroid(
-                this.adapter.getApplicationMetadata().getName() + "-appcompat-v7",
-                appCompatPath,
-                "android-23",
-                appCompatPath,
-                true));
+        copyfile = new CopyFile(
+                Harmony.getBundlePath() + "tact-core/lib/gradlew.bat",
+                Harmony.getProjectAndroidPath() + "gradlew.bat");
+        result.add(copyfile);
+
+        copyfile = new CopyFile(
+                Harmony.getBundlePath() + "tact-core/lib/gradlew",
+                Harmony.getProjectAndroidPath() + "gradlew");
+        result.add(copyfile);
 
         return result;
     }
@@ -494,7 +483,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         List<String> libraries = new ArrayList<String>();
-        libraries.add("universal-image-loader-1.8.6-with-sources.jar");
         libraries.add("ImageViewTouch.jar");
 
         result.addAll(this.adapter.getLibrariesCopyFile(libraries));
@@ -997,10 +985,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-	public List<IUpdater> getFixtureAssets() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<IUpdater> getFixtureAssets() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public List<IUpdater> getApplicationFiles() {
@@ -1167,9 +1155,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateTestsPath();
-        String filePath = String.format("%s%s/%s/%s/",
+        String filePath = String.format("%s/%s/%s/",
                 this.adapter.getTestPath(),
-                this.adapter.getSource(),
                 this.adapter.getApplicationMetadata().getProjectNameSpace(),
                 this.adapter.getTest());
 
@@ -1271,9 +1258,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateTestsPath();
-        String filePath = String.format("%s%s/%s/%s/",
+        String filePath = String.format("%s/%s/%s/",
                 this.adapter.getTestPath(),
-                this.adapter.getSource(),
                 this.adapter.getApplicationMetadata().getProjectNameSpace(),
                 this.adapter.getTest());
 
@@ -1315,9 +1301,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateTestsPath();
-        String filePath = String.format("%s%s/%s/%s/",
+        String filePath = String.format("%s/%s/%s/",
                 this.adapter.getTestPath(),
-                this.adapter.getSource(),
                 this.adapter.getApplicationMetadata().getProjectNameSpace(),
                 this.adapter.getTest());
 
@@ -1516,7 +1501,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         if (enumMeta.getIdName() != null) {
-        	result.add(new EnumImplementationAndroid(enumMeta));
+            result.add(new EnumImplementationAndroid(enumMeta));
         }
 
         return result;
