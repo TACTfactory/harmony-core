@@ -67,3 +67,8 @@
 -keep class android.support.v4.widget.CursorAdapter
 -keep class com.actionbarsherlock.** { *; }
 -keep interface com.actionbarsherlock.** { *; }
+
+# Http Apache
+-dontwarn org.apache.commons.**
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
