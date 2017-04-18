@@ -563,12 +563,11 @@ public class FieldVisitor {
 							}
 						} else
 
-						if (annotationType.equals(FILTER_COLUMNRESULT)) {
-							if (mvp.getName().equals(ATTRIBUTE_COLUMN_NAME)) {
-								String command = ((StringLiteralExpr)
-										mvp.getValue()).getValue();
-								result.setColumnName(command);
-							}
+						if (annotationType.equals(FILTER_COLUMNRESULT)
+						        && mvp.getName().equals(ATTRIBUTE_COLUMN_NAME)) {
+							String command = ((StringLiteralExpr)
+									mvp.getValue()).getValue();
+							result.setColumnName(command);
 						}
 				}
 			}
@@ -853,18 +852,16 @@ public class FieldVisitor {
      * @param classMeta The class to complete
      */
     private void parseOrderBysAnnotation(RelationMetadata relationMeta) {
-    	AnnotationExpr orderBysAnnot =
-    			this.annotationMap.get(ANNOTATION_ORDER_BYS);
-    	if (orderBysAnnot != null) {
-    		if (orderBysAnnot instanceof SingleMemberAnnotationExpr) {
-    			Expression memberValue = ((SingleMemberAnnotationExpr)
-    						orderBysAnnot).getMemberValue();
-				this.parseOrderByArray(
-						relationMeta,
-						(ArrayInitializerExpr) memberValue);
+    	AnnotationExpr orderBysAnnot = this.annotationMap.get(ANNOTATION_ORDER_BYS);
 
-    		}
-    	}
+    	if (orderBysAnnot != null && orderBysAnnot instanceof SingleMemberAnnotationExpr) {
+			Expression memberValue = ((SingleMemberAnnotationExpr) orderBysAnnot).getMemberValue();
+
+			this.parseOrderByArray(
+					relationMeta,
+					(ArrayInitializerExpr) memberValue);
+
+		}
     }
 }
 
