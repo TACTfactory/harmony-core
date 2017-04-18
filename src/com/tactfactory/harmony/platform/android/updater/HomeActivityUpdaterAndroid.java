@@ -10,6 +10,7 @@ package com.tactfactory.harmony.platform.android.updater;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -122,9 +123,10 @@ public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
 
         boolean alreadyExists = false;
 
-        for (Element element : xpath.evaluate(doc)) {
-            linearL = element;
-            break;
+        List<Element> elements = xpath.evaluate(doc);
+
+        if (elements.size() > 0) {
+            linearL = elements.get(0);
         }
 
         for (Element element : linearL.getChildren("Button")) {

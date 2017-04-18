@@ -81,11 +81,9 @@ public class UnpackThread extends Thread {
         this.archiveFormat = archiveFormat;
         this.compressionType = compressionType;
 
-        if (!this.destFile.exists()) {
-            if (!this.destFile.mkdir()) {
-                ConsoleUtils.displayError(new Exception(
-                        "ERROR : Output folder couldn't be created."));
-            }
+        if (!this.destFile.exists() && !this.destFile.mkdir()) {
+            ConsoleUtils.displayError(new Exception(
+                    "ERROR : Output folder couldn't be created."));
         }
     }
 

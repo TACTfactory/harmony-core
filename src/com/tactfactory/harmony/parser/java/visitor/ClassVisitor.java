@@ -375,10 +375,9 @@ public class ClassVisitor {
 					final FieldMetadata fieldMetas = this.fieldVisitor.visit(
 							(FieldDeclaration) member,
 							result);
-					if (fieldMetas != null) {
-						if (fieldMetas.isId()) {
-							result.setIdName(fieldMetas.getName());
-						}
+
+					if (fieldMetas != null && fieldMetas.isId()) {
+						result.setIdName(fieldMetas.getName());
 					}
 				} else
 
@@ -591,30 +590,22 @@ public class ClassVisitor {
 			String columnName = "inheritance_type";
 			String name = "discriminatorColumn";
 
-    		if (discriminatorAnnot != null) {
-    			if (discriminatorAnnot instanceof NormalAnnotationExpr) {
+    		if (discriminatorAnnot != null && discriminatorAnnot instanceof NormalAnnotationExpr) {
+				List<MemberValuePair> pairs = ((NormalAnnotationExpr) discriminatorAnnot).getPairs();
 
-    				List<MemberValuePair> pairs =
-    						((NormalAnnotationExpr) discriminatorAnnot)
-    								.getPairs();
+				for (MemberValuePair pair : pairs) {
+					if (ATTRIBUTE_NAME.equals(pair.getName())) {
+						columnName = ((StringLiteralExpr) pair.getValue()).getValue();
+					} else
 
-    				for (MemberValuePair pair : pairs) {
-    					if (ATTRIBUTE_NAME.equals(pair.getName())) {
-    						columnName = ((StringLiteralExpr)
-    										pair.getValue()).getValue();
-    					} else
+					if (ATTRIBUTE_TYPE.equals(pair.getName())) {
+						type = ((StringLiteralExpr) pair.getValue()).getValue();
+					}
+				}
 
-    					if (ATTRIBUTE_TYPE.equals(pair.getName())) {
-    						type = ((StringLiteralExpr)
-    								pair.getValue()).getValue();
-    					}
-    				}
+			}
 
-    			}
-    		}
-
-			FieldMetadata discriminatorColumn =
-					new FieldMetadata(classMeta);
+			FieldMetadata discriminatorColumn = new FieldMetadata(classMeta);
 			discriminatorColumn.setHarmonyType(type);
 			discriminatorColumn.setColumnDefinition(type);
 			discriminatorColumn.setColumnName(columnName);
@@ -656,18 +647,16 @@ public class ClassVisitor {
     	AnnotationExpr orderBysAnnot =
     			this.annotationMap.get(ANNOTATION_ORDER_BYS);
 
-    	if (orderBysAnnot != null) {
-    		if (orderBysAnnot instanceof SingleMemberAnnotationExpr) {
-    			Expression memberValue =
-    					((SingleMemberAnnotationExpr)
-    							orderBysAnnot).getMemberValue();
+    	if (orderBysAnnot != null && orderBysAnnot instanceof SingleMemberAnnotationExpr) {
+			Expression memberValue =
+					((SingleMemberAnnotationExpr)
+							orderBysAnnot).getMemberValue();
 
-				this.parseOrderByArray(
-						classMeta,
-						(ArrayInitializerExpr) memberValue);
+			this.parseOrderByArray(
+					classMeta,
+					(ArrayInitializerExpr) memberValue);
 
-    		}
-    	}
+		}
     }
 
     /**
@@ -681,34 +670,32 @@ public class ClassVisitor {
 
     	classMeta.setTableName(classMeta.getName());
 
-    	if (tableAnnot != null) {
-    		if (tableAnnot instanceof NormalAnnotationExpr) {
-    			List<MemberValuePair> pairs =
-    					((NormalAnnotationExpr) tableAnnot).getPairs();
+    	if (tableAnnot != null && tableAnnot instanceof NormalAnnotationExpr) {
+			List<MemberValuePair> pairs =
+					((NormalAnnotationExpr) tableAnnot).getPairs();
 
-    			if (pairs != null) {
-	    			for (MemberValuePair pair : pairs) {
-	    				if (ATTRIBUTE_INDEXES.equals(pair.getName())) {
-	    					this.parseIndexes(
-	    							classMeta,
-	    							(ArrayInitializerExpr) pair.getValue());
+			if (pairs != null) {
+    			for (MemberValuePair pair : pairs) {
+    				if (ATTRIBUTE_INDEXES.equals(pair.getName())) {
+    					this.parseIndexes(
+    							classMeta,
+    							(ArrayInitializerExpr) pair.getValue());
 
-	    				}
+    				}
 
-	    				if (ATTRIBUTE_NAME.equals(pair.getName())) {
-                            if (pair.getValue()
-                                    instanceof StringLiteralExpr) {
-                                classMeta.setTableName(((StringLiteralExpr)
-                                        pair.getValue()).getValue());
-                            } else {
-                                classMeta.setTableName(
-                                        pair.getValue().toString());
-                            }
+    				if (ATTRIBUTE_NAME.equals(pair.getName())) {
+                        if (pair.getValue()
+                                instanceof StringLiteralExpr) {
+                            classMeta.setTableName(((StringLiteralExpr)
+                                    pair.getValue()).getValue());
+                        } else {
+                            classMeta.setTableName(
+                                    pair.getValue().toString());
                         }
-	    			}
+                    }
     			}
-    		}
-    	}
+			}
+		}
     }
 
     /**
