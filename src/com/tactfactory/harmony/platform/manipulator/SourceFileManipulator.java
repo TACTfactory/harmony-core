@@ -52,7 +52,7 @@ public abstract class SourceFileManipulator {
 	/**
 	 * Generate a method at the end of the class.
 	 *
-	 * @param template The template to used to generate the method.
+	 * @param templateName The template to used to generate the method.
 	 * @param model The datamodel.
 	 *
 	 * @return True if the method has been generated successfully. False if it
@@ -159,7 +159,6 @@ public abstract class SourceFileManipulator {
 	 * after the given index.
 	 * (can exclude comments)
 	 *
-	 * @param sb The Strinbuffer to parse.
 	 * @param content The content to search for.
 	 * @param fromIndex The index where to begin the search
 	 * @param allowComments True to include comments in the search.
@@ -173,7 +172,6 @@ public abstract class SourceFileManipulator {
 	/**
 	 * Returns the first index of a content in a String buffer.
 	 * (can exclude comments)
-	 * @param sb The Strinbuffer to parse.
 	 * @param content The content to search for.
 	 * @param allowComments True to include comments in the search.
 	 * @return the index of the found String. -1 if nothing found.
@@ -250,7 +248,6 @@ public abstract class SourceFileManipulator {
 
 	/**
 	 * Returns the position of the corresponding closing bracket.
-	 * @param fileString The file to parse
 	 * @param openingBracketIndex The opening bracket
 	 * @return The position
 	 */

@@ -30,41 +30,41 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 	private final static String ELEMENT_ATTR = "attr";
 	/** enum element. */
 	private final static String ELEMENT_ENUM = "enum";
-	
+
 	/** name attribute. */
 	private final static String ATTRIBUTE_NAME = "name";
 	/** format attribute. */
 	private final static String ATTRIBUTE_FORMAT = "format";
 	/** value attribute. */
 	private final static String ATTRIBUTE_VALUE = "value";
-	
+
 	/** List of styleable items. */
 	protected ArrayList<Styleable> styleables = new ArrayList<Styleable>();
 	/** List of styleable items. */
 	protected ArrayList<Styleable.Attr> attrs = new ArrayList<Styleable.Attr>();
-	
+
 	/**
-	 * Constructor. 
-	 * 
+	 * Constructor.
+	 *
 	 * @param adapter The adapter
 	 * @param xmlPath The xml path
 	 */
 	public AttrsFile(IAdapter adapter, String xmlPath) {
 		super(adapter, xmlPath);
-		
+
 
 		Element root = this.getDocument().getRootElement();
 		List<Element> styleables = root.getChildren(ELEMENT_STYLEABLE);
 		for (Element styleable : styleables) {
 			this.styleables.add(new Styleable(styleable));
 		}
-		
+
 		List<Element> attrs = root.getChildren(ELEMENT_ATTR);
 		for (Element attr : attrs) {
 			this.attrs.add(new Styleable.Attr(attr));
 		}
 	}
-	
+
 	public AttrsFile() {
 	    super();
 	}
@@ -74,11 +74,11 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 		Element rootElement = new Element(ELEMENT_ROOT);
 		rootElement.addNamespaceDeclaration(
 				Namespace.getNamespace(
-						"android", 
+						"android",
 						"http://schemas.android.com/apk/res/android"));
 		return rootElement;
 	}
-	
+
 	/**
 	 * Add a styleable if none with he same name exists.
 	 * @param styleable The styleable to add
@@ -89,7 +89,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 			this.getDocument().getRootElement().addContent(styleable.getElement());
 		}
 	}
-	
+
 	/**
 	 * Add a attr if none with he same name exists.
 	 * @param attr The attr to add
@@ -100,7 +100,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 			this.getDocument().getRootElement().addContent(attr.getElement());
 		}
 	}
-	
+
 	/**
 	 * Gets the styleable named name
 	 * @param name The name of the styleable
@@ -114,8 +114,8 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 			}
 		}
 		return result;
-	}	
-	
+	}
+
 	/**
 	 * Gets the attr named name
 	 * @param name The name of the attr
@@ -130,17 +130,17 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Merge another AttrsFile into this one.
-	 * @param attrs The other AttrsFile
+	 * @param attrsFile The other AttrsFile
 	 */
 	public void mergeFrom(AttrsFile attrsFile) {
 		ArrayList<Styleable> styles = attrsFile.styleables;
 		for (Styleable style : styles) {
 			this.addStyleable(style.clone());
 		}
-		
+
 		ArrayList<Styleable.Attr> attrs = attrsFile.attrs;
 		for (Styleable.Attr attr : attrs) {
 			this.addAttr(attr.clone());
@@ -157,54 +157,54 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 		protected String name;
 		/** Styleable's attrs. */
 		protected HashMap<String, Attr> attrs = new HashMap<String, Attr>();
-		
+
 		/**
 		 * Constructor.
 		 */
 		public Styleable() {
 			this.element = new Element(ELEMENT_STYLEABLE);
 		}
-		
+
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param element The element to parse
 		 */
 		public Styleable(Element element) {
 			this.element = element;
 			this.parseFromElement();
 		}
-		
+
 		/**
 		 * Clone.
-		 * 
+		 *
 		 * @return The cloned styleable
 		 */
 		public Styleable clone() {
 			Styleable result = new Styleable();
 			result.setName(this.name);
-			
+
 			for(Attr attr : this.attrs.values()) {
 				result.setAttr(attr.getName(), attr.clone());
 			}
-			
+
 			return result;
 		}
-		
+
 		/**
 		 * Extract data from xml element.
 		 */
 		private void parseFromElement() {
-			
-			this.name = 
+
+			this.name =
 					this.element.getAttribute(ATTRIBUTE_NAME).getValue();
-			
+
 			for (Element elem : this.element.getChildren(ELEMENT_ATTR)) {
 				Attr attr = new Attr(elem);
 				this.attrs.put(attr.getName(), attr);
 			}
 		}
-		
+
 		/**
 		 * @return the element
 		 */
@@ -226,7 +226,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 			this.name = name;
 			this.element.setAttribute(ATTRIBUTE_NAME, this.name);
 		}
-		
+
 		/**
 		 * Set the attr if not already existing.
 		 * @param name The name of the attr
@@ -238,7 +238,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 				this.element.addContent(attr.getElement());
 			}
 		}
-		
+
 		/**
 		 * Class representing an android Attr xml item.
 		 */
@@ -249,73 +249,73 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 			private String name;
 			/** Attr's format. */
 			private String format;
-			
+
 			/** List of associated enums. */
 			private HashMap<String, Enum> enums = new HashMap<String, Enum>();
-			
+
 			/**
 			 * Constructor.
 			 */
 			public Attr() {
 				this.element = new Element(ELEMENT_ATTR);
 			}
-			
+
 			/**
 			 * Constructor.
-			 * 
+			 *
 			 * @param element The element to parse
 			 */
 			public Attr(Element element) {
 				this.element = element;
 				this.parseFromElement();
 			}
-			
+
 			/**
 			 * Clone method.
-			 * 
+			 *
 			 * @return The cloned attr
 			 */
 			public Attr clone() {
 				Attr result = new Attr();
-				
+
 				result.setName(this.name);
 				result.setFormat(this.format);
-				
+
 
 				for(Enum enu : this.enums.values()) {
 					result.setEnum(enu.clone());
 				}
-				
+
 				return result;
 			}
-			
+
 			/**
 			 * Extract data from set xml element.
 			 */
 			private void parseFromElement() {
 				this.name = this.element.getAttributeValue(ATTRIBUTE_NAME);
 				this.format = this.element.getAttributeValue(ATTRIBUTE_FORMAT);
-				
+
 				for (Element elem : this.element.getChildren(ELEMENT_ENUM)) {
 					Enum e = new Enum(elem);
 					this.enums.put(e.getName(), e);
 				}
 			}
-			
+
 			/**
 			 * @return the name
 			 */
 			public String getName() {
 				return this.name;
 			}
-			
+
 			/**
 			 * @return the format
 			 */
 			public String getFormat() {
 				return this.format;
 			}
-			
+
 			/**
 			 * @param name the name
 			 */
@@ -323,34 +323,34 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 				this.name = name;
 				this.element.setAttribute(ATTRIBUTE_NAME, name);
 			}
-			
+
 			/**
 			 * @param format the format
 			 */
 			public void setFormat(String format) {
 				this.format = format;
-				
+
 				if (format != null) {
 					this.element.setAttribute(ATTRIBUTE_FORMAT, format);
 				} else {
 					this.element.removeAttribute(ATTRIBUTE_FORMAT);
 				}
 			}
-			
+
 			/**
 			 * @return the associated element
 			 */
 			public Element getElement() {
 				return this.element;
 			}
-			
+
 			public void setEnum(Enum e) {
 				if (!this.enums.containsKey(e.getName())) {
 					this.enums.put(e.getName(), e);
 					this.element.addContent(e.getElement());
 				}
 			}
-			
+
 			/**
 			 * Class representing an android xml enum.
 			 */
@@ -361,36 +361,36 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 				private String name;
 				/** Enum's value. */
 				private String value;
-				
+
 				/**
 				 * Constructor.
 				 */
 				public Enum() {
 					this.element = new Element(ELEMENT_ENUM);
 				}
-				
+
 				/**
 				 * Constructor.
-				 * 
+				 *
 				 * @param element The xml element
 				 */
 				public Enum(Element element) {
 					this.element = element;
 					this.parseFromElement();
 				}
-				
+
 				/**
 				 * Clone.
 				 */
 				public Enum clone() {
 					Enum result = new Enum();
-					
+
 					result.setName(this.name);
 					result.setValue(this.value);
-					
+
 					return result;
 				}
-				
+
 				/**
 				 * Extract data from set xml element.
 				 */
@@ -398,21 +398,21 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 					this.name = this.element.getAttributeValue(ATTRIBUTE_NAME);
 					this.value = this.element.getAttributeValue(ATTRIBUTE_VALUE);
 				}
-				
+
 				/**
 				 * @return the name
 				 */
 				public String getName() {
 					return this.name;
 				}
-				
+
 				/**
 				 * @return the value
 				 */
 				public String getValue() {
 					return this.value;
 				}
-				
+
 				/**
 				 * @param name the name
 				 */
@@ -420,7 +420,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 					this.name = name;
 					this.element.setAttribute(ATTRIBUTE_NAME, name);
 				}
-				
+
 				/**
 				 * @param value the value
 				 */
@@ -428,7 +428,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 					this.value = value;
 					this.element.setAttribute(ATTRIBUTE_VALUE, value);
 				}
-				
+
 				/**
 				 * @return the associated element
 				 */
@@ -438,11 +438,11 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
 			}
 		}
 	}
-	
+
 	/**
 	 * Merge an android attrs.xml file into another one.
 	 * @param adapter The adapter
-	 * @param from The source attrs.xml 
+	 * @param from The source attrs.xml
 	 * @param to The attrs.xml that will be written to
 	 */
 	public static void mergeFromTo(IAdapter adapter, String from, String to) {
@@ -460,7 +460,7 @@ public class AttrsFile extends XmlManager implements IXmlUtil {
     @Override
     public void open(String file) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

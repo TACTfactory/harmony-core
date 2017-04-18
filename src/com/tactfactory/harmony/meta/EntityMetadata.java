@@ -264,7 +264,7 @@ public final class EntityMetadata extends ClassMetadata {
     }
 
     /**
-     * @param createAction the createAction to set
+     * @param deleteAction the deleteAction to set
      */
     public final void setDeleteAction(boolean deleteAction) {
         this.deleteAction = deleteAction;
