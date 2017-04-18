@@ -40,8 +40,7 @@ public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
     /**
      * Update Class : HomeActivity.
      * HomeActivity : add new Map button to Entity activity
-     * @param activity Activity without Entity name (GMapsActivity, OSMActivity)
-     * @param entity Entity to add
+     * @param generator Current generator to use
      */
     protected final void addLaunchActivityButton(BaseGenerator<? extends IAdapter> generator) {
 

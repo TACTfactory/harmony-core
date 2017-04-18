@@ -37,7 +37,7 @@ public enum TargetPlatform {
 
 	/** Platform name. */
 	private final String str;
-	
+
 	private final Class<?> adapterType;
 
 	/**
@@ -66,7 +66,7 @@ public enum TargetPlatform {
 	public String toLowerString() {
 		return this.str;
 	}
-	
+
 	public Class<?> getAdapterType() {
 	    return this.adapterType;
 	}
@@ -113,10 +113,10 @@ public enum TargetPlatform {
 
 		return result;
 	}
-	
+
 	/**
-     * Parses a target to get the correct platform.
-     * @param target The target to parse
+     * Parses an adapter target to get the correct platform.
+     * @param adapter The adapter to parse
      * @return The found platform. (All if nothing else found)
      */
     public static TargetPlatform parse(final IAdapter adapter) {

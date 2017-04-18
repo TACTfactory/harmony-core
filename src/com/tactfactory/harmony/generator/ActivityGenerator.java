@@ -128,7 +128,7 @@ public class ActivityGenerator extends BaseGenerator<IAdapter> {
 
     /**
      * Generate all actions (List, Show, Edit, Create).
-     * @param entityName The entity for which to generate the crud.
+     * @param entity The entity for which to generate the crud.
      */
     public final void generateAllAction(final EntityMetadata entity) {
         final String entityName = entity.getName();

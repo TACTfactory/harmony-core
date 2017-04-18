@@ -188,10 +188,9 @@ public final class ProjectContext {
     }
 
     /**
-     * Extract Project NameSpace from AndroidManifest file.
+     * Extract Project NameSpace from AndroidManifest file and set it in {@link ApplicationMetadata}.
      *
      * @param manifest Manifest File
-     * @return Project Name Space
      */
     public static void loadNameSpaceFromManifest(final File manifest) {
         String result = null;
@@ -224,10 +223,9 @@ public final class ProjectContext {
     }
 
     /**
-     * Extract Project Name from configuration file.
+     * Extract Project Name from configuration file and set it in {@link ApplicationMetadata}.
      *
      * @param config Configuration file
-     * @return Project Name Space
      */
     public static void loadProjectNameFromConfig(final File config) {
         String projectName = null;

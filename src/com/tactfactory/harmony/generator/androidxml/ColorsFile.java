@@ -26,15 +26,15 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 	private final static String ELEMENT_COLOR = "color";
 	/** Name Attribute. */
 	private final static String ATTRIBUTE_NAME = "name";
-	
+
 	/**
 	 * List of defined dimens.
 	 */
 	protected ArrayList<Dimen> dimens = new ArrayList<Dimen>();
-	
+
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param adapter The adapter
 	 * @param dimenFilePath The file path
 	 */
@@ -45,16 +45,16 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 		for (Element dimen : dimens) {
 			this.dimens.add(new Dimen(dimen));
 		}
-		
+
 	}
-	
+
 	public ColorsFile() {
-	    
+
 	}
-	
+
 	/**
 	 * Add a dimen if it doesn't exist yet.
-	 * 
+	 *
 	 * @param dimen The dimen to add.
 	 */
 	public void addDimen(Dimen dimen) {
@@ -63,10 +63,10 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 			this.getDocument().getRootElement().addContent(dimen.getElement());
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Get the dimen named name.
-	 * 
+	 *
 	 * @param name The name of the dimen
 	 * @return The dimen
 	 */
@@ -79,10 +79,10 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Merge a DimensFile into this one.
-	 * 
+	 *
 	 * @param dimenManager The dimensfile to merge into this one
 	 */
 	public void mergeFrom(ColorsFile dimenManager) {
@@ -91,7 +91,7 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 			this.addDimen(dimen.clone());
 		}
 	}
-	
+
 	/**
 	 * Class representing an android dimen.
 	 */
@@ -102,46 +102,46 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 		protected String name;
 		/** Dimen's value. */
 		protected String value;
-		
+
 		/**
 		 * Empty constructor.
 		 */
 		public Dimen() {
 			this.element = new Element(ELEMENT_COLOR);
 		}
-		
+
 		/**
 		 * Clone the dimen.
-		 * 
+		 *
 		 * @return The dimen
 		 */
 		public Dimen clone() {
 			Dimen result = new Dimen();
 			result.setName(this.name);
 			result.setValue(this.value);
-			
+
 			return result;
 		}
-		
+
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param element The element to extract
 		 */
 		public Dimen(Element element) {
 			this.element = element;
 			this.parseFromElement();
 		}
-		
+
 		/**
 		 * Parse the element to fill this dimen.
 		 */
 		private void parseFromElement() {
-			
+
 			this.name = this.element.getAttributeValue(ATTRIBUTE_NAME);
 			this.value = this.element.getValue();
 		}
-		
+
 		/**
 		 * @return the element
 		 */
@@ -163,27 +163,27 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
 			this.name = name;
 			this.element.setAttribute(ATTRIBUTE_NAME, this.name);
 		}
-		
+
 		/**
-		 * @return the name
+		 * @return the value
 		 */
 		public final String getValue() {
 			return this.value;
 		}
 
 		/**
-		 * @param name the name to set
+		 * @param value the value to set
 		 */
 		public final void setValue(String value) {
 			this.value = value;
 			this.element.setText(value);
 		}
 	}
-	
+
 	/**
-	 * Merge a dimens.xml files into another one. 
+	 * Merge a dimens.xml files into another one.
 	 * @param adapter The adapter
-	 * @param from The source dimens.xml 
+	 * @param from The source dimens.xml
 	 * @param to The dimens.xml to overwrite
 	 */
 	public static void mergeFromTo(IAdapter adapter, String from, String to) {
@@ -207,7 +207,7 @@ public class ColorsFile extends XmlManager implements IXmlUtil {
     @Override
     public void open(String file) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

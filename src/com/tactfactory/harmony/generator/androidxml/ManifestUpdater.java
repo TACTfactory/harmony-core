@@ -98,8 +98,10 @@ public class ManifestUpdater extends XmlManager {
 
     /**
      * Update Android Manifest.
+     * @param projectNamespace The root project namespace
      * @param classF The class file name
-     * @param entityName the entity for which to update the manifest for.
+     * @param viewName The view name (by default entity name)
+     * @param viewPackage The view package (by default entity name)
      */
     public void addActivity(
             final String projectNamespace,
