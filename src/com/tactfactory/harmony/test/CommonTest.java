@@ -309,6 +309,10 @@ public abstract class CommonTest {
      */
     protected static class CommonTestConfiguration {
 
+        public CommonTestConfiguration() {
+
+        }
+
         /**
          * @return List of Metadata used by test runner.
          */

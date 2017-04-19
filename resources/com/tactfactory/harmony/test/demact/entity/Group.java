@@ -16,9 +16,11 @@ import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.OneToMany;
+import com.tactfactory.harmony.annotation.Table;
 
 /** Group class. */
 @Entity
+@Table(name="demact_group")
 public class Group {
 
 	/** Entity's technical id. */

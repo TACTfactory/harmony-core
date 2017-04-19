@@ -330,6 +330,7 @@ public class DemactFactory extends ProjectMetadataFactory {
         DemactFactory.addImports(group,
                 CLASS_COLUMN,
                 CLASS_ENTITY,
+                CLASS_TABLE,
                 CLASS_ID,
                 CLASS_GENERATED_VALUE,
                 CLASS_GENERATED_VALUE_STRATEGY,
