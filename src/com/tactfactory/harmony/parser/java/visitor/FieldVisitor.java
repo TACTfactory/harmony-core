@@ -330,9 +330,13 @@ public class FieldVisitor {
 
 				if (rel.getType().equals("OneToMany")
 						&& rel.getMappedBy() == null) {
+					//Unidirectional relation (OneToMany)
 					this.createMappingField(result);
 				} else if (rel.getType().equals("ManyToMany")) {
 					this.createJoinTable(result);
+				} else if (rel.getType().equals("OneToOne")
+								&& rel.getMappedBy() != null) {
+					//TODO: Bidirectional OneToOne relation (unidirectional handled correctly)
 				}
 
 				if (rel.getType().equals("OneToMany") ||
@@ -510,6 +514,30 @@ public class FieldVisitor {
 							}
 							fieldRef.getRelation().setInversedBy(result);
 							rel.setMappedBy(fieldRef);						}
+					} else
+
+						if (annotationType.equals(FILTER_ONE2ONE)) {
+							if (mvp.getName().equals(ATTRIBUTE_MAPPED_BY)) {
+								String fieldName = ((StringLiteralExpr)
+										mvp.getValue()).getValue();
+								FieldMetadata fieldRef;
+								if (rel.getEntityRef().getFields().containsKey(
+										fieldName)) {
+									fieldRef =
+											rel.getEntityRef().getFields().get(
+													fieldName);
+								} else {
+									RelationMetadata inversingRel =
+											new RelationMetadata();
+									inversingRel.setType("OneToOne");
+									fieldRef = new FieldMetadata(rel.getEntityRef());
+									fieldRef.setName(fieldName);
+									fieldRef.setRelation(inversingRel);
+									fieldRef.setHarmonyType(Column.Type.RELATION.getValue());
+									fieldRef.setInternal(true);
+								}
+								fieldRef.getRelation().setInversedBy(result);
+								rel.setMappedBy(fieldRef);						}
 					} else
 
 						if (annotationType.equals(FILTER_MANY2ONE)) {
