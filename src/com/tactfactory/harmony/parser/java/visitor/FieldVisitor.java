@@ -337,7 +337,7 @@ public class FieldVisitor {
 				} else if (rel.getType().equals("OneToOne")
 								&& rel.getMappedBy() != null) {
 					//TODO: Bidirectional OneToOne relation (unidirectional handled correctly)
-					this.createMappingField(result, "OneToOne");
+					//this.createMappingField(result, "OneToOne");
 				}
 
 				if (rel.getType().equals("OneToMany") ||
