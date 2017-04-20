@@ -125,6 +125,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
     }
 
 <#if (singleTabInheritance && !isTopMostSuperClass)>
+//TODO: handle inheritance in OneToOne mapping (see #10582)
     public static String getSchemaColumns() {
         return ""
 <#list curr_fields as field>
@@ -176,7 +177,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 ;
     }
 <#elseif curr.resource>
-
+//TODO: handle resource in OneToOne mapping (see #10582)
     public static String getSchemaColumns() {
         return ""
 <#list curr_fields as field>
@@ -224,7 +225,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         return "CREATE TABLE "
         + ${ContractUtils.getContractTableName(curr)}    + " ("
 <#list curr_fields as field>
-    <#if (field.columnName??) && (!field.columnResult && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
+    <#if (field.columnName??) && (!field.columnResult && (!field.relation?? || (field.relation.type=="ManyToOne" || (field.relation.type=="OneToOne" && !field.relation.mappedBy??))))>
         <#assign fieldNames = ContractUtils.getFieldsNames(field) />
         <#list fieldNames as fieldName>
         <#if (lastLine??)>${lastLine},"</#if>
@@ -251,7 +252,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 <#if (curr.relations??)>
     <#list (curr.relations) as relation>
-        <#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
+        <#if (relation.relation.type=="ManyToOne" || (relation.relation.type=="OneToOne" && !relation.relation.mappedBy??))>
         <#assign fieldNames = ContractUtils.getFieldsNames(relation) />
         <#list fieldNames as fieldName>
         <#assign refId = relation.relation.field_ref[fieldName_index] />
@@ -411,7 +412,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
     <#if (curr_relations??)>
         <#list (curr_relations) as relation>
-            <#if (relation.relation.type=="ManyToOne" || relation.relation.type=="OneToOne")>
+            <#if (relation.relation.type=="ManyToOne" || (relation.relation.type=="OneToOne" && !relation.relation.mappedBy??))>
     /**
      * Find & read ${curr.name} by ${relation.name}.
      * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
@@ -583,6 +584,22 @@ public abstract class ${curr.name}SQLiteAdapterBase
                                     insertResult);
             </#if>
             }
+        }
+        <#elseif (relation.relation.type=="OneToOne" && relation.relation.mappedBy??)>
+        if (item.get${relation.name?cap_first}() != null) {
+            ${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
+                    new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
+            ${relation.name?uncap_first}Adapter.open(this.mDatabase);
+            ${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} =
+                        item.get${relation.name?cap_first}();
+            <#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
+                ${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+                ${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
+            <#else>
+                ${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(
+                                    ${relation.relation.targetEntity?lower_case},
+                                    insertResult);
+            </#if>
         }
         </#if>
     </#list>

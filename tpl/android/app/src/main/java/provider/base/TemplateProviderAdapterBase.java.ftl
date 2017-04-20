@@ -413,7 +413,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
             <#list curr.relations as relation>
                 <#if !relation.internal>
             case ${curr.name?upper_case}_${relation.name?upper_case}:
-                <#if relation.relation.type == "OneToOne" || relation.relation.type == "ManyToOne">
+                <#if (relation.relation.type == "OneToOne"  && !relation.relation.mappedBy??)|| relation.relation.type == "ManyToOne">
                 ${curr.name?uncap_first}Cursor = this.queryById(<#list IdsUtils.getAllIdsNamesFromArray(curr_ids) as id><#if (IdsUtils.getAllIdsNamesFromArray(curr_ids)?size > 0)>
                         </#if>uri.getPathSegments().get(${id_index + 1})<#if id_has_next>,</#if></#list>);
 

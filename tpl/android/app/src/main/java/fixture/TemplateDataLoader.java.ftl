@@ -105,6 +105,7 @@ public final class ${curr.name?cap_first}DataLoader
         return this.extractItem(element, ${curr.name?uncap_first});
     }
 
+    //TODO: verify OneToOne bidirectional behaviour
     /**
      * Extract an entity from a fixture element (XML).
      * @param element The element to be extracted
@@ -157,7 +158,7 @@ public final class ${curr.name?cap_first}DataLoader
         ${curr.name?uncap_first}.set${field.name?cap_first}(${enumType.name}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
                                 </#if>
                             <#else>
-        ${curr.name?uncap_first}.set${field.name?cap_first}(${enumType.name}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));                        
+        ${curr.name?uncap_first}.set${field.name?cap_first}(${enumType.name}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
                             </#if>
                             <#break />
                         <#case "double">
@@ -179,26 +180,36 @@ public final class ${curr.name?cap_first}DataLoader
                 <#else>
                     <#if (field.relation.type == "OneToOne" || field.relation.type == "ManyToOne")>
         ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseSimpleRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
-                        <#if (field.relation.inversedBy??)>
+                        <#if (field.relation.type=="ManyToOne" && field.relation.inversedBy??)>
         if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
             if (${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}() == null) {
                 ${curr.name?uncap_first}.get${field.name?cap_first}().set${field.relation.inversedBy?cap_first}(
                         new ArrayList<${curr.name?cap_first}>());
             }
-            
+
             ${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}().add(${curr.name?uncap_first});
+        }
+                        <#elseif (field.relation.type=="OneToOne" && field.relation.inversedBy??)>
+        if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
+            if (${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}() == null) {
+                ${curr.name?uncap_first}.get${field.name?cap_first}().set${field.relation.inversedBy?cap_first}(
+                        new ${curr.name?cap_first}());
+            }
+
+            ${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}().setId(${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}().getId());
         }
                         </#if>
                     <#else>
+                        <#if (field.relation.type == "ManyToMany" | field.relation.type == "OneToMany")>
         ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseMultiRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
-                        <#if (field.relation.type == "OneToMany" && field.relation.mappedBy?? && field.relation.mappedBy?? && !entities[field.relation.targetEntity].fields[field.relation.mappedBy].internal)>
+                            <#if (field.relation.type == "OneToMany" && field.relation.mappedBy?? && field.relation.mappedBy?? && !entities[field.relation.targetEntity].fields[field.relation.mappedBy].internal)>
         if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
             for (${field.relation.targetEntity} related : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
                 related.set${field.relation.mappedBy?cap_first}(${curr.name?uncap_first});
             }
         }
-                        <#elseif field.relation.type == "ManyToMany" && field.relation.inversedBy??>
-                            <#assign invField = MetadataUtils.getInversingField(field) />
+                            <#elseif field.relation.type == "ManyToMany" && field.relation.inversedBy??>
+                                <#assign invField = MetadataUtils.getInversingField(field) />
         if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
             for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
                 ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
@@ -208,10 +219,11 @@ public final class ${curr.name?cap_first}DataLoader
                                 new ArrayList<${curr.name?cap_first}>();
                         ${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
                 }
-                
+
                 ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
             }
         }
+                            </#if>
                         </#if>
                     </#if>
                 </#if>

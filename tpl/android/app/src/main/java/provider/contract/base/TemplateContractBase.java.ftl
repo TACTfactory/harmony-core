@@ -49,7 +49,7 @@ public abstract class ${curr.name}ContractBase {
     /** Identifier for inheritance. */
     public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
     </#if>
-    <#list curr_fields as field><#if field.columnName?? && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>${ContractUtils.getFieldsDeclarations(field, curr)}</#if></#list>
+    <#list curr_fields as field><#if field.columnName?? && (!field.relation?? || (field.relation.type=="ManyToOne" || (field.relation.type=="OneToOne" && !field.relation.mappedBy??)))>${ContractUtils.getFieldsDeclarations(field, curr)}</#if></#list>
     <#if (singleTabInheritance && isTopMostSuperClass)>
     /** Discriminator column. */
     public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} =
@@ -83,7 +83,7 @@ public abstract class ${curr.name}ContractBase {
         ResourceContract.COL_UUID</#if></#if>
         <#list wholeFields as field>
         <#if field.columnName??
-         && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>
+         && (!field.relation?? || (field.relation.type=="ManyToOne" || (field.relation.type=="OneToOne" && !field.relation.mappedBy??)))>
         <#if field_index=1 && curr.resource>,</#if>
             <#if (curr.resource && !field.id) || !curr.resource>
                 <#assign fieldNames = ContractUtils.getFieldsNames(field) />
@@ -107,7 +107,7 @@ public abstract class ${curr.name}ContractBase {
     </#if>
     <#list ViewUtils.getAllFields(curr)?values as field>
         <#if field_index=1 && curr.resource>,</#if>
-        <#if field.columnName?? && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>
+        <#if field.columnName?? && (!field.relation?? || (field.relation.type=="ManyToOne" || (field.relation.type=="OneToOne" && !field.relation.mappedBy??)))>
             <#if (curr.resource && !field.id) || !curr.resource>
                 <#assign fieldNamesAlias = ContractUtils.getFieldsNames(field, true) />
             </#if>

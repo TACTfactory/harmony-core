@@ -15,7 +15,7 @@
         <#assign relations = entity.relations />
     </#if>
     <#list relations as relation>
-        <#if (relation.relation.type!="OneToMany" && relation.relation.type!="ManyToMany")>
+        <#if (relation.relation.type=="ManyToOne" || (relation.relation.type=="OneToOne" && !relation.relation.mappedBy??))>
             <#return true />
         </#if>
     </#list>
