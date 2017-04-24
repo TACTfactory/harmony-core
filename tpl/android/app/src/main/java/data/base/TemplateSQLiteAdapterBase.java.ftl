@@ -125,7 +125,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
     }
 
 <#if (singleTabInheritance && !isTopMostSuperClass)>
-//TODO: handle inheritance in OneToOne mapping (see #10582)
+<#--TODO: handle inheritance in OneToOne mapping (see #10582)-->
     public static String getSchemaColumns() {
         return ""
 <#list curr_fields as field>
@@ -177,7 +177,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 ;
     }
 <#elseif curr.resource>
-//TODO: handle resource in OneToOne mapping (see #10582)
+<#--TODO: handle resource in OneToOne mapping (see #10582)-->
     public static String getSchemaColumns() {
         return ""
 <#list curr_fields as field>

@@ -82,7 +82,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
             Criterion inCrit = new Criterion();
             crit.add(inCrit);
-            
+
             inCrit.setKey(<#list IdsUtils.getAllIdsColsFromArray(targetEntity.ids) as refId>${refId}<#if refId_has_next>
                     + " || '::dirtyHack::' ||"
                     + </#if></#list>);
@@ -137,7 +137,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                             <#else>
                         .withValue(
                                 ${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
-                                item.get${id.name?cap_first}())    
+                                item.get${id.name?cap_first}())
                             </#if>
                         </#list>
                         .build());
@@ -225,7 +225,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
             Criterion inCrit = new Criterion();
             crit.add(inCrit);
-            
+
             inCrit.setKey(${ContractUtils.getContractCol(entities[relation.relation.targetEntity].ids[0])});
             inCrit.setType(Type.IN);
             ArrayValue inValue = new ArrayValue();
@@ -385,7 +385,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
         </#list>
         }
         cursor.close();
-        
+
         return result;
     }
 
@@ -467,13 +467,13 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             String selection;
             String[] selectionArgs;
             // Set new ${relation.name} for ${curr.name}
-            CriteriaExpression ${relation.name}Crit = 
+            CriteriaExpression ${relation.name}Crit =
                     new CriteriaExpression(GroupType.AND);
             Criterion crit = new Criterion();
             ArrayValue values = new ArrayValue();
             crit.setType(Type.IN);
             crit.setKey(<#list IdsUtils.getAllIdsColsFromArray(entities[relation.relation.targetEntity].ids) as id>${id}<#if id_has_next>
-                    + " || '::dirtyHack::' || " 
+                    + " || '::dirtyHack::' || "
                     + </#if></#list>);
             crit.addValue(values);
             ${relation.name}Crit.add(crit);
@@ -507,7 +507,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                     String.valueOf(item.get${id.name?cap_first}()),
                     Type.EQUALS);
             </#list>
-            
+
 
             operations.add(ContentProviderOperation.newUpdate(
                     ${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
@@ -546,7 +546,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                     .build());
         }
             <#elseif (relation.relation.type == "OneToOne" && relation.relation.mappedBy??)>
-        //TODO: implement OneToOne with mappedBy for internal fields
+        <#--TODO: implement OneToOne with mappedBy for internal fields-->
             </#if>
         </#list>
 
@@ -602,7 +602,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             ArrayValue values = new ArrayValue();
             crit.setType(Type.IN);
             crit.setKey(<#list IdsUtils.getAllIdsColsFromArray(entities[relation.relation.targetEntity].ids) as id>${id}<#if id_has_next>
-                    + " || '::dirtyHack::' || " 
+                    + " || '::dirtyHack::' || "
                     + </#if></#list>);
             crit.addValue(values);
             ${relation.name}Crit.add(crit);
@@ -636,7 +636,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                     String.valueOf(item.get${id.name?cap_first}()),
                     Type.EQUALS);
             </#list>
-            
+
 
             operations.add(ContentProviderOperation.newUpdate(
                     ${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
@@ -789,7 +789,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
         android.database.Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
                 ${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
                 ${ContractUtils.getContractCols(entities[relation.relation.joinTable], true)},
-                <#list curr_ids as id>${relation.relation.joinTable?cap_first}Contract.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case} 
+                <#list curr_ids as id>${relation.relation.joinTable?cap_first}Contract.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case}
                         + "= ?<#if id_has_next> AND "
                         + </#if></#list>",
                 new String[]{<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}())<#if id_has_next>,

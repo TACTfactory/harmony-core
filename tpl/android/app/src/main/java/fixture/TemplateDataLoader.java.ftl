@@ -105,7 +105,7 @@ public final class ${curr.name?cap_first}DataLoader
         return this.extractItem(element, ${curr.name?uncap_first});
     }
 
-    //TODO: verify OneToOne bidirectional behaviour
+    <#--TODO: verify OneToOne bidirectional behaviour-->
     /**
      * Extract an entity from a fixture element (XML).
      * @param element The element to be extracted
