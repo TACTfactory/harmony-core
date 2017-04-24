@@ -144,6 +144,30 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
             }
         }
+            <#elseif (relation.relation.type == "OneToOne" && relation.relation.mappedBy??)>
+        if (item.get${relation.name?cap_first}() != null) {
+            CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
+            crit.add(${ContractUtils.getContractCol(targetEntity.ids[0])}, String.valueOf(item.get${relation.name?cap_first}().get${targetEntity.ids[0].name?cap_first}()));
+
+            operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+                    <#list curr_ids as id>
+                        <#if id.strategy == "IDENTITY">
+                    .withValueBackReference(
+                            ${relation.relation.targetEntity}Contract
+                                    .${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
+                            0)
+                        <#else>
+                    .withValue(
+                            ${relation.relation.targetEntity}Contract
+                                    .${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
+                            item.get${id.name?cap_first}())
+                        </#if>
+                    </#list>
+                    .withSelection(
+                            crit.toSQLiteSelection(),
+                            crit.toSQLiteSelectionArgs())
+                    .build());
+        }
             </#if>
         </#list>
 
@@ -521,6 +545,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                     .withValues(${relation.relation.targetEntity?uncap_first}Values)
                     .build());
         }
+            <#elseif (relation.relation.type == "OneToOne" && relation.relation.mappedBy??)>
+        //TODO: implement OneToOne with mappedBy for internal fields
             </#if>
         </#list>
 
@@ -646,6 +672,34 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
             operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
                     .withValues(${relation.relation.targetEntity?uncap_first}Values)
+                    .build());
+        }
+            <#elseif (relation.relation.type == "OneToOne" && relation.relation.mappedBy??)>
+        if (item.get${relation.name?cap_first}() != null) {
+            CriteriaExpression updateCrit = new CriteriaExpression(GroupType.AND);
+            CriteriaExpression removeCrit = new CriteriaExpression(GroupType.AND);
+
+            removeCrit.add(${relation.relation.targetEntity}Contract.${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${curr.ids[0].name?upper_case}, String.valueOf(item.get${curr.ids[0].name?cap_first}()));
+            updateCrit.add(${ContractUtils.getContractCol(targetEntity.ids[0])}, String.valueOf(item.get${relation.name?cap_first}().get${targetEntity.ids[0].name?cap_first}()));
+
+            operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+                    .withValue(
+                            ${relation.relation.targetEntity}Contract
+                                    .${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${curr.ids[0].name?upper_case},
+                            null)
+                    .withSelection(
+                            removeCrit.toSQLiteSelection(),
+                            removeCrit.toSQLiteSelectionArgs())
+                    .build());
+
+            operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+                    .withValue(
+                            ${relation.relation.targetEntity}Contract
+                                    .${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${curr.ids[0].name?upper_case},
+                            item.get${curr.ids[0].name?cap_first}())
+                    .withSelection(
+                            updateCrit.toSQLiteSelection(),
+                            updateCrit.toSQLiteSelectionArgs())
                     .build());
         }
             </#if>
