@@ -86,7 +86,10 @@ public class ProviderGenerator extends BaseGenerator<IAdapter> {
      */
     public static int generateProviderUriId(final EntityMetadata em) {
         int result = 0;
-        result = Math.abs(em.getName().hashCode())*10000;
+        result = Math.abs(em.getName().hashCode());
+        if (result < 100) {
+            result *= 10000;
+        }
         return result;
     }
 }
