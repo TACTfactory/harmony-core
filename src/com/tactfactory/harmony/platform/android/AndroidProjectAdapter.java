@@ -900,7 +900,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<String> libraries = new ArrayList<String>();
 
         if (type.equals("xml")) {
-            libraries.add("jdom-2.0.2.jar");
+            libraries.add("jdom-2.0.6.jar");
         } else {
             libraries.add("snakeyaml-1.10-android.jar");
         }

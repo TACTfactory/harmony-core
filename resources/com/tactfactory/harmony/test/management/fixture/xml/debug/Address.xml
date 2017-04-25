@@ -30,5 +30,6 @@
 			<Person>Worker2</Person>
 			<Person>Worker3</Person>
 		</inhabitants>
+		<company>Microsoft</company>
 	</Address>
 </list>

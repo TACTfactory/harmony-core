@@ -220,3 +220,12 @@
     </#list>
     <#return false />
 </#function>
+
+<#function hasOneToOneBidirRelation entity>
+    <#list ViewUtils.getAllRelations(entity) as relation>
+        <#if relation.relation.type == "OneToOne" && relation.relation.mappedBy??>
+            <#return true />
+        </#if>
+    </#list>
+    <#return false />
+</#function>

@@ -7,6 +7,7 @@
 			<Person>Worker2</Person>
 			<Person>Worker3</Person>
 		</employees>
+		<address>Address3</address>
 	</Company>
 	-->
 </list>

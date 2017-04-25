@@ -8,6 +8,7 @@ import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.ManyToMany;
+import com.tactfactory.harmony.annotation.OneToOne;
 
 @Entity
 public class Address {
@@ -33,4 +34,8 @@ public class Address {
     
     @ManyToMany(inversedBy="addresses", mappedBy="addresses")
     private ArrayList<Person> inhabitants;
+
+    @OneToOne(targetEntity="Company", mappedBy="address")
+    @Column(nullable=true)
+    private Company company;
 }
