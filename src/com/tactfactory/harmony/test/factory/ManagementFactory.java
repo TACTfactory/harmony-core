@@ -87,14 +87,16 @@ public class ManagementFactory extends ProjectMetadataFactory {
                 CLASS_GENERATED_VALUE,
                 CLASS_ID,
                 CLASS_MANY_TO_MANY,
-                CLASS_GENERATED_VALUE_STRATEGY);
+                CLASS_GENERATED_VALUE_STRATEGY,
+                CLASS_ONE_TO_ONE);
         ManagementFactory.addImports(company,
                 CLASS_COLUMN,
                 CLASS_ENTITY,
                 CLASS_GENERATED_VALUE,
                 CLASS_ID,
                 CLASS_ONE_TO_MANY,
-                CLASS_GENERATED_VALUE_STRATEGY);
+                CLASS_GENERATED_VALUE_STRATEGY,
+                CLASS_ONE_TO_ONE);
         ManagementFactory.addImports(day,
                 CLASS_COLUMN,
                 CLASS_ENTITY,
@@ -221,6 +223,8 @@ public class ManagementFactory extends ProjectMetadataFactory {
                 address, "zipcode", false, false);
         ProjectMetadataFactory.generateField(
                 address, "inhabitants", false, false);
+        ProjectMetadataFactory.generateField(
+        		address, "company", true, false);
 
         ProjectMetadataFactory.generateField(
                 company, "id", false, true);
@@ -228,6 +232,8 @@ public class ManagementFactory extends ProjectMetadataFactory {
                 company, "name", false, false);
         ProjectMetadataFactory.generateField(
                 company, "employees", false, false);
+        ProjectMetadataFactory.generateField(
+        		company, "address", true, false);
 
         ProjectMetadataFactory.generateField(
                 day, "identifier", false, true);
@@ -239,6 +245,7 @@ public class ManagementFactory extends ProjectMetadataFactory {
                 day, "year", false, false);
         ProjectMetadataFactory.generateField(
                 day, "publicHoliday", false, false);
+        //To delete ?
         ProjectMetadataFactory.generateField(
                 day, "officeToClean", true, false);
 

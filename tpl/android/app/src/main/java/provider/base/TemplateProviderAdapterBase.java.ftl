@@ -32,7 +32,7 @@ import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
 <#list curr.relations as relation>
-    <#if (!relation.internal && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany"))>
+    <#if (!relation.internal && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany" || (relation.relation.type == "OneToOne" && relation.relation.mappedBy??)))>
 import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
     </#if>
 </#list>
@@ -368,7 +368,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
         <#if MetadataUtils.hasToOneRelations(curr)>
         android.database.Cursor ${curr.name?uncap_first}Cursor;
         </#if>
-        <#if MetadataUtils.hasToManyRelations(curr)>
+        <#if MetadataUtils.hasToManyRelations(curr) | MetadataUtils.hasOneToOneBidirRelation(curr)>
             <#list curr.ids as id>
         ${FieldsUtils.getJavaType(id)} ${curr.name?lower_case}${id.name?cap_first};
             </#list>
@@ -413,7 +413,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
             <#list curr.relations as relation>
                 <#if !relation.internal>
             case ${curr.name?upper_case}_${relation.name?upper_case}:
-                <#if relation.relation.type == "OneToOne" || relation.relation.type == "ManyToOne">
+                <#if (relation.relation.type == "OneToOne"  && !relation.relation.mappedBy??)|| relation.relation.type == "ManyToOne">
                 ${curr.name?uncap_first}Cursor = this.queryById(<#list IdsUtils.getAllIdsNamesFromArray(curr_ids) as id><#if (IdsUtils.getAllIdsNamesFromArray(curr_ids)?size > 0)>
                         </#if>uri.getPathSegments().get(${id_index + 1})<#if id_has_next>,</#if></#list>);
 
