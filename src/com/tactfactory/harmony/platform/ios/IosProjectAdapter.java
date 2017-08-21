@@ -172,6 +172,21 @@ public class IosProjectAdapter implements IAdapterProject {
 
         result.add(new SourceFile(templatePath + "main.m", String.format("%s/main.m", filePath), false));
 
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.h",
+                String.format("%s/HomeViewController.h", filePath),
+                false));
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.m",
+                String.format("%s/HomeViewController.m", filePath),
+                false));
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.xib",
+                String.format("%s/HomeViewController.xib", filePath),
+                false));
+
         templatePath = this.adapter.getTemplateProjectPath();
         filePath = String.format("%s/%s", Harmony.getProjectPath(), this.adapter.getPlatform());
 
@@ -192,8 +207,27 @@ public class IosProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getStartViewFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateSourceEntityPath();
+        String filePath = this.adapter.getSourcePath();
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.h",
+                String.format("%s/HomeViewController.h", filePath),
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.m",
+                String.format("%s/HomeViewController.m", filePath),
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.xib",
+                String.format("%s/HomeViewController.xib", filePath),
+                true));
+
+        return result;
     }
 
     @Override
@@ -408,15 +442,6 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "SQLiteAdapter.h",
                 false));
 
-//        result.add(new SourceFile(
-//                templatePath + "data-package-info.java",
-//                filePath + "package-info.java",
-//                true));
-//
-//        result.add(new SourceFile(
-//                templatePath + "base/data-package-info.java",
-//                filePath + "base/package-info.java",
-//                true));
         templatePath = this.adapter.getTemplateSourceHarmonySqlPath();
         filePath = String.format("%s/Sql/",
                 this.adapter.getSourceHarmonyPath());
@@ -507,26 +532,126 @@ public class IosProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getCreateView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateSourceControlerPath();
+
+        String filePath = String.format("%s/%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateController.h",
+                String.format("%s%sCreateViewController.h",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateController.m",
+                String.format("%s%sCreateViewController.m",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateController.xib",
+                String.format("%s%sCreateViewController.xib",
+                        filePath,
+                        entity.getName())));
+
+        return result;
     }
 
     @Override
     public List<IUpdater> getEditView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateSourceControlerPath();
+
+        String filePath = String.format("%s/%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditController.h",
+                String.format("%s%sEditViewController.h",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditController.m",
+                String.format("%s%sEditViewController.m",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditController.xib",
+                String.format("%s%sEditViewController.xib",
+                        filePath,
+                        entity.getName())));
+
+        return result;
     }
 
     @Override
     public List<IUpdater> getShowView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateSourceControlerPath();
+
+        String filePath = String.format("%s/%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateShowController.h",
+                String.format("%s%sShowViewController.h",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateShowController.m",
+                String.format("%s%sShowViewController.m",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateShowController.xib",
+                String.format("%s%sShowViewController.xib",
+                        filePath,
+                        entity.getName())));
+
+        return result;
     }
 
     @Override
     public List<IUpdater> getListView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateSourceControlerPath();
+
+        String filePath = String.format("%s/%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateTableViewController.h",
+                String.format("%s%sTableViewController.h",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateTableViewController.m",
+                String.format("%s%sTableViewController.m",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateTableViewController.xib",
+                String.format("%s%sTableViewController.xib",
+                        filePath,
+                        entity.getName())));
+
+        return result;
     }
 
     @Override
@@ -538,8 +663,38 @@ public class IosProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getViews(boolean isDate, boolean isTime) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = String.format("%sharmony/view/",
+                this.adapter.getTemplateSourcePath());
+        String filePath = String.format("%s/Harmony/View/",
+                this.adapter.getSourcePath());
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyDatePicker.h",
+                filePath + "HarmonyDatePicker.h"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyDatePicker.m",
+                filePath + "HarmonyDatePicker.m"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyPicker.h",
+                filePath + "HarmonyPicker.h"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyPicker.m",
+                filePath + "HarmonyPicker.m"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyMultiplePicker.h",
+                filePath + "HarmonyMultiplePicker.h"));
+
+        result.add(new SourceFile(
+            templatePath + "HarmonyMultiplePicker.m",
+            filePath + "HarmonyMultiplePicker.m"));
+
+        return result;
     }
 
     @Override
@@ -814,6 +969,13 @@ public class IosProjectAdapter implements IAdapterProject {
                     filePath + "Utils/base/" + entity.getName() + "ProviderUtilsBase.m",
                     true));
         }
+
+        templatePath = this.adapter.getTemplateSourceHarmonyUtilsPath();
+        filePath = String.format("%s/Utils/", this.adapter.getSourceHarmonyPath());
+
+        result.add(new SourceFile(templatePath + "EnumUtils.h", filePath + "EnumUtils.h", true));
+
+        result.add(new SourceFile(templatePath + "EnumUtils.m", filePath + "EnumUtils.m", true));
 
         return result;
     }

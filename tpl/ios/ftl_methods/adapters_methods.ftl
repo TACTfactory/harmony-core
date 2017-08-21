@@ -1,4 +1,4 @@
-<#function itemToContentValuesFieldAdapter objectName field indentLevel = 0>
+<<#function itemToContentValuesFieldAdapter objectName field indentLevel = 0>
     <#assign t = Utils.getIndentString(indentLevel) />
     <#assign result = "" />
     <#if (!field.internal && field.writable)>
@@ -297,26 +297,9 @@
             && field.harmony_type?lower_case != "enum"
             && field.writable>
         <#if !field.nullable>
-            <#if !field.relation??>
-                <#if FieldsUtils.getObjectiveType(field)?lower_case == "datetime">
-                    <#if (field.harmony_type) == "datetime">
-                        <#assign result = result + "${tab}if (this.${field.name}View.getDateTime() == null) {" />
-                    <#else>
-                        <#assign result = result + "${tab}if (this.${field.name}View.get${field.harmony_type?cap_first}() == null) {" />
-                    </#if>
-                <#else>
-                        <#assign result = result + "${tab}if (Strings.isNullOrEmpty(" />
-                        <#assign result = result + "${tab}            this.${field.name}View.getText().toString().trim())) {" />
-                </#if>
-            <#else>
-                <#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
-                    <#assign result = result + "${tab}if (this.${field.name}Adapter.getSelectedItem() == null) {" />
-                <#else>
-                    <#assign result = result + "${tab}if (this.${field.name}Adapter.getCheckedItems().isEmpty()) {" />
-                </#if>
-            </#if>
-            <#assign result = result + "${tab}    error = R.string.${field.owner?lower_case}_${field.name?lower_case}_invalid_field_error;" />
-            <#assign result = result + "${tab}}" />
+            <#assign result = result + "${tab}    if (self.${field.name}TextField.text.length < 1) {" />
+            <#assign result = result + "${tab}      error = @\"Error in ${field.name}.\";" />
+            <#assign result = result + "${tab}    }\n" />
         </#if>
     </#if>
     <#return result />
@@ -340,29 +323,37 @@
 <#function loadDataCreateFieldAdapter field indentLevel = 0>
     <#assign result = "" />
     <#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-    <#if !field.internal && !field.hidden && field.writable>
-            <#if !field.relation??>
-                <#if !MetadataUtils.isPrimitive(field) >
-                    <#if (FieldsUtils.getObjectiveType(field)?lower_case == "boolean")>
-        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
+    <#if (!field.internal && !field.hidden)>
+            <#if (field.harmony_type?lower_case != "relation")>
+                <#if (!MetadataUtils.isPrimitive(field))>
+                    <#if (FieldsUtils.getObjectiveType(field)?lower_case == "datetime")>
+        <#assign result = result + "${tab}self.${field.name}TextField.text = [DateUtils dateToISOString:self.model.${field.name}];" />
+                    <#elseif (field.harmony_type?lower_case == "enum")>
+        <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%lu\", (unsigned long)self.model.${field.name}];" />
+                    <#elseif (field.harmony_type?lower_case == "char") || (field.harmony_type?lower_case == "character")>
+        <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%c\", self.model.${field.name}];" />
                     <#else>
-        <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+        <#assign result = result + "${tab}self.${field.name}TextField.text = self.model.${field.name};" />
                     </#if>
-                    <#if FieldsUtils.getObjectiveType(field)?lower_case=="datetime">
-                        <#if field.harmony_type=="datetime">
-        <#assign result = result + "${tab}    this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());" />
-                        <#elseif (field.harmony_type=="date")>
-        <#assign result = result + "${tab}    this.${field.name}View.setDate(this.model.get${field.name?cap_first}());" />
-                        <#elseif (field.harmony_type=="time")>
-        <#assign result = result + "${tab}    this.${field.name}View.setTime(this.model.get${field.name?cap_first}());" />
-                        </#if>
-                    <#else>
-        <#assign result = result + "${tab}    ${ViewUtils.setLoader(field)}" />
-                    </#if>
-        <#assign result = result + "${tab}}" />
+                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "zipcode") || (field.harmony_type?lower_case == "integer") || (field.harmony_type?lower_case == "short") || (field.harmony_type?lower_case == "byte")>
+        <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}];" />
+                <#elseif (field.harmony_type?lower_case == "char" || (field.harmony_type?lower_case == "character"))>
+        <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%c\", self.model.${field.name}];" />
                 <#else>
         <#assign result = result + "${tab}${ViewUtils.setLoader(field)}" />
                 </#if>
+            <#else>
+        <#assign result = result + "${tab}if (self.model.${field.name} != nil) {" />
+                <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
+        <#assign result = result + "${tab}    self.${field.name}TextField.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}.${entities[field.relation.targetEntity].ids[0].name}];" />
+                <#else>
+        <#assign result = result + "${tab}    NSMutableArray *${field.name} = [NSMutableArray new];" />
+        <#assign result = result + "${tab}    for (${entities[field.relation.targetEntity].name?cap_first} *${entities[field.relation.targetEntity].name?lower_case} in self.model.${field.name}) {"/>
+        <#assign result = result + "${tab}        [${field.name} addObject:[NSNumber numberWithInt:${entities[field.relation.targetEntity].name?lower_case}.id]];" />
+        <#assign result = result + "${tab}    }\n" />
+        <#assign result = result + "${tab}    self.${field.name}TextField.text = [${field.name} componentsJoinedByString:@\",\"];" />
+                </#if>
+        <#assign result = result + "${tab}}" />
             </#if>
         </#if>
     <#return result/>
@@ -374,47 +365,34 @@
     <#if (!field.internal && !field.hidden)>
             <#if (field.harmony_type?lower_case != "relation")>
                 <#if (!MetadataUtils.isPrimitive(field))>
-                    <#if (FieldsUtils.getObjectiveType(field)?lower_case == "boolean")>
-        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
-                    <#else>
-        <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
-                    </#if>
                     <#if (FieldsUtils.getObjectiveType(field)?lower_case == "datetime")>
-                        <#if (field.harmony_type?lower_case == "datetime")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            DateUtils.formatDateTimeToString(" />
-        <#assign result = result + "${tab}                    this.model.get${field.name?cap_first}()));" />
-                        </#if>
-                        <#if (field.harmony_type?lower_case == "date")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            DateUtils.formatDateToString(" />
-        <#assign result = result + "${tab}                    this.model.get${field.name?cap_first}()));" />
-                        </#if>
-                        <#if (field.harmony_type?lower_case == "time")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            DateUtils.formatTimeToString(" />
-        <#assign result = result + "${tab}                    this.model.get${field.name?cap_first}()));" />
-                        </#if>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [DateUtils dateToISOString:self.model.${field.name}];" />
                     <#elseif (field.harmony_type?lower_case == "enum")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());" />
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%lu\", (unsigned long)self.model.${field.name}];" />
+                <#elseif (field.harmony_type?lower_case == "char") || (field.harmony_type?lower_case == "character")>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%c\", self.model.${field.name}];" />
                     <#else>
-        <#assign result = result + "${tab}    ${ViewUtils.setLoader(field)}" />
+        <#assign result = result + "${tab}self.${field.name}Label.text = self.model.${field.name};" />
                     </#if>
-        <#assign result = result + "${tab}}" />
+                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "zipcode") || (field.harmony_type?lower_case == "integer") || (field.harmony_type?lower_case == "short") || (field.harmony_type?lower_case == "byte")>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}];" />
+                <#elseif (field.harmony_type?lower_case == "char") || (field.harmony_type?lower_case == "character")>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%c\", self.model.${field.name}];" />
+                <#elseif (field.harmony_type?lower_case == "nsnumber")>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%@\", self.model.${field.name}];" />
                 <#else>
         <#assign result = result + "${tab}${ViewUtils.setLoader(field)}" />
                 </#if>
             <#else>
-        <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+        <#assign result = result + "${tab}if (self.model.${field.name} != nil) {" />
                 <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            String.valueOf(this.model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));" />
+        <#assign result = result + "${tab}    self.${field.name}Label.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}.${entities[field.relation.targetEntity].ids[0].name}];" />
                 <#else>
-        <#assign result = result + "${tab}    String ${field.name}Value = \"\";" />
-        <#assign result = result + "${tab}    for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {" />
-        <#assign result = result + "${tab}        ${field.name}Value += item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() + \",\";" />
-        <#assign result = result + "${tab}    }" />
-        <#assign result = result + "${tab}    this.${field.name}View.setText(${field.name}Value);" />
+        <#assign result = result + "${tab}    NSMutableArray *${field.name} = [NSMutableArray new];" />
+        <#assign result = result + "${tab}    for (${entities[field.relation.targetEntity].name?cap_first} *${entities[field.relation.targetEntity].name?lower_case} in self.model.${field.name}) {"/>
+        <#assign result = result + "${tab}        [${field.name} addObject:[NSNumber numberWithInt:${entities[field.relation.targetEntity].name?lower_case}.id]];" />
+        <#assign result = result + "${tab}    }\n" />
+        <#assign result = result + "${tab}    self.${field.name}Label.text = [${field.name} componentsJoinedByString:@\",\"];" />
                 </#if>
         <#assign result = result + "${tab}}" />
             </#if>

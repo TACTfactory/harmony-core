@@ -1,7 +1,6 @@
 <#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 <#assign curr = enums[current_entity] />
-<#assign curr_fields = (curr.name) />
 
 #import <Foundation/Foundation.h>
 
