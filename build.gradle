@@ -27,3 +27,7 @@ jar {
 javadoc {
     exclude 'com/tactfactory/harmony/test/**'
 }
+
+dependencies {
+    compile 'com.google.guava:guava:20.0'
+}
