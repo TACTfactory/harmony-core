@@ -92,16 +92,16 @@ public class ClassMetadata extends BaseMetadata {
     /**
      * @return the fields
      */
-    public final Map<String, FieldMetadata> getFields(Boolean superClass) {
+    public final Map<String, FieldMetadata> getFields(boolean superClass) {
     	Map<String, FieldMetadata> result;
 
-        if (this.getInheritance() != null && this.getInheritance().getSuperclass() != null
-        		&& superClass) {
-            result = this.getInheritance().getSuperclass().getFields();
+        if (this.getInheritance() != null && this.getInheritance().getSuperclass() != null && superClass) {
+            result = new LinkedHashMap(this.getInheritance().getSuperclass().getFields());
             result.putAll(this.getFields());
         } else {
             result = getFields();
         }
+        
         return result;
     }
 
