@@ -1,22 +1,37 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
-using ${project_namespace}.Data;
-using Microsoft.Phone.Controls;
-using System.Collections.ObjectModel;
 
-namespace ${project_namespace}.View.${curr.name}
+using ${project_namespace}.View.${curr.name?cap_first}.UsersControls;
+using ${project_namespace}.View.Navigation.UsersControls;
+using Windows.UI.Xaml.Controls;
+
+namespace ${project_namespace}.View.${curr.name?cap_first}
 {
-    public partial class ${curr.name}ListPage : PhoneApplicationPage
+    /// <summary>
+    /// ${curr.name?cap_first}ListPage allow to create a new item based on ${curr.name?cap_first} entity
+    /// This ${curr.name?cap_first}ListPage load graphical context and be managed by ${curr.name?cap_first}ListState
+    /// </summary>
+    public partial class ${curr.name?cap_first}ListPage : Page
     {
-        public ${curr.name}ListPage()
+        /// <summary>
+        /// Used to manage ${curr.name?cap_first}List UserControl in ${curr.name?cap_first}ListState.
+        /// </summary>
+        public ${curr.name?cap_first}ListUserControl ${curr.name?cap_first}ListUserControl { get; set; }
+
+        /// <summary>
+        /// Used to manage NavigationBrowser in ${curr.name?cap_first}ListState.
+        /// </summary>
+        public NavigationBrowser NavigationBrowser { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public ${curr.name?cap_first}ListPage()
         {
             InitializeComponent();
-            
-            ObservableCollection<Entity.${curr.name}> obs =
-                new ObservableCollection<Entity.${curr.name}>(
-                    new DemactSqlOpenHelper().${curr.name});
 
-            this.itemsList.ItemsSource = obs;
+            this.${curr.name?cap_first}ListUserControl = this.${curr.name?lower_case}_list_usercontrol;
+            this.NavigationBrowser = this.navigation_broswer;
         }
     }
 }

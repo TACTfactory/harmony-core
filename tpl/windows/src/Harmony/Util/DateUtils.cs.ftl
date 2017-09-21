@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace ${project_namespace}.Harmony.Util
 {
-    /** 
-     * Utility class for date manipulation.
-     */
+    /// <summary>
+    /// Utility class for date manipulation.
+    /// </summary>
     public class DateUtils
     {
         /** TAG for debug purpose. */
@@ -19,13 +19,13 @@ namespace ${project_namespace}.Harmony.Util
         private const String TIME_24H_PATTERN = "HH:mm";
 
         /** Regexp Date for YAML. */
-        private const String REGEXP_YAML_DATE = 
+        private const String REGEXP_YAML_DATE =
                 "([0-9][0-9][0-9][0-9])"
                 + "-([0-9][0-9]?)"
                 + "-([0-9][0-9]?)";
-    
+
         /** Regexp Time for YAML. */
-        private const String REGEXP_YAML_TIME = 
+        private const String REGEXP_YAML_TIME =
                 "([Tt]|[ \\t]+)([0-9][0-9]?)"
                 + ":([0-9][0-9])"
                 + ":([0-9][0-9])"
@@ -34,18 +34,18 @@ namespace ${project_namespace}.Harmony.Util
 
 
         /** Regexp Date for XML. */
-        private const String REGEXP_XML_DATE = 
+        private const String REGEXP_XML_DATE =
                 "([0-9][0-9][0-9][0-9])"
                 + "-([0-9][0-9])"
                 + "-([0-9][0-9])";
-    
+
         /** Regexp Time for XML. */
-        private const String REGEXP_XML_TIME = 
+        private const String REGEXP_XML_TIME =
                 "([Tt]|[ \\t]+)([0-9][0-9]?)"
                 + ":([0-9][0-9])"
                 + ":([0-9][0-9])"
                 + "(\\.[0-9]*)?";
-    
+
         /** Regexp TimeZone for XML. */
         private const String REGEXP_XML_TIMEZONE =
                  "(Z|[-+][0-9][0-9]:[0-9][0-9])";
@@ -70,9 +70,9 @@ namespace ${project_namespace}.Harmony.Util
             DateTime date;
             DateTime time;
             DateTime defaultDt;
-        
+
             Match matchTimeZone = Regex.Match(dateTime, REGEXP_XML_TIMEZONE);
-        
+
             if (matchTimeZone.Success) {
                 String timeZoneString = matchTimeZone.Groups[1].Value;
                 //TODO TimeZone
@@ -81,16 +81,16 @@ namespace ${project_namespace}.Harmony.Util
                 //TODO UTC
                 defaultDt = new DateTime(1970, 1, 1);
             }
-        
+
             Match matchTime = Regex.Match(dateTime, REGEXP_XML_TIME);
-        
+
             Match match = Regex.Match(dateTime, REGEXP_XML_DATE);
-        
+
             if (match.Success) {
                 int year = Convert.ToInt32(match.Groups[1].Value);
                 int month = Convert.ToInt32(match.Groups[2].Value);
                 int day = Convert.ToInt32(match.Groups[3].Value);
-            
+
                 date = new DateTime(
                         year,
                         month,
@@ -102,8 +102,8 @@ namespace ${project_namespace}.Harmony.Util
             } else {
                 date = new DateTime(defaultDt.Ticks);
             }
-        
-        
+
+
             if (matchTime.Success) {
                 int hour = Convert.ToInt32(matchTime.Groups[2].Value);
                 int minute = Convert.ToInt32(matchTime.Groups[3].Value);
@@ -116,7 +116,7 @@ namespace ${project_namespace}.Harmony.Util
                 } else {
                     millis = 0;
                 }
-            
+
                 time = new DateTime(
                         defaultDt.Year,
                         defaultDt.Month,
@@ -129,14 +129,14 @@ namespace ${project_namespace}.Harmony.Util
             } else {
                 time = new DateTime(defaultDt.Ticks);
             }
-        
+
             dt = DateUtils.merge(date, time);
             return dt;
         }
-    
+
         /**
          * Merge two DateTime reprensenting a date and a time.
-         * 
+         *
          * @param date The date
          * @param time The time
          *

@@ -52,7 +52,7 @@
     <#else>
         <#assign result = "FAILED" />
     </#if>
-    
+
     <#return result />
 </#function>
 

@@ -66,7 +66,7 @@
 </#function>
 
 <#function getContractClass entity>
-	<#return "${entity.name}Contract.${entity.name}" />
+	<#return "${entity.name}Contract" />
 </#function>
 
 <#function getContractItemToContentValues entity>

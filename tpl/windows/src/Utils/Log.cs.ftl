@@ -24,7 +24,7 @@ namespace ${project_namespace}.Utils
         {
             D(tag, msg.ToString());
         }
-        
+
         [Conditional("DEBUG")]
         public static void I(string tag, string msg)
         {

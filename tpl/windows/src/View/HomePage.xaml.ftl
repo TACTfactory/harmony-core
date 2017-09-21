@@ -1,17 +1,14 @@
-<phone:PhoneApplicationPage
+<#include utilityPath + "all_imports.ftl" />
+<!-- <@header?interpret /> -->
+
+<Page
     x:Class="${project_namespace}.View.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:local="using:${project_namespace}.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    mc:Ignorable="d">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -41,8 +38,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="${project_name?upper_case}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="What to do next" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+            <TextBlock Text="${project_name?upper_case}" Style="{StaticResource BaseTextBlockStyle}" Margin="12,0"/>
+            <TextBlock Text="What to do next" Margin="9,-7,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -54,7 +51,7 @@
                     Text="You have generated your first Windows Phone project with Harmony."/>
                 <TextBlock
                     TextWrapping="Wrap"
-                    Foreground="{StaticResource PhoneAccentBrush}"
+                    Foreground="{StaticResource TextBoxButtonPressedForegroundThemeBrush}"
                     FontWeight="Bold"
                     Text="Step 1"/>
                 <TextBlock
@@ -74,7 +71,7 @@
                 <TextBlock
                     TextWrapping="Wrap"
                     FontWeight="Bold"
-                    Foreground="{StaticResource PhoneAccentBrush}"
+                    Foreground="{StaticResource TextBoxButtonPressedForegroundThemeBrush}"
                     Margin="0,8,0,0"
                     Text="Step 2"/>
                 <TextBlock
@@ -94,7 +91,7 @@
                 <TextBlock
                     TextWrapping="Wrap"
                     FontWeight="Bold"
-                    Foreground="{StaticResource PhoneAccentBrush}"
+                    Foreground="{StaticResource TextBoxButtonPressedForegroundThemeBrush}"
                     Margin="0,8,0,0"
                     Text="Step 3"/>
                 <TextBlock
@@ -109,7 +106,7 @@
                     Margin="0,0,0,20"
                     Text="https://support.tactfactory.com/projects/harmony/wiki"/>
                 <#list entities?values as entity>
-                    <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
+                    <#if (FieldsUtils.hasShowableFields(entity.fields?values) && !entity.internal && entity.listAction)>
                 <Button Name="Button${entity.name}" Content="List all ${entity.name}" Click="Button${entity.name}_Click"/>
                     </#if>
                 </#list>
@@ -125,4 +122,4 @@
         <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
     </Grid>
 
-</phone:PhoneApplicationPage>
+</Page>

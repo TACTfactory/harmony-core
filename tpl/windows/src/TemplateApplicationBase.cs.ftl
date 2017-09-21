@@ -1,114 +1,47 @@
-<#assign sync=false />
-<#list entities?values as entity>
-	<#if entity.options.sync??>
-		<#assign sync=true />
-	</#if>
-</#list>
 <@header?interpret />
 
-
+using ${project_namespace}.Data;
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO.IsolatedStorage;
-using System.Windows;
-using System.Windows.Markup;
-using System.Windows.Navigation;
-using Microsoft.Phone.Net.NetworkInformation;
-using Microsoft.Phone.Shell;
-using Microsoft.Phone.Controls;
-using ${project_namespace}.Resources.Values;
-using ${project_namespace}.Data.Base;
+using Windows.Networking.Connectivity;
+using Windows.Security.ExchangeActiveSyncProvisioning;
+using Windows.Storage;
 
 namespace ${project_namespace}
 {
-    public abstract class ${project_name?cap_first}ApplicationBase : Application
+    public partial class ${project_name?cap_first}ApplicationBase
     {
-        <#if (sync)>
-        /// <summary>
-        /// Preference Last sync date key.
-        /// </summary>
-        protected const string PREFERENCE_LAST_SYNC = "lastSyncDate";
-        
-        </#if>
         /// <summary>
         /// Date format.
         /// </summary>
         public static string DateFormat { get; protected set; }
+
         /// <summary>
         /// Time format.
         /// </summary>
         public static String TimeFormat { get; protected set; }
+
         /// <summary>
         /// 24HFormat
         /// </summary>
         public static bool Is24Hour { get; protected set; }
+
+        /// <summary>
+        /// Application container name
+        /// </summary>
+        private const string DEMACT_CONTAINER = "demact_container";
+
+        /// <summary>
+        /// Application local setting base container
+        /// </summary>
+        private ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
         /// <summary>
         /// Preferences
         /// </summary>
-        protected static IsolatedStorageSettings Preferences { get; set; }
-        /// <summary>
-        /// Provides easy access to the root frame of the Phone Application.
-        /// </summary>
-        /// <returns>The root frame of the Phone Application.</returns>
-        public static PhoneApplicationFrame RootFrame { get; private set; }
-        
-        public bool IsResumed { get; private set; }
+        protected static ApplicationDataContainer Preferences { get; set; }
 
-        protected ${project_name?cap_first}ApplicationBase()
-        {
-            Preferences = IsolatedStorageSettings.ApplicationSettings;
-            DateFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
-            TimeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
-            Is24Hour = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("H");
-
-            <#if (sync)>
-            if (!Preferences.Contains(PREFERENCE_LAST_SYNC))
-            {
-                // TODO: First Sync
-                ${project_name?cap_first}ApplicationBase.SetLastSyncDate(
-                    new DateTime(1970, 01, 01));
-            }
-            </#if>
-            // Global handler for uncaught exceptions.
-            UnhandledException += Application_UnhandledException;
-            
-            // Phone-specific initialization
-            InitializePhoneApplication();
-            
-            // Language display initialization
-            InitializeLanguage();
-            
-            // Create the database if it does not exist.
-            using (${project_name?cap_first}SqlOpenHelperBase db =
-                new ${project_name?cap_first}SqlOpenHelperBase())
-            {
-                db.CreateDatabaseIfNotExists();
-            }
-        }
-        
-        <#if (sync)>
-        /// <summary>
-        /// Get the last sync date.
-        /// </summary>
-        /// <returns>A DateTime representing the last sync date</returns>
-        public static DateTime GetLastSyncDate()
-        {
-            return GetPreference(PREFERENCE_LAST_SYNC, DateTime.MinValue);
-        }
-
-        /// <summary>
-        /// Set the last sync date.
-        /// </summary>
-        /// <param name="dateTime">DateTime representing the last sync date to set</param>
-        public static void SetLastSyncDate(DateTime dateTime)
-        {
-            UpdatePreference(
-                PREFERENCE_LAST_SYNC,
-                dateTime);
-        }
-        
-        </#if>
         /// <summary>
         /// Get the device's UDID.
         /// </summary>
@@ -117,10 +50,12 @@ namespace ${project_namespace}
         {
             String udid = null;
 
-            byte[] id = (byte[]) Microsoft.Phone.Info
-                .DeviceExtendedProperties.GetValue("DeviceUniqueId");
+            var deviceInformation = new EasClientDeviceInformation();
+            udid = deviceInformation.Id.ToString();
+            byte[] bytes = new byte[udid.Length * sizeof(char)];
+            System.Buffer.BlockCopy(udid.ToCharArray(), 0, bytes, 0, bytes.Length);
 
-            udid = Convert.ToBase64String(id);
+            udid = Convert.ToBase64String(bytes);
 
             return udid;
         }
@@ -131,7 +66,16 @@ namespace ${project_namespace}
         /// <returns>true if have a network</returns>
         public static bool IsNetworkAvailable()
         {
-            return DeviceNetworkInformation.IsNetworkAvailable;
+            var isInternetConnected = false;
+            var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
+
+            if (connectionProfile != null)
+            {
+                var connectivityLevel = connectionProfile.GetNetworkConnectivityLevel();
+                isInternetConnected = connectivityLevel == NetworkConnectivityLevel.InternetAccess;
+            }
+
+            return isInternetConnected;
         }
 
         /// <summary>
@@ -141,17 +85,17 @@ namespace ${project_namespace}
         /// <param name="key">Key of the object in the preference</param>
         /// <param name="defaultValue">Default value if object wasn't in preference</param>
         /// <returns>The needed object</returns>
-        protected static T GetPreference<T>(String key, T defaultValue)
+        static T GetPreference<T>(String key, T defaultValue)
         {
             T result = defaultValue;
 
             try
             {
-                result = (T)Preferences[key];
+                result = (T)Preferences.Containers[DEMACT_CONTAINER].Values[key];
             }
             catch (Exception)
             {
-                Preferences.Add(key, defaultValue);
+                Preferences.Containers[DEMACT_CONTAINER].Values.Add(key, defaultValue);
             }
 
             return result;
@@ -162,127 +106,17 @@ namespace ${project_namespace}
         /// </summary>
         /// <param name="key">Key of the object in preference</param>
         /// <param name="value">The object to add</param>
-        protected static void UpdatePreference(String key, object value)
+        static void UpdatePreference(String key, object value)
         {
-            if (Preferences.Contains(key))
+            if (Preferences.Containers[DEMACT_CONTAINER].Values.ContainsKey(key))
             {
-                Preferences[key] = value;
+                Preferences.Containers[DEMACT_CONTAINER].Values[key] = value;
             }
             else
             {
-                Preferences.Add(key, value);
-            }
-
-            Preferences.Save();
-        }
-        
-        // Code to execute when the application is launching (eg, from Start)
-        // This code will not execute when the application is reactivated
-        protected virtual void Application_Launching(object sender, LaunchingEventArgs e)
-        {
-        }
-
-        // Code to execute when the application is activated (brought to foreground)
-        // This code will not execute when the application is first launched
-        protected virtual void Application_Activated(object sender, ActivatedEventArgs e)
-        {
-            this.IsResumed = true;
-        }
-
-        // Code to execute when the application is deactivated (sent to background)
-        // This code will not execute when the application is closing
-        protected virtual void Application_Deactivated(object sender, DeactivatedEventArgs e)
-        {
-        }
-
-        // Code to execute when the application is closing (eg, user hit Back)
-        // This code will not execute when the application is deactivated
-        protected virtual void Application_Closing(object sender, ClosingEventArgs e)
-        {
-        }
-
-        // Code to execute if a navigation fails
-        protected virtual void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            if (Debugger.IsAttached)
-            {
-                // A navigation has failed; break into the debugger
-                Debugger.Break();
+                Preferences.Containers[DEMACT_CONTAINER].Values.Add(key, value);
             }
         }
-
-        // Code to execute on Unhandled Exceptions
-        protected virtual void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
-        {
-            if (Debugger.IsAttached)
-            {
-                // An unhandled exception has occurred; break into the debugger
-                Debugger.Break();
-            }
-        }
-
-        #region Phone application initialization
-
-        // Avoid double-initialization
-        private bool phoneApplicationInitialized = false;
-
-        // Do not add any additional code to this method
-        protected virtual void InitializePhoneApplication()
-        {
-            if (phoneApplicationInitialized)
-                return;
-
-            // Create the frame but don't set it as RootVisual yet; this allows the splash
-            // screen to remain active until the application is ready to render.
-            RootFrame = new PhoneApplicationFrame();
-            RootFrame.Navigated += CompleteInitializePhoneApplication;
-
-            // Handle navigation failures
-            RootFrame.NavigationFailed += RootFrame_NavigationFailed;
-
-            // Handle reset requests for clearing the backstack
-            RootFrame.Navigated += CheckForResetNavigation;
-
-            // Ensure we don't initialize again
-            phoneApplicationInitialized = true;
-        }
-
-        // Do not add any additional code to this method
-        private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e)
-        {
-            // Set the root visual to allow the application to render
-            if (RootVisual != RootFrame)
-                RootVisual = RootFrame;
-
-            // Remove this handler since it is no longer needed
-            RootFrame.Navigated -= CompleteInitializePhoneApplication;
-        }
-
-        protected virtual void CheckForResetNavigation(object sender, NavigationEventArgs e)
-        {
-            // If the app has received a 'reset' navigation, then we need to check
-            // on the next navigation to see if the page stack should be reset
-            if (e.NavigationMode == NavigationMode.Reset)
-                RootFrame.Navigated += ClearBackStackAfterReset;
-        }
-
-        protected virtual void ClearBackStackAfterReset(object sender, NavigationEventArgs e)
-        {
-            // Unregister the event so it doesn't get called again
-            RootFrame.Navigated -= ClearBackStackAfterReset;
-
-            // Only clear the stack for 'new' (forward) and 'refresh' navigations
-            if (e.NavigationMode != NavigationMode.New && e.NavigationMode != NavigationMode.Refresh)
-                return;
-
-            // For UI consistency, clear the entire page stack
-            while (RootFrame.RemoveBackEntry() != null)
-            {
-                ; // do nothing
-            }
-        }
-
-        #endregion
 
         // Initialize the app's font and flow direction as defined in its localized resource strings.
         //
@@ -301,7 +135,7 @@ namespace ${project_namespace}
         //
         // For more info on localizing Windows Phone apps see http://go.microsoft.com/fwlink/?LinkId=262072.
         //
-        protected virtual void InitializeLanguage()
+        void InitializeLanguage()
         {
             try
             {
@@ -313,7 +147,8 @@ namespace ${project_namespace}
                 //
                 // If a compiler error is hit then ResourceLanguage is missing from
                 // the resource file.
-                RootFrame.Language = XmlLanguage.GetLanguage(StringsResources.ResourceLanguage);
+
+                //RootFrame.Language = XmlLanguage.GetLanguage(StringsResources.ResourceLanguage);
 
                 // Set the FlowDirection of all elements under the root frame based
                 // on the ResourceFlowDirection resource string for each
@@ -321,8 +156,9 @@ namespace ${project_namespace}
                 //
                 // If a compiler error is hit then ResourceFlowDirection is missing from
                 // the resource file.
-                FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), StringsResources.ResourceFlowDirection);
-                RootFrame.FlowDirection = flow;
+
+                //TODO check FlowDirection flow = (FlowDirection)Enum.Parse(typeof(FlowDirection), StringsResources.ResourceFlowDirection);
+                //RootFrame.FlowDirection = flow;
             }
             catch
             {
@@ -338,6 +174,25 @@ namespace ${project_namespace}
 
                 throw;
             }
+        }
+
+        public ${project_name?cap_first}ApplicationBase()
+        {
+            Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
+               Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
+               Microsoft.ApplicationInsights.WindowsCollectors.Session);
+
+            Preferences = localSettings.CreateContainer(DEMACT_CONTAINER, Windows.Storage.ApplicationDataCreateDisposition.Always);
+            DateFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+            TimeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+            Is24Hour = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("H");
+
+            // Language display initialization
+            InitializeLanguage();
+
+            // Create the database if it does not exist.
+            //${project_name?cap_first}SQLiteOpenHelper.Instance.DeleteDatabase();
+            ${project_name?cap_first}SQLiteOpenHelper.Instance.CreateDatabase();
         }
     }
 }
