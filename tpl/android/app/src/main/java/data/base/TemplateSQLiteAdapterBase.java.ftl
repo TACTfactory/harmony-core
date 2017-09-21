@@ -109,7 +109,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         result += this.motherAdapter.getJoinedTableName();
         result += " <#if InheritanceUtils.isExtended(entities[curr.inheritance.superclass.name])>AND<#else>ON</#if> ";
         <#list entities[curr.inheritance.superclass.name].ids as id>
-        result += ${ContractUtils.getContractClass(curr)}.ALIASED_${NamingUtils.alias(curr.ids[id_index].name)} + " = " + ${ContractUtils.getContractCol(id, true)};<#if id_has_next>
+        result += ${ContractUtils.getContractClass(curr)}.ALIASED_${NamingUtils.alias(curr_ids[id_index].name)} + " = " + ${ContractUtils.getContractCol(id, true)};<#if id_has_next>
         result += " AND ";</#if>
         </#list>
         </#if>

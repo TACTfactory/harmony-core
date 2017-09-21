@@ -113,13 +113,13 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
                 <#list IdsUtils.getAllIdsTypesFromArray([id]) as idType>
                     <#assign varName = "result.getPathSegments().get(${id_index + 1})" />
                     <#if id.strategy == "IDENTITY">
-            Assert.assertTrue(${FieldsUtils.getStringParser(idType, varName)}<#if MetadataUtils.isPrimitiveType(idType)> > <#else>.equals(</#if>0)<#if !MetadataUtils.isPrimitiveType(idType)>)</#if>;        
+            Assert.assertTrue(${FieldsUtils.getStringParser(idType, varName)}<#if MetadataUtils.isPrimitiveType(idType)> > <#else>.equals(</#if>0)<#if !MetadataUtils.isPrimitiveType(idType)>)</#if>;
                     <#else>
             Assert.assertTrue(${FieldsUtils.getStringParser(idType, varName)}<#if MetadataUtils.isPrimitiveType(idType)> == <#else>.equals(</#if>${curr.name?uncap_first}${idGetters[id_index]})<#if !MetadataUtils.isPrimitiveType(idType)>)</#if>;
                     </#if>
                 </#list>
             </#list>
-            
+
         }
     }
 
@@ -132,7 +132,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
             try {
                 android.database.Cursor c = this.provider.query(Uri.parse(
                         ${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
-                                + "/" 
+                                + "/"
                                 + this.entity${id}</#list>),
                         this.adapter.getCols(),
                         null,
@@ -210,7 +210,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
         if (this.entities != null) {
             if (this.entities.size() > 0) {
                 ${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
-    
+
                 try {
                     ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
                     <#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
@@ -221,12 +221,12 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
                     values.remove(${field.owner}Contract.COL_${field.name?upper_case});
                         </#if>
                     </#list>
-    
+
                     result = this.provider.update(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values, null, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-    
+
                 Assert.assertEquals(result, this.nbEntities);
             }
         }
@@ -240,7 +240,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
             try {
                 result = this.provider.delete(
                         Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
-                            + "/" 
+                            + "/"
                             + this.entity${id}</#list>),
                         null,
                         null);
@@ -259,14 +259,14 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
         int result = -1;
         if (this.entities != null) {
             if (this.entities.size() > 0) {
-    
+
                 try {
                     result = this.provider.delete(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, null, null);
-    
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-    
+
                 Assert.assertEquals(result, this.nbEntities);
             }
         }
@@ -319,7 +319,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
                             found = true;
                             break;
                         }
-                    }                    
+                    }
                     if(!found) {
                         ${curr.name?uncap_first}.get${relation.name?cap_first}().add(${relation.name});
                     }
