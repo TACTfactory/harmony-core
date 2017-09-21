@@ -12,7 +12,7 @@
     
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
     <#list fields?values as field>
         <#if (!field.internal && !field.hidden && field.writable)>
         <#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
