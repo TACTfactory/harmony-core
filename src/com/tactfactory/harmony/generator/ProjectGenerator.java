@@ -187,13 +187,20 @@ public class ProjectGenerator extends BaseGenerator<IAdapter> {
             List<String> directories = this.getAdapter().getDirectoryForResources();
 
             for (String directory : directories) {
-                TactFileUtils.copyDirectory(
-                        new File(String.format("%s/%s/",
-                                templateResourcePath,
-                                directory)),
-                        new File(String.format("%s/%s/",
-                                resourcePath,
-                                directory)));
+                File templateFile = new File(String.format("%s/%s/",
+                        templateResourcePath,
+                        directory));
+                if (templateFile.exists()) {
+                    TactFileUtils.copyDirectory(
+                        templateFile,
+                            new File(String.format("%s/%s/",
+                                    resourcePath,
+                                    directory)));
+                }else{
+                    ConsoleUtils.displayWarning("Resource template " 
+                        + templateFile.getAbsolutePath() 
+                        +" do not exists yet.");
+                }
             }
         } catch (IOException e) {
             ConsoleUtils.displayError(e);
