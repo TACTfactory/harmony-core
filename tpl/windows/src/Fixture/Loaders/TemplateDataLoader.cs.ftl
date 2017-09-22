@@ -5,7 +5,6 @@
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
 <#assign hasLocaleTime = MetadataUtils.hasLocaleTime(curr) />
-<#assign curr = entities[current_entity] />
 <@header?interpret />
 
 using System;
@@ -115,28 +114,28 @@ namespace ${project_namespace}.Fixture
             <#list curr_fields as field>
                 <#if (!field.internal)>
                     <#if (!field.relation??)>
-                        <#if field.type?lower_case=="datetime">
+                        <#if field.harmony_type?lower_case=="datetime">
             ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseDateTimeField(columns, ${NamingUtils.fixtureAlias(field)}));
                         <#elseif field.harmony_type?lower_case=="enum">
-                            <#assign enumType = enums[field.type] />
+                            <#assign enumType = enums[field.enum.targetEnum] />
                             <#if (enumType.id??)>
-                                <#assign idEnum = enumType.fields[enumType.id] />
-                                <#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-            ${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, Integer.class)));
+                                <#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+                                <#if (idEnumType?lower_case == "int" || idEnumType?lower_case == "integer") >
+            ${curr.name?uncap_first}.set${field.name?cap_first}(${field.harmony_type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, Integer.class)));
                                 <#else>
-            ${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
+            ${curr.name?uncap_first}.set${field.name?cap_first}(${field.harmony_type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
                                 </#if>
                             <#else>
-            ${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
+            ${curr.name?uncap_first}.set${field.name?cap_first}(${field.harmony_type}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
                                 
                             </#if>
                         <#else>
-                            <#if (field.type == "double" || field.type?lower_case == "char" || field.type?lower_case == "float" || field.type?lower_case == "byte" || field.type?lower_case == "short" || field.type?lower_case == "int" || field.type?lower_case == "boolean")>
-            ${curr.name?uncap_first}.set${field.name?cap_first}(this.parse${field.type?cap_first}Field(columns, ${NamingUtils.fixtureAlias(field)}));
-                            <#elseif (field.type?lower_case == "character")>
+                            <#if (field.harmony_type == "double" || field.harmony_type?lower_case == "char" || field.harmony_type?lower_case == "float" || field.harmony_type?lower_case == "byte" || field.harmony_type?lower_case == "short" || field.harmony_type?lower_case == "int" || field.harmony_type?lower_case == "boolean")>
+            ${curr.name?uncap_first}.set${field.name?cap_first}(this.parse${field.harmony_type?cap_first}Field(columns, ${NamingUtils.fixtureAlias(field)}));
+                            <#elseif (field.harmony_type?lower_case == "character")>
             ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class).charAt(0));
                             <#else>
-            ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.type?cap_first}.class));
+            ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.harmony_type?cap_first}.class));
                             </#if>
                         </#if>
                     <#else>
