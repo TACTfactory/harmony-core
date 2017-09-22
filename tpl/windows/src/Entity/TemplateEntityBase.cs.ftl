@@ -1,5 +1,4 @@
 <#include utilityPath + "all_imports.ftl" />
-<#assign curr = entities[current_entity] />
 <@header?interpret />
 
 using System.ComponentModel;
